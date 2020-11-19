@@ -31,4 +31,24 @@ jobs:
           cd gamify-specs/
           mvn clean test
 
-      # TODO : We'll want to upload a test report to GitHub Pages at this point.
+      - name: Upload report as GitHub artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@master
+        with:
+          name: report
+          path: gamify-specs/target/cucumber
+
+      - name: Upload report to GitHub pages
+        if: github.event_name == 'push'
+        run: |
+          mkdir report
+          cp gamify-specs/target/cucumber report/index.html
+          cd report
+          git init .
+          git config user.name "${{github.actor}}"
+          git config user.email "${{github.actor}}@users.noreply.github.com"
+          git add .
+          git commit -m "Deployed 🚀"
+          git remote add origin https://${{secrets.TOKEN_GITHUB}}@github.com/${{github.repository}}.git
+          git checkout -b gh-pages
+          git push -u origin gh-pages --force
