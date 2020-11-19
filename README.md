@@ -21,13 +21,13 @@ This repository contains our version of the second project of the AMT class of H
 | Alexandre Piveteau 				     | alexandre.piveteau@heig-vd.ch    |
 | Guy-Laurent Subri                      | guy-laurent.subri@heig-vd.ch     |
 
-## Running the service locally
+## Running the service (locally)
 
-Assuming you have Maven installed locally, you should run these commands to get the app running on your `8080` port :
+Assuming you have Docker installed locally, you can run the following scripts to get the app running on your `8080` port :
 
-```
-cd gamify-impl/
-mvn spring-boot:run
+```bash
+sh ./build-image.sh
+sh ./run-compose.sh
 ```
 
 The Swagger docs will then be available on the [root endpoint](http://localhost:8080/).
