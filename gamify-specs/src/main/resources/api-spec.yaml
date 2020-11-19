@@ -19,6 +19,19 @@ paths:
       responses:
         '201':
           description: created
+    get:
+      description: get all the events
+      operationId: getEvents
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+
 
   # TODO : This should be dropped.
   /fruits:
@@ -85,6 +98,17 @@ components:
           format: date-time
           nullable: false
         type:
+          type: string
+          nullable: false
+
+    # A registration is a piece of data used to identify an application.
+    Registration:
+      type: object
+      properties:
+        appId:
+          type: string
+          nullable: false
+        password:
           type: string
           nullable: false
 
