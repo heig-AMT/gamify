@@ -1,4 +1,4 @@
-package io.avalia.fruits.api.spec;
+package ch.heigvd.gamify.api.spec;
 
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;

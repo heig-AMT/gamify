@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>io.avalia.fruits</groupId>
+    <groupId>ch.heigvd.gamify.api</groupId>
     <artifactId>fruits-impl</artifactId>
     <packaging>jar</packaging>
     <name>fruits-impl</name>
@@ -53,10 +53,10 @@
                                 <swaggerDocketConfig>false</swaggerDocketConfig>
                                 <interfaceOnly>true</interfaceOnly>
                                 <delegatePattern>false</delegatePattern>
-                                <apiPackage>io.avalia.fruits.api</apiPackage>
-                                <configPackage>io.avalia.fruits.config</configPackage>
-                                <basePackage>io.avalia.fruits</basePackage>
-                                <modelPackage>io.avalia.fruits.api.model</modelPackage>
+                                <apiPackage>ch.heigvd.gamify.api</apiPackage>
+                                <configPackage>ch.heigvd.gamify.api.config</configPackage>
+                                <basePackage>ch.heigvd.gamify.api</basePackage>
+                                <modelPackage>ch.heigvd.gamify.api.model</modelPackage>
                             </configOptions>
                         </configuration>
                     </execution>

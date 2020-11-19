@@ -1,10 +1,10 @@
-package io.avalia.fruits.api.spec.steps;
+package ch.heigvd.gamify.api.spec.steps;
 
-import io.avalia.fruits.ApiException;
-import io.avalia.fruits.ApiResponse;
-import io.avalia.fruits.api.DefaultApi;
-import io.avalia.fruits.api.dto.Fruit;
-import io.avalia.fruits.api.spec.helpers.Environment;
+import ch.heigvd.gamify.ApiException;
+import ch.heigvd.gamify.ApiResponse;
+import ch.heigvd.gamify.api.DefaultApi;
+import ch.heigvd.gamify.api.dto.Fruit;
+import ch.heigvd.gamify.api.spec.helpers.Environment;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -44,7 +44,7 @@ public class BasicSteps {
 
     @Given("I have a fruit payload")
     public void i_have_a_fruit_payload() throws Throwable {
-        fruit = new io.avalia.fruits.api.dto.Fruit()
+        fruit = new ch.heigvd.gamify.api.dto.Fruit()
           .kind("banana")
           .colour("yellow")
           .size("medium")

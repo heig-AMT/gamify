@@ -1,4 +1,4 @@
-package io.avalia.fruits.api.exceptions;
+package ch.heigvd.gamify.api.exceptions;
 
 public class ApiException extends Exception {
     private int code;

@@ -1,11 +1,9 @@
-package io.avalia.fruits.api.endpoints;
+package ch.heigvd.gamify.api.endpoints;
 
-import io.avalia.fruits.api.FruitsApi;
-import io.avalia.fruits.api.exceptions.ApiException;
-import io.avalia.fruits.api.exceptions.NotFoundException;
-import io.avalia.fruits.entities.FruitEntity;
-import io.avalia.fruits.api.model.Fruit;
-import io.avalia.fruits.repositories.FruitRepository;
+import ch.heigvd.gamify.api.FruitsApi;
+import ch.heigvd.gamify.entities.FruitEntity;
+import ch.heigvd.gamify.api.model.Fruit;
+import ch.heigvd.gamify.repositories.FruitRepository;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +17,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;

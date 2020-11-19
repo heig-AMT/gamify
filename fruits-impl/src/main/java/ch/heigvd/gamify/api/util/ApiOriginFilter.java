@@ -1,4 +1,4 @@
-package io.avalia.fruits.api.util;
+package ch.heigvd.gamify.api.util;
 
 import java.io.IOException;
 

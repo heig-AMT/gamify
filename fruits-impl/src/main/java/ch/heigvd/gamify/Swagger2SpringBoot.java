@@ -1,4 +1,4 @@
-package io.avalia.fruits;
+package ch.heigvd.gamify;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
@@ -10,8 +10,8 @@ import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "io.avalia.fruits", "io.avalia.fruits.api" })
-public class    Swagger2SpringBoot implements CommandLineRunner {
+@ComponentScan(basePackages = {"ch.heigvd.gamify.api", "ch.heigvd.gamify.api"})
+public class Swagger2SpringBoot implements CommandLineRunner {
 
     @PostConstruct
     void started() {

@@ -1,4 +1,4 @@
-package io.avalia.fruits;
+package ch.heigvd.gamify;
 
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.fasterxml.jackson.databind.util.ISO8601Utils;

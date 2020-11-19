@@ -1,4 +1,4 @@
-package io.avalia.fruits.api.exceptions;
+package ch.heigvd.gamify.api.exceptions;
 
 public class NotFoundException extends ApiException {
     private int code;
