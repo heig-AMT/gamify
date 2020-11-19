@@ -5,14 +5,14 @@ services:
     build: ../../images/gamify
     environment:
       - PORT=1234
+      - DATABASE_URL=postgres://root:123456@database:5432/root
     ports:
       - "8080:1234"
 
-  # We'll want to set a database up to replicate the Heroku deployment locally.
-  # database:
-  #   image: postgres:13.0
-  #   environment:
-  #     - POSTGRES_USER=root
-  #     - POSTGRES_PASSWORD=123456
-  #   ports:
-  #    - "5432:5432"
+  database:
+    image: postgres:13.0
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=123456
+    ports:
+     - "5432:5432"

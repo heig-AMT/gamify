@@ -26,5 +26,7 @@ public class EventEntity implements Serializable {
   @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
   private OffsetDateTime timestamp;
   private String type;
+
+  @Column(name = "userId") // PostgreSQL reserves the "user" keyword
   private String user;
 }
