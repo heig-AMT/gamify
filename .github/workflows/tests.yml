@@ -14,32 +14,26 @@ jobs:
         with:
           java-version: 11
 
-      - name: Build Docker image
+      - name: Build and run the Docker compose topology
         run: |
           sh ./build-image.sh
-      
-      - name: Run Docker-compose topology
-        run: |
           sh ./run-compose.sh &
 
-      - name: Wait for app to be online
+      - name: Run Cucumber tests
         run: |
           python3 .github/scripts/wait_online.py
-            
-      - name: Run Cucumber tests
-        run : |
           cd gamify-specs/
           mvn clean test
 
       - name: Upload report as GitHub artifact
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
         uses: actions/upload-artifact@master
         with:
           name: report
           path: gamify-specs/target/cucumber
 
       - name: Upload report to GitHub pages
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
         run: |
           mkdir report
           cp gamify-specs/target/cucumber report/index.html
