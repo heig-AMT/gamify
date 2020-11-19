@@ -1,5 +1,8 @@
 # Gamify
 
+![Build and publish Docker image](https://github.com/heig-AMT/gamify/workflows/Build%20and%20publish%20Docker%20image/badge.svg?branch=dev)
+[![Heroku App Status](http://heroku-shields.herokuapp.com/heig-amt-gamify)](https://heig-amt-gamify.herokuapp.com)
+
 This repository contains our version of the second project of the AMT class of HEIG-VD.
 
 ## Structure
