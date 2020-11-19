@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"ch.heigvd.gamify.api", "ch.heigvd.gamify.api"})
+@ComponentScan(basePackages = {"ch.heigvd.gamify", "ch.heigvd.gamify.api"})
 public class Swagger2SpringBoot implements CommandLineRunner {
 
     @PostConstruct
