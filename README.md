@@ -6,6 +6,8 @@
 
 This repository contains our version of the second project of the AMT class of HEIG-VD.
 
+Our Cucumber reports for the `dev` branch are on [GitHub Pages](https://heig-amt.github.io/gamify/) :seedling:
+
 ## Structure
 
 + The `docker` folder contains deployment information for our images and environments.
