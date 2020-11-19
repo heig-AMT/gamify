@@ -23,7 +23,7 @@ This repository contains our version of the second project of the AMT class of H
 
 ## Running the service locally
 
-Assuming you have Maven installed locally, you can run the following goal to get the app running on your `8080` port :
+Assuming you have Maven installed locally, you should run these commands to get the app running on your `8080` port :
 
 ```
 cd gamify-impl/
@@ -37,10 +37,10 @@ The Swagger docs will then be available on the [root endpoint](http://localhost:
 You can run the Cucumber validation via Maven. You need to make sure the app is running on your `8080` port :
 
 ```
-cd cd fruits-specs/
+cd gamify-specs/
 mvn clean test
 ```
 
 ## Deployments
 
-We're working on a live version of our app. Please come back soon !
+A live version of our API is available on [Heroku](https://heig-amt-gamify.herokuapp.com). We're using a free plan, so it may need a few seconds to start up if the instance was previously paused :rocket:
