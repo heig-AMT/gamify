@@ -9,7 +9,7 @@ This repository contains our version of the second project of the AMT class of H
 
 + The `docker` folder contains deployment information for our images and environments.
 + The `full-project` folder is useful to open both the implementation and specs simulateneously in IntelliJ IDEA.
-+ The `gamify-impl` contains a Spring Boot project that will gamify your next app. That's probably what you came here for :peace:
++ The `gamify-impl` contains a Spring Boot project that will gamify your next app. That's probably what you came here for :v:
 + The `gamify-specs` contains our code-based specification. It is used to validate the behavior of the API.
 
 ## Team
