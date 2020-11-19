@@ -14,17 +14,14 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.List;
 
-import static java.util.Collections.singletonList;
-
-
 @Configuration
 public class SwaggerDocumentationConfig {
 
   ApiInfo apiInfo() {
     return new ApiInfoBuilder()
         .title("Gamify API")
-        .description(
-            "An API that manages application-specific events, and lets you define rules to find user scores.")
+        .description("An API that manages application-specific events,"
+            + " and lets you define rules to find user scores.")
         .version("0.1.0")
         .build();
   }
@@ -36,8 +33,8 @@ public class SwaggerDocumentationConfig {
         .apis(RequestHandlerSelectors.basePackage("ch.heigvd.gamify.api"))
         .build()
         .directModelSubstitute(Void.class, Void.class)
-        .securitySchemes(singletonList(securityScheme()))
-        .securityContexts(singletonList(securityContext()))
+        .securitySchemes(List.of(securityScheme()))
+        .securityContexts(List.of(securityContext()))
         .apiInfo(apiInfo());
   }
 
@@ -58,8 +55,7 @@ public class SwaggerDocumentationConfig {
   }
 
   private List<SecurityReference> securityReferences() {
-    return singletonList(
-        new SecurityReference("X-API-KEY", new AuthorizationScope[]{}));
+    return List.of(new SecurityReference("X-API-KEY", new AuthorizationScope[]{}));
     // new SecurityReference("BearerAuthorization", new AuthorizationScope[] {}));
   }
 
