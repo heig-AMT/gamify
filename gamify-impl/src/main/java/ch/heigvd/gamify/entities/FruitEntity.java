@@ -11,19 +11,19 @@ import java.time.OffsetDateTime;
 @Data
 public class FruitEntity implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
 
-    private String kind;
-    private String size;
-    private String colour;
-    private String weight;
+  private String kind;
+  private String size;
+  private String colour;
+  private String weight;
 
-    @Column(columnDefinition = "DATE")
-    private LocalDate expirationDate;
+  @Column(columnDefinition = "DATE")
+  private LocalDate expirationDate;
 
-    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    private OffsetDateTime expirationDateTime;
+  @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
+  private OffsetDateTime expirationDateTime;
 
 }

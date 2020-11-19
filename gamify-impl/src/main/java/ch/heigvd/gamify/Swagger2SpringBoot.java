@@ -13,29 +13,30 @@ import java.util.TimeZone;
 @ComponentScan(basePackages = {"ch.heigvd.gamify", "ch.heigvd.gamify.api"})
 public class Swagger2SpringBoot implements CommandLineRunner {
 
-    @PostConstruct
-    void started() {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+  @PostConstruct
+  void started() {
+    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+  }
+
+  @Override
+  public void run(String... arg0) throws Exception {
+    if (arg0.length > 0 && arg0[0].equals("exitcode")) {
+      throw new ExitException();
     }
+  }
+
+  public static void main(String[] args) throws Exception {
+    new SpringApplication(Swagger2SpringBoot.class).run(args);
+  }
+
+  class ExitException extends RuntimeException implements ExitCodeGenerator {
+
+    private static final long serialVersionUID = 1L;
 
     @Override
-    public void run(String... arg0) throws Exception {
-        if (arg0.length > 0 && arg0[0].equals("exitcode")) {
-            throw new ExitException();
-        }
+    public int getExitCode() {
+      return 10;
     }
-
-    public static void main(String[] args) throws Exception {
-        new SpringApplication(Swagger2SpringBoot.class).run(args);
-    }
-
-    class ExitException extends RuntimeException implements ExitCodeGenerator {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public int getExitCode() {
-            return 10;
-        }
-    }
+  }
 
 }

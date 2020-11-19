@@ -1,12 +1,26 @@
 openapi: '3.0.3'
 info:
   version: '0.1.0'
-  title: Fruits API
-  description: An API to demonstrate Swagger and Spring Boot
+  title: Gamify API
+  description: An API that manages application-specific events, and lets you define rules to find user scores.
 security:
   #  - bearerAuth: []
-  - apiKeyAuth: []
+  - apiKeyAuth: [ ]
 paths:
+  /events:
+    post:
+      description: post a user defined event
+      operationId: addEvent
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '201':
+          description: created
+
+  # TODO : This should be dropped.
   /fruits:
     post:
       description: create a fruit
@@ -59,6 +73,22 @@ components:
       in: header
       name: X-API-KEY
   schemas:
+    # An Event is specific to each user of our API.
+    Event:
+      type: object
+      properties:
+        userId:
+          type: string
+          nullable: false
+        timestamp:
+          type: string
+          format: date-time
+          nullable: false
+        type:
+          type: string
+          nullable: false
+
+    # TODO : This should be dropped.
     Fruit:
       type: object
       properties:
