@@ -1,47 +1,43 @@
-# TrainingREST
+# Gamify
 
-# Build and run the Fruit microservice
+This repository contains our version of the second project of the AMT class of HEIG-VD.
 
-You can use maven to build and run the REST API implementation from the command line. After invoking the following maven goal, the Spring Boot server will be up and running, listening for connections on port 8080.
+## Structure
+
++ The `docker` folder contains deployment information for our images and environments.
++ The `full-project` folder is useful to open both the implementation and specs simulateneously in IntelliJ IDEA.
++ The `gamify-impl` contains a Spring Boot project that will gamify your next app. That's probably what you came here for :smile:
++ The `gamify-specs` contains our code-based specification. It is used to validate the behavior of the API.
+
+## Team
+
+| Name                                   |                                  |
+|----------------------------------------|----------------------------------|
+| Matthieu Burguburu 					 | matthieu.burguburu@heig-vd.ch    |
+| David Dupraz                           | david.dupraz@heig-vd.ch          |
+| Alexandre Piveteau 				     | alexandre.piveteau@heig-vd.ch    |
+| Guy-Laurent Subri                      | guy-laurent.subri@heig-vd.ch     |
+
+## Running the service locally
+
+Assuming you have Maven installed locally, you can run the following goal to get the app running on your `8080` port :
 
 ```
-cd fruits-impl/
+cd gamify-impl/
 mvn spring-boot:run
 ```
 
-You can then access:
+The Swagger docs will then be available on the [root endpoint](http://localhost:8080/).
 
-* the [API documentation](http://localhost:8080/swagger-ui.html), generated from annotations in the code
-* the [API endpoint](http://localhost:8080/), accepting GET and POST requests
+## Verifying the service with Cucumber
 
-You can use curl to invoke the endpoints:
-
-* To retrieve the list of fruits previously created:
-
-```
-curl -X GET --header 'Accept: application/json' 'http://localhost:8080/fruits'
-```
-
-* To create a new fruit (beware that in the live documentation, there are extra \ line separators in the JSON payload that cause issues in some shells)
-
-```
-curl -X POST --header 'Content-Type: application/json' --header 'Accept: */*' -d '{
-  "colour": "red",
-  "expirationDate": "2020-11-06",
-  "expirationDateTime": "2020-11-06T05:43:27.909Z",
-  "kind": "apple",
-  "size": "small",
-  "weight": "light"
-}' 'http://localhost:8080/fruits'
-```
-
-# Test the Fruit microservice by running the executable specification
-
-You can use the Cucumber project to validate the API implementation. Do this when the server is running.
+You can run the Cucumber validation via Maven. You need to make sure the app is running on your `8080` port :
 
 ```
 cd cd fruits-specs/
 mvn clean test
 ```
-You will see the test results in the console, but you can also open the file located in `./target/cucumber`
 
+## Deployments
+
+We're working on a live version of our app. Please come back soon !
