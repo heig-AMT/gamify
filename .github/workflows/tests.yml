@@ -1,0 +1,34 @@
+name: Run tests
+
+on: [ push, pull_request ]
+
+jobs:
+  integration-testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Build Docker image
+        run: |
+          sh ./build-image.sh
+      
+      - name: Run Docker-compose topology
+        run: |
+          sh ./run-compose.sh &
+
+      - name: Wait for app to be online
+        run: |
+          python3 .github/scripts/wait_online.py
+            
+      - name: Run Cucumber tests
+        run : |
+          cd gamify-specs/
+          mvn clean test
+
+      # TODO : We'll want to upload a test report to GitHub Pages at this point.
