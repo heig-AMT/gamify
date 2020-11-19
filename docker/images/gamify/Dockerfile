@@ -5,4 +5,4 @@ LABEL maintainer="alexandre@piveteau.email"
 ADD . /usr/gamify
 WORKDIR /usr/gamify
 
-CMD [ "java", "-jar", "gamify-impl-0.1.0.jar" ]
+CMD [ "java", "-jar", "gamify-impl-0.1.0.jar", "-XX:MaxRAM=200m" ]
