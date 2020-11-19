@@ -7,6 +7,25 @@ security:
   #  - bearerAuth: []
   - apiKeyAuth: [ ]
 paths:
+  /register:
+    post:
+      description: register a new application
+      operationId: addApp
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Registration'
+      responses:
+        '201':
+          description: success
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/RegistrationSuccess'
+        '403':
+          description: forbidden
+
   /events:
     post:
       description: post a user defined event
@@ -66,5 +85,12 @@ components:
           type: string
           nullable: false
         password:
+          type: string
+          nullable: false
+
+    RegistrationSuccess:
+      type: object
+      properties:
+        token:
           type: string
           nullable: false
