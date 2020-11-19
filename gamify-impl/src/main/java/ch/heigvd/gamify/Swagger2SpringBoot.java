@@ -19,17 +19,17 @@ public class Swagger2SpringBoot implements CommandLineRunner {
   }
 
   @Override
-  public void run(String... arg0) throws Exception {
+  public void run(String... arg0) {
     if (arg0.length > 0 && arg0[0].equals("exitcode")) {
       throw new ExitException();
     }
   }
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
     new SpringApplication(Swagger2SpringBoot.class).run(args);
   }
 
-  class ExitException extends RuntimeException implements ExitCodeGenerator {
+  static class ExitException extends RuntimeException implements ExitCodeGenerator {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,5 +38,4 @@ public class Swagger2SpringBoot implements CommandLineRunner {
       return 10;
     }
   }
-
 }
