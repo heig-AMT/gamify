@@ -8,7 +8,7 @@ import java.time.OffsetDateTime;
 public class EventsDefs implements En {
 
   public EventsDefs(Environment environment) {
-    Given("I have a event payload",
+    Given("I have an event payload",
         () -> environment.getClient().putPayload("event", generatePayload())
     );
   }
