@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class Client {
 
+  // PAYLOAD MANAGEMENT
+
   private final Map<String, Object> payloads = new HashMap<>();
 
   /**
@@ -32,5 +34,26 @@ public class Client {
     var payload = payloads.get(name);
     assertNotNull(payload);
     return (T) payload;
+  }
+
+  // RESPONSE STATUS AND CODE MANAGEMENT
+
+  private Integer status = null;
+
+  /**
+   * Puts a certain response status code in the {@link Client}.
+   *
+   * @param code the retrieved code.
+   */
+  public void putResponseStatus(int code) {
+    this.status = code;
+  }
+
+  /**
+   * Returns the last set response status.
+   */
+  public int getResponseStatus() {
+    assertNotNull(this.status);
+    return this.status;
   }
 }

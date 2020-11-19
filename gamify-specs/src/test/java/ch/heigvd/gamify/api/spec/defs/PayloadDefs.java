@@ -1,5 +1,7 @@
 package ch.heigvd.gamify.api.spec.defs;
 
+import static org.junit.Assert.assertEquals;
+
 import ch.heigvd.gamify.api.dto.Event;
 import ch.heigvd.gamify.api.spec.env.Environment;
 import io.cucumber.java8.En;
@@ -21,11 +23,17 @@ public class PayloadDefs implements En {
       var payload = environment.getClient().<Event>getPayload(named);
       switch (method) {
         case POST:
-          environment.getApi().addEventWithHttpInfo(payload);
+          var info = environment.getApi().addEventWithHttpInfo(payload);
+          environment.getClient().putResponseStatus(info.getStatusCode());
           break;
         default:
           throw new RuntimeException("Unknown method " + method);
       }
+    });
+
+    // Verifying server responses.
+    Then("I receive a {int} status code", (Integer code) -> {
+      assertEquals(code.intValue(), environment.getClient().getResponseStatus());
     });
   }
 }
