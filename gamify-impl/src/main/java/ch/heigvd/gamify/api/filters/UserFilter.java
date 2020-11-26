@@ -15,8 +15,16 @@ import javax.servlet.http.HttpServletResponse;
  * An implementation of a {@link Filter} that makes sure that proper API keys are used to
  * authenticate users.
  */
-public class RegistrationFilter implements Filter {
+public class UserFilter implements Filter {
 
+  /**
+   * The key in which the {@link ch.heigvd.gamify.entities.RegisteredAppEntity} will be stored.
+   */
+  public static final String APP_KEY = "app";
+
+  /**
+   * The API key header that's specified in our spec.
+   */
   private static final String API_KEY_HEADER = "X-API-KEY";
 
   /**
@@ -25,7 +33,7 @@ public class RegistrationFilter implements Filter {
    */
   private final RegisteredAppRepository repository;
 
-  public RegistrationFilter(RegisteredAppRepository repository) {
+  public UserFilter(RegisteredAppRepository repository) {
     this.repository = repository;
   }
 
