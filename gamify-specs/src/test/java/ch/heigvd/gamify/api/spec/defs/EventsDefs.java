@@ -4,6 +4,7 @@ import ch.heigvd.gamify.api.dto.Event;
 import ch.heigvd.gamify.api.spec.env.Environment;
 import io.cucumber.java8.En;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 public class EventsDefs implements En {
 
@@ -15,7 +16,7 @@ public class EventsDefs implements En {
 
   private Event generatePayload() {
     return new Event()
-        .type("openQuestion")
+        .type("openQuestion"+ UUID.randomUUID().toString())
         .userId("bob")
         .timestamp(OffsetDateTime.now());
   }

@@ -63,6 +63,8 @@ public class PayloadDefs implements En {
     });
     Then("I see {word} in {word}", (String element, String container) -> {
       var collection = (Collection) environment.getClient().getPayload(container);
+      System.out.println("LOOG "+environment.getClient().getPayload(element)
+              +"   "+ environment.getClient().getPayload(container));
       assertTrue(collection.contains(environment.getClient().getPayload(element)));
     });
   }
