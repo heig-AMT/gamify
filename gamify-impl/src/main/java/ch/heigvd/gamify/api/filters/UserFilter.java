@@ -64,7 +64,7 @@ public class UserFilter implements Filter {
     }
 
     // Populate the app for the requests.
-    req.getSession().setAttribute("app", app.get());
+    req.getSession().setAttribute(APP_KEY, app.get());
     filterChain.doFilter(req, res);
   }
 
