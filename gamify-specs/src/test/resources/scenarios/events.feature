@@ -2,7 +2,7 @@ Feature: Validation of event management
 
   Background:
     Given there is a Gamify server
-    And I create the registration payload registration
+    And I create the credentials payload registration
     When I POST the registration payload to the /register endpoint
     Then I receive a 201 status code
     And I read the registrationResponse payload
