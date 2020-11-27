@@ -6,14 +6,15 @@ import ch.heigvd.gamify.api.model.AuthenticationSuccess;
 import ch.heigvd.gamify.api.model.Credentials;
 import ch.heigvd.gamify.entities.RegisteredAppEntity;
 import ch.heigvd.gamify.repositories.RegisteredAppRepository;
-import java.util.Optional;
-import java.util.UUID;
-import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.NativeWebRequest;
+
+import javax.validation.Valid;
+import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 public class AuthenticationApiController

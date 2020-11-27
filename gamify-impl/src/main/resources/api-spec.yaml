@@ -71,6 +71,22 @@ paths:
       responses:
         '201':
           description: created
+    get:
+      description: read a category
+      operationId: getCategory
+      parameters:
+        - name: idCategory
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Category'
 
 
 

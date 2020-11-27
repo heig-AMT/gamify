@@ -31,4 +31,12 @@ public class CategoriesApiController implements CategoriesApi
                 .buildAndExpand(entity.getName());
         return ResponseEntity.created(location.toUri()).build();
     }
+
+    @Override
+    public ResponseEntity<Category> getCategory(@Valid String idCategory) {
+        var entity=this.repository.findById(idCategory);
+        return ResponseEntity.ok(
+                new Category().name(entity.get().getName())
+        );
+    }
 }
