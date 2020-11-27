@@ -28,6 +28,22 @@ public class CredentialsDefs implements En {
         );
       }
     });
+    
+    When("I POST the {word} payload to the /login endpoint", (String named) -> {
+      var payload = environment.getClient().<Credentials>getPayload(named);
+      try {
+        var info = environment.getApi().loginWithHttpInfo(payload);
+        environment.getClient().putResponse(
+            info.getStatusCode(),
+            info.getData()
+        );
+      } catch (ApiException exception) {
+        environment.getClient().putResponse(
+            exception.getCode(),
+            exception.getResponseBody()
+        );
+      }
+    });
   }
 
   private Credentials generateCredentials() {
