@@ -35,6 +35,22 @@ public class CategoriesDef implements En
                         info.getData()
                 );
         });
+
+        When("I UPDATE {word} to {word} to the /categories endpoint", (String categoryToUpdate, String newCategory) ->
+        {var payload=environment.getClient().<Category>getPayload(newCategory);
+            try {
+                var info = environment.getApi().updateCategoryWithHttpInfo(categoryToUpdate, payload);
+                environment.getClient().putResponse(
+                        info.getStatusCode(),
+                        info.getData()
+                );
+            } catch (ApiException exception) {
+                environment.getClient().putResponse(
+                        exception.getCode(),
+                        exception.getResponseBody()
+                );
+            }
+        });
     }
 
     private Category generateCategory(String name){

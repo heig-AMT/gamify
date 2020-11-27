@@ -87,6 +87,23 @@ paths:
             'application/json':
               schema:
                 $ref: '#/components/schemas/Category'
+    put:
+      description: update a category
+      operationId: updateCategory
+      parameters:
+        - name: idCategory
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '201':
+          description: created
 
 
 

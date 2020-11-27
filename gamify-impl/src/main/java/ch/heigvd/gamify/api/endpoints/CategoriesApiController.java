@@ -39,4 +39,21 @@ public class CategoriesApiController implements CategoriesApi
                 new Category().name(entity.get().getName())
         );
     }
+
+    @Override
+    public ResponseEntity<Void> updateCategory(@Valid String idCategory, Category newCategory){
+        newCategory.setName(idCategory);
+        this.repository.delete(CategoryEntity.builder()
+                .name(idCategory)
+                .build());
+        var entity=this.repository.save(
+                CategoryEntity.builder()
+                        .name(newCategory.getName())
+                        .build()
+        );
+        var location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{name}")
+                .buildAndExpand(entity.getName());
+        return ResponseEntity.created(location.toUri()).build();
+    }
 }

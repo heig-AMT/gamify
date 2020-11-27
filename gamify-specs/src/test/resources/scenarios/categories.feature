@@ -10,3 +10,6 @@ Feature: Implement category
     Then I receive a 201 status code
     When I GET the category1 payload to the /categories endpoint
     Then I receive a 200 status code
+    When I create the category payload category2
+    And I UPDATE category1 to category2 to the /categories endpoint
+    Then I receive a 201 status code
