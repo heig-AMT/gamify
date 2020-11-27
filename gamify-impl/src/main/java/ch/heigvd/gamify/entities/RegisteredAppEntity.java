@@ -17,4 +17,5 @@ public class RegisteredAppEntity {
   @Id
   private String name;
   private String password;
+  private String token;
 }
