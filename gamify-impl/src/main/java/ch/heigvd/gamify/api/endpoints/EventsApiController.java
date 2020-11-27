@@ -1,30 +1,32 @@
 package ch.heigvd.gamify.api.endpoints;
 
 import ch.heigvd.gamify.api.EventsApi;
+import ch.heigvd.gamify.api.filters.UserFilter;
 import ch.heigvd.gamify.api.model.Event;
 import ch.heigvd.gamify.entities.EventEntity;
+import ch.heigvd.gamify.entities.RegisteredAppEntity;
 import ch.heigvd.gamify.repositories.EventRepository;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import javax.servlet.ServletRequest;
 import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-@Controller
+@RestController
 public class EventsApiController implements EventsApi {
 
-  private final EventRepository repository;
+  @Autowired
+  EventRepository repository;
 
-  public EventsApiController(EventRepository repository) {
-    this.repository = repository;
-  }
+  @Autowired
+  ServletRequest request;
 
   @Override
   public ResponseEntity<Void> addEvent(@Valid Event event) {
+    var app = (RegisteredAppEntity) request.getAttribute(UserFilter.APP_KEY);
     var entity = this.repository.save(EventEntity.builder()
+        .app(app)
         .timestamp(event.getTimestamp())
         .type(event.getType())
         .user(event.getUserId())
@@ -34,18 +36,5 @@ public class EventsApiController implements EventsApi {
         .path("/{id}")
         .buildAndExpand(entity.getId());
     return ResponseEntity.created(location.toUri()).build();
-  }
-
-  @Override
-  public ResponseEntity<List<Event>> getEvents() {
-    var items = StreamSupport.stream(repository.findAll().spliterator(), false)
-        .sorted(Comparator.comparing(EventEntity::getId))
-        .map(entity -> new Event()
-            .timestamp(entity.getTimestamp())
-            .type(entity.getType())
-            .userId(entity.getUser())
-        )
-        .collect(Collectors.toList());
-    return ResponseEntity.ok(items);
   }
 }

@@ -7,6 +7,7 @@ security:
   #  - bearerAuth: []
   - apiKeyAuth: [ ]
 paths:
+  # Authentication related endpoints
   /register:
     post:
       description: register a new application
@@ -15,17 +16,36 @@ paths:
         content:
           'application/json':
             schema:
-              $ref: '#/components/schemas/Registration'
+              $ref: '#/components/schemas/Credentials'
       responses:
         '201':
           description: success
           content:
             'application/json':
               schema:
-                $ref: '#/components/schemas/RegistrationSuccess'
+                $ref: '#/components/schemas/AuthenticationSuccess'
+        '403':
+          description: forbidden
+  /login:
+    post:
+      description: login a registered application
+      operationId: login
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/AuthenticationSuccess'
         '403':
           description: forbidden
 
+  # Events related endpoints
   /events:
     post:
       description: post a user defined event
@@ -38,18 +58,6 @@ paths:
       responses:
         '201':
           description: created
-    get:
-      description: get all the events
-      operationId: getEvents
-      responses:
-        '200':
-          description: success
-          content:
-            'application/json':
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Event'
 
   /categories:
     post:
@@ -92,8 +100,8 @@ components:
           type: string
           nullable: false
 
-    # A registration is a piece of data used to identify an application.
-    Registration:
+    # A credentials is a piece of data used to identify an application.
+    Credentials:
       type: object
       properties:
         appId:
@@ -103,7 +111,7 @@ components:
           type: string
           nullable: false
 
-    RegistrationSuccess:
+    AuthenticationSuccess:
       type: object
       properties:
         token:
