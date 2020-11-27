@@ -51,6 +51,21 @@ paths:
                 items:
                   $ref: '#/components/schemas/Event'
 
+  /categories:
+    post:
+      description: post a new category
+      operationId: addCategory
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '201':
+          description: created
+
+
+
 components:
   securitySchemes:
     #    bearerAuth:            # arbitrary name for the security scheme
@@ -94,3 +109,12 @@ components:
         token:
           type: string
           nullable: false
+
+    # Category
+    Category:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: false
+
