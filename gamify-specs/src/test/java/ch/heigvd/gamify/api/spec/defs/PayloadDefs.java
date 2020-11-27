@@ -8,17 +8,8 @@ import ch.heigvd.gamify.api.spec.env.Environment;
 import io.cucumber.java8.En;
 import io.cucumber.java8.ParameterDefinitionBody.A1;
 import java.util.Collection;
-import org.junit.Assert;
 
 public class PayloadDefs implements En {
-
-  private enum Write {
-    POST,
-  }
-
-  private enum Read {
-    GET,
-  }
 
   public PayloadDefs(Environment environment) {
 
@@ -73,5 +64,13 @@ public class PayloadDefs implements En {
       var collection = (Collection) environment.getClient().getPayload(container);
       assertTrue(collection.contains(environment.getClient().getPayload(element)));
     });
+  }
+
+  private enum Write {
+    POST,
+  }
+
+  private enum Read {
+    GET,
   }
 }
