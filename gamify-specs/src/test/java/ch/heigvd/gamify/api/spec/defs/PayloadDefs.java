@@ -8,6 +8,7 @@ import ch.heigvd.gamify.api.spec.env.Environment;
 import io.cucumber.java8.En;
 import io.cucumber.java8.ParameterDefinitionBody.A1;
 import java.util.Collection;
+import org.junit.Assert;
 
 public class PayloadDefs implements En {
 
@@ -55,6 +56,13 @@ public class PayloadDefs implements En {
     });
     When("I read the {word} payload", (String name) -> {
       environment.getClient().putPayload(name, environment.getClient().getResponseData());
+    });
+
+    When("I see that {word} and {word} are the same", (String first, String second) -> {
+      var payload1 = environment.getClient().getPayload(first);
+      var payload2 = environment.getClient().getPayload(second);
+
+      assertEquals(payload1, payload2);
     });
 
     // Server responses management.

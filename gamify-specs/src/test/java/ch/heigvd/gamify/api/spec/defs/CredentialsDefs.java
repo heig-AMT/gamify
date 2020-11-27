@@ -46,7 +46,7 @@ public class CredentialsDefs implements En {
     });
   }
 
-  private Credentials generateCredentials() {
+    private Credentials generateCredentials() {
     return new Credentials()
         .appId(UUID.randomUUID().toString())
         .password(UUID.randomUUID().toString());

@@ -17,4 +17,5 @@ Feature: User login
     When I POST the credentials payload to the /login endpoint
     Then I receive a 200 status code
     And I read the response payload
-    And I see registrationToken in response
+    And I read the loginToken payload as the token property of the response payload
+    And I see that registrationToken and loginToken are the same
