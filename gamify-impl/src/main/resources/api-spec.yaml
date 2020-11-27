@@ -15,14 +15,14 @@ paths:
         content:
           'application/json':
             schema:
-              $ref: '#/components/schemas/Registration'
+              $ref: '#/components/schemas/Credentials'
       responses:
         '201':
           description: success
           content:
             'application/json':
               schema:
-                $ref: '#/components/schemas/RegistrationSuccess'
+                $ref: '#/components/schemas/AuthenticationSuccess'
         '403':
           description: forbidden
 
@@ -77,8 +77,8 @@ components:
           type: string
           nullable: false
 
-    # A registration is a piece of data used to identify an application.
-    Registration:
+    # A credentials is a piece of data used to identify an application.
+    Credentials:
       type: object
       properties:
         appId:
@@ -88,7 +88,7 @@ components:
           type: string
           nullable: false
 
-    RegistrationSuccess:
+    AuthenticationSuccess:
       type: object
       properties:
         token:

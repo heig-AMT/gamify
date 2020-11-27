@@ -1,8 +1,8 @@
 package ch.heigvd.gamify.api.endpoints;
 
 import ch.heigvd.gamify.api.RegisterApi;
-import ch.heigvd.gamify.api.model.Registration;
-import ch.heigvd.gamify.api.model.RegistrationSuccess;
+import ch.heigvd.gamify.api.model.AuthenticationSuccess;
+import ch.heigvd.gamify.api.model.Credentials;
 import ch.heigvd.gamify.entities.RegisteredAppEntity;
 import ch.heigvd.gamify.repositories.RegisteredAppRepository;
 import java.util.UUID;
@@ -23,19 +23,19 @@ public class RegistrationApiController implements RegisterApi {
 
   @Transactional
   @Override
-  public ResponseEntity<RegistrationSuccess> addApp(@Valid Registration registration) {
-    var exists = repository.findById(registration.getAppId()).isPresent();
+  public ResponseEntity<AuthenticationSuccess> addApp(@Valid Credentials credentials) {
+    var exists = repository.findById(credentials.getAppId()).isPresent();
     if (exists) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
     var token = UUID.randomUUID().toString();
     var entity = RegisteredAppEntity.builder()
-        .name(registration.getAppId())
-        .password(registration.getPassword())
+        .name(credentials.getAppId())
+        .password(credentials.getPassword())
         .token(token)
         .build();
     repository.save(entity);
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new RegistrationSuccess().token(token));
+        .body(new AuthenticationSuccess().token(token));
   }
 }
