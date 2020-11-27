@@ -1,0 +1,15 @@
+name: Check common mistakes
+
+on: [ push, pull_request ]
+
+jobs:
+  matching-openapi-files:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Verify OpenAPI files
+        run: |
+          cmp gamify-impl/src/main/resources/api-spec.yaml gamify-specs/src/main/resources/api-spec.yaml
