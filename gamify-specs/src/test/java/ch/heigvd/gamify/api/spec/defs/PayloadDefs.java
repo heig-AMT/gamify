@@ -5,23 +5,22 @@ import static org.junit.Assert.assertTrue;
 
 import ch.heigvd.gamify.api.spec.env.Environment;
 import io.cucumber.java8.En;
-import io.cucumber.java8.ParameterDefinitionBody.A1;
 import java.util.Collection;
 
 public class PayloadDefs implements En {
 
-  private enum Read {
-    GET,
-  }
-
   public PayloadDefs(Environment environment) {
-
-    // Request methods definitions.
-    ParameterType("read", "GET", (A1<Read>) Read::valueOf);
 
     // Writing data to the server.
     When("I read the {word} payload", (String name) -> {
       environment.getClient().putPayload(name, environment.getClient().getResponseData());
+    });
+
+    When("I see that {word} and {word} are the same", (String first, String second) -> {
+      var payload1 = environment.getClient().getPayload(first);
+      var payload2 = environment.getClient().getPayload(second);
+
+      assertEquals(payload1, payload2);
     });
 
     // Server responses management.
