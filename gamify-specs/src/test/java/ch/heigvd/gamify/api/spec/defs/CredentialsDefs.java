@@ -1,20 +1,20 @@
 package ch.heigvd.gamify.api.spec.defs;
 
 import ch.heigvd.gamify.ApiException;
-import ch.heigvd.gamify.api.dto.Registration;
 import ch.heigvd.gamify.api.spec.env.Environment;
+import ch.heigvd.gamify.api.dto.Credentials;
 import io.cucumber.java8.En;
 import java.util.UUID;
 
-public class RegistrationDefs implements En {
+public class CredentialsDefs implements En {
 
-  public RegistrationDefs(Environment environment) {
-    Given("I create the registration payload {word}",
-        (String name) -> environment.getClient().putPayload(name, generateRegistration())
+  public CredentialsDefs(Environment environment) {
+    Given("I create the credentials payload {word}",
+        (String name) -> environment.getClient().putPayload(name, generateCredentials())
     );
 
     When("I POST the {word} payload to the /register endpoint", (String named) -> {
-      var payload = environment.getClient().<Registration>getPayload(named);
+      var payload = environment.getClient().<Credentials>getPayload(named);
       try {
         var info = environment.getApi().addAppWithHttpInfo(payload);
         environment.getClient().putResponse(
@@ -30,8 +30,8 @@ public class RegistrationDefs implements En {
     });
   }
 
-  private Registration generateRegistration() {
-    return new Registration()
+  private Credentials generateCredentials() {
+    return new Credentials()
         .appId(UUID.randomUUID().toString())
         .password(UUID.randomUUID().toString());
   }
