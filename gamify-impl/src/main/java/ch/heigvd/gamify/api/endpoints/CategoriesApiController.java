@@ -56,4 +56,12 @@ public class CategoriesApiController implements CategoriesApi
                 .buildAndExpand(entity.getName());
         return ResponseEntity.created(location.toUri()).build();
     }
+
+    @Override
+    public ResponseEntity<Void> deleteCategory(@Valid String idCategory) {
+        this.repository.delete(CategoryEntity.builder()
+                .name(idCategory)
+                .build());
+        return ResponseEntity.ok(null);
+    }
 }

@@ -51,6 +51,15 @@ public class CategoriesDef implements En
                 );
             }
         });
+
+        When("I DELETE the {word} payload to the /categories endpoint", (String category) ->
+        {
+            var info = environment.getApi().deleteCategoryWithHttpInfo(category);
+            environment.getClient().putResponse(
+                    info.getStatusCode(),
+                    info.getData()
+            );
+        });
     }
 
     private Category generateCategory(String name){

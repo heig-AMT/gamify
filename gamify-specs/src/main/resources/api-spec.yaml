@@ -104,6 +104,18 @@ paths:
       responses:
         '201':
           description: created
+    delete:
+      description: delete a category
+      operationId: deleteCategory
+      parameters:
+        - name: idCategory
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
 
 
 
