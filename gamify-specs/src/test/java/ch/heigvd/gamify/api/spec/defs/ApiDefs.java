@@ -14,6 +14,12 @@ public class ApiDefs implements En {
           .getAuthentication("apiKeyAuth");
       auth.setApiKey((String) token);
     });
+    Then("I don't authenticate", () -> {
+      var auth = (ApiKeyAuth) environment.getApi()
+          .getApiClient()
+          .getAuthentication("apiKeyAuth");
+      auth.setApiKey("");
+    });
     Then("I read the {word} payload as the {word} property of the {word} payload",
         (String field, String named, String original) -> {
           var payload = environment.getClient().getPayload(original);
