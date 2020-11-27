@@ -52,7 +52,8 @@ public class AuthenticationApiController
   public ResponseEntity<AuthenticationSuccess> login(@Valid Credentials credentials) {
     return repository.findById(credentials.getAppId())
         .filter((app) -> app.getPassword().equals(credentials.getPassword()))
-        .map((app) -> ResponseEntity.status(HttpStatus.OK).body(new AuthenticationSuccess().token(app.getToken())))
+        .map((app) -> ResponseEntity.status(HttpStatus.OK)
+            .body(new AuthenticationSuccess().token(app.getToken())))
         .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
   }
 }

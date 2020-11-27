@@ -1,8 +1,8 @@
 package ch.heigvd.gamify.api.spec.defs;
 
 import ch.heigvd.gamify.ApiException;
-import ch.heigvd.gamify.api.spec.env.Environment;
 import ch.heigvd.gamify.api.dto.Credentials;
+import ch.heigvd.gamify.api.spec.env.Environment;
 import io.cucumber.java8.En;
 import java.util.UUID;
 
@@ -28,7 +28,7 @@ public class CredentialsDefs implements En {
         );
       }
     });
-    
+
     When("I POST the {word} payload to the /login endpoint", (String named) -> {
       var payload = environment.getClient().<Credentials>getPayload(named);
       try {
@@ -46,7 +46,7 @@ public class CredentialsDefs implements En {
     });
   }
 
-    private Credentials generateCredentials() {
+  private Credentials generateCredentials() {
     return new Credentials()
         .appId(UUID.randomUUID().toString())
         .password(UUID.randomUUID().toString());
