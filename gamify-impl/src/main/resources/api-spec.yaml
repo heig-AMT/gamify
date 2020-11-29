@@ -170,4 +170,9 @@ components:
         name:
           type: string
           nullable: false
-
+        title:
+          type: string
+          nullable: false
+        description:
+          type: string
+          nullable: false

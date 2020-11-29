@@ -24,6 +24,8 @@ public class CategoriesApiController implements CategoriesApi
         var entity=this.repository.save(
                 CategoryEntity.builder()
                         .name(category.getName())
+                        .title(category.getName())
+                        .description(category.getDescription())
                         .build()
         );
         var location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -43,12 +45,12 @@ public class CategoriesApiController implements CategoriesApi
     @Override
     public ResponseEntity<Void> updateCategory(@Valid String idCategory, Category newCategory){
         newCategory.setName(idCategory);
-        this.repository.delete(CategoryEntity.builder()
-                .name(idCategory)
-                .build());
+        this.repository.delete(this.repository.findById(idCategory).get());
         var entity=this.repository.save(
                 CategoryEntity.builder()
                         .name(newCategory.getName())
+                        .title(newCategory.getTitle())
+                        .description(newCategory.getDescription())
                         .build()
         );
         var location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -59,9 +61,7 @@ public class CategoriesApiController implements CategoriesApi
 
     @Override
     public ResponseEntity<Void> deleteCategory(@Valid String idCategory) {
-        this.repository.delete(CategoryEntity.builder()
-                .name(idCategory)
-                .build());
+        this.repository.delete(this.repository.findById(idCategory).get());
         return ResponseEntity.ok(null);
     }
 }

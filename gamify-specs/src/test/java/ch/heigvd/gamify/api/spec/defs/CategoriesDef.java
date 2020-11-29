@@ -8,8 +8,8 @@ import io.cucumber.java8.En;
 public class CategoriesDef implements En
 {
     public CategoriesDef(Environment environment){
-        Given("I create the category payload {word}",
-                (String catName)->environment.getClient().putPayload(catName,generateCategory(catName)));
+        Given("I create the category payload named {word} described as {word}",
+                (String catName, String descr)->environment.getClient().putPayload(catName,generateCategory(catName, descr)));
 
         When("I POST the {word} payload to the /categories endpoint", (String category) ->
         {var payload=environment.getClient().<Category>getPayload(category);
@@ -62,8 +62,10 @@ public class CategoriesDef implements En
         });
     }
 
-    private Category generateCategory(String name){
+    private Category generateCategory(String name, String description){
         return new Category()
-                .name(name);
+                .name(name)
+                .title(name)
+                .description(description);
     }
 }
