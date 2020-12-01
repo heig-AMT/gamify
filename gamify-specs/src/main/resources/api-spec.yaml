@@ -3,20 +3,39 @@ info:
   version: '0.1.0'
   title: Gamify API
   description: An API that manages application-specific events, and lets you define rules to find user scores.
+  
+tags:
+- name: users
+  description: Everything about users
+- name: end users
+  description: To be defined more clearly
+- name: categories
+  description: Everything about categories
+- name: badges
+  description: Everything about badges
+- name: rules
+  description: Everything about rules
+- name: events
+  description: Everything about events
+- name: aggregates
+  description: Everything about aggregates
+  
 security:
   #  - bearerAuth: []
   - apiKeyAuth: [ ]
 paths:
-  # Authentication related endpoints
+  # users
   /register:
     post:
-      description: register a new application
-      operationId: addApp
+      tags:
+      - users
+      description: register a new user
+      operationId: registerUser
       requestBody:
         content:
           'application/json':
             schema:
-              $ref: '#/components/schemas/Credentials'
+              $ref: '#/components/schemas/UserCredentials'
       responses:
         '201':
           description: success
@@ -26,15 +45,17 @@ paths:
                 $ref: '#/components/schemas/AuthenticationSuccess'
         '403':
           description: forbidden
-  /login:
-    post:
-      description: login a registered application
-      operationId: login
+
+    put:
+      tags:
+      - users
+      description: update a user
+      operationId: updateUser
       requestBody:
         content:
           'application/json':
             schema:
-              $ref: '#/components/schemas/Credentials'
+              $ref: '#/components/schemas/UserCredentials'
       responses:
         '200':
           description: success
@@ -45,9 +66,227 @@ paths:
         '403':
           description: forbidden
 
-  # Events related endpoints
+    delete:
+      tags:
+      - users
+      description: delete a user
+      operationId: deleteUser
+      responses:
+        '204':
+          description: success
+        '403':
+          description: forbidden
+  
+  # end users
+  
+  # categories
+  /categories:
+    post:
+      tags:
+      - categories
+      description: register a new category
+      operationId: registerCategory
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/UserCredentials'
+      responses:
+        '201':
+          description: success
+        '403':
+          description: forbidden
+
+    get:
+      tags:
+      - categories
+      description: get all the categories
+      operationId: getCategories
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+
+  /categories/{categoryName}:
+    parameters:
+          - name: categoryName
+            in: path
+            description: name of the category
+            required: true
+            schema:
+              type: string
+
+    put:
+      tags:
+      - categories
+      description: update a category
+      operationId: updateCategory
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '204':
+          description: success
+        '403':
+          description: forbidden
+    delete:
+      tags:
+      - categories
+      description: delete a category
+      operationId: deleteCategory
+      responses:
+        '204':
+          description: success
+        '403':
+          description: forbidden
+
+  # badges
+  /badges:
+    post:
+      tags:
+      - badges
+      description: register a new badge
+      operationId: registerBadge
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Badge'
+      responses:
+        '204':
+          description: success
+        '403':
+          description: forbidden
+
+    get:
+      tags:
+      - badges
+      description: get all the badges
+      operationId: getBadges
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Badge'
+
+  /badges/{badgeName}:
+    parameters:
+          - name: badgeName
+            in: path
+            description: name of the badge
+            required: true
+            schema:
+              type: string
+    put:
+      tags:
+      - badges
+      description: update a badge
+      operationId: updateBadge
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Badge'
+      responses:
+        '204':
+          description: success
+        '403':
+          description: forbidden
+
+    delete:
+      tags:
+      - badges
+      description: delete a badge
+      operationId: deleteBadge
+      responses:
+        '204':
+          description: success
+        '403':
+          description: forbidden
+  # rules
+  /rules:
+    post:
+      tags:
+      - rules
+      description: register a new rule
+      operationId: registerRule
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Rule'
+      responses:
+        '204':
+          description: success
+        '403':
+          description: forbidden
+
+    get:
+      tags:
+      - rules
+      description: get all the rules
+      operationId: getRules
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rule'
+
+  /rules/{ruleName}:
+    parameters:
+          - name: ruleName
+            in: path
+            description: name of the rule
+            required: true
+            schema:
+              type: string
+    put:
+      tags:
+      - rules
+      description: update a rule
+      operationId: updateRule
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Rule'
+      responses:
+        '204':
+          description: success
+        '403':
+          description: forbidden
+
+    delete:
+      tags:
+      - rules
+      description: delete a rule
+      operationId: deleteRule
+      responses:
+        '204':
+          description: success
+        '403':
+          description: forbidden
+
+  # events
   /events:
     post:
+      tags:
+      - events
       description: post a user defined event
       operationId: addEvent
       requestBody:
@@ -58,6 +297,64 @@ paths:
       responses:
         '201':
           description: created
+    get:
+      tags:
+      - events
+      description: get all the events
+      operationId: getEvents
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+
+  /aggregates/categories/{categoryName}:
+    parameters:
+      - name: categoryName
+        in: path
+        description: name of the category
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+      - aggregates
+      description: get the global leaderboard for a category
+      operationId: getLeaderboard
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserAggregate'
+
+  /aggregates/endusers/{endUserId}:
+    parameters:
+        - name: endUserId
+          in: path
+          description: id of the end user
+          required: true
+          schema:
+            type: string
+    get:
+      tags:
+      - aggregates
+      description: get a specific end user aggregate
+      operationId: getEndUserAggregate
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/UserAggregate'
 
 components:
   securitySchemes:
@@ -69,36 +366,84 @@ components:
       type: apiKey
       in: header
       name: X-API-KEY
+      
   schemas:
-    # An Event is specific to each user of our API.
-    Event:
+    User:
       type: object
       properties:
         userId:
           type: string
-          nullable: false
-        timestamp:
-          type: string
-          format: date-time
-          nullable: false
-        type:
-          type: string
-          nullable: false
-
-    # A credentials is a piece of data used to identify an application.
-    Credentials:
+          
+    EndUser:
       type: object
       properties:
-        appId:
+        endUserId:
           type: string
-          nullable: false
+          
+    Category:
+      type: object
+      properties:
+        title: 
+          type: string
+        description:
+          type: string
+        name:
+          type: string
+          
+    Badge:
+      type: object
+      properties:
+        category:
+          type: string
+        pointsLower:
+          type: integer
+        pointsUpper:
+          type: integer
+          nullable: true
+
+    # An Event is specific to each user of our API.
+    Event:
+      type: object
+      properties:
+        name:
+          type: string
+        endUserId:
+          type: string
+        timestamp:
+          type: string
+          format: Unix Epoch
+
+    Rule:
+      type: object
+      properties:
+        event:
+          type: string
+        points:
+          type: integer
+        category:
+          type: string
+          
+    UserAggregate:
+      type: object
+      properties:
+        endUser:
+          $ref: '#/components/schemas/EndUser'
+        points:
+          type: integer
+        rank:
+          type: integer
+
+    # A registration is a piece of data used to identify an application.
+    UserCredentials:
+      type: object
+      properties:
+        userName:
+          type: string
         password:
           type: string
-          nullable: false
 
     AuthenticationSuccess:
       type: object
       properties:
         token:
           type: string
-          nullable: false
