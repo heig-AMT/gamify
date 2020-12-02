@@ -1,6 +1,6 @@
 openapi: '3.0.3'
 info:
-  version: '0.1.0'
+  version: 'InDev'
   title: Gamify API
   description: An API that manages application-specific events, and lets you define rules to find user scores.
 servers:
@@ -32,7 +32,7 @@ paths:
         content:
           'application/json':
             schema:
-              $ref: '#/components/schemas/NewAccount'
+              $ref: '#/components/schemas/Registration'
       responses:
         '201':
           description: success
@@ -48,13 +48,15 @@ paths:
     put:
       tags:
       - account
-      description: update an account
+      description: update an account's password
       operationId: updateAccount
+      security:
+      - basicAuth: []
       requestBody:
         content:
           'application/json':
             schema:
-              $ref: '#/components/schemas/ChangeAccount'
+              $ref: '#/components/schemas/ChangePassword'
       responses:
         '200':
           description: success
@@ -74,6 +76,8 @@ paths:
       - account
       description: delete an account
       operationId: deleteAccount
+      security:
+      - basicAuth: []
       responses:
         '204':
           description: success
@@ -84,17 +88,14 @@ paths:
         '404':
           description: not found
           
-  /account/login:
+  /account/token:
     post:
       tags:
       - account
       description: login to an account
       operationId: login
-      requestBody:
-        content:
-          'application/json':
-            schema:
-              $ref: '#/components/schemas/Authentication'
+      security:
+      - basicAuth: []
       responses:
         '200':
           description: success
@@ -126,9 +127,9 @@ paths:
         '403':
           description: forbidden
 
-  /categories/{categoryName}:
+  /categories/{name}:
     parameters:
-          - name: categoryName
+          - name: name
             in: path
             description: name of the category
             required: true
@@ -148,7 +149,7 @@ paths:
           content:
             'application/json':
               schema:
-                $ref: '#/components/schemas/SpecificCategory'
+                $ref: '#/components/schemas/Category'
         '403':
           description: forbidden
         '404':
@@ -165,7 +166,7 @@ paths:
         content:
           'application/json':
             schema:
-              $ref: '#/components/schemas/SpecificCategory'
+              $ref: '#/components/schemas/Category'
       responses:
         '204':
           description: success
@@ -208,9 +209,9 @@ paths:
         '403':
           description: forbidden
 
-  /badges/{badgeName}:
+  /badges/{name}:
     parameters:
-          - name: badgeName
+          - name: name
             in: path
             description: name of the badge
             required: true
@@ -230,7 +231,7 @@ paths:
           content:
             'application/json':
               schema:
-                $ref: '#/components/schemas/SpecificBadge'
+                $ref: '#/components/schemas/Badge'
         '403':
           description: forbidden
         '404':
@@ -247,7 +248,7 @@ paths:
         content:
           'application/json':
             schema:
-              $ref: '#/components/schemas/SpecificBadge'
+              $ref: '#/components/schemas/Badge'
       responses:
         '204':
           description: success
@@ -315,9 +316,9 @@ paths:
         '403':
           description: forbidden
 
-  /rules/{ruleName}:
+  /rules/{name}:
     parameters:
-          - name: ruleName
+          - name: name
             in: path
             description: name of the rule
             required: true
@@ -337,7 +338,7 @@ paths:
           content:
             'application/json':
               schema:
-                $ref: '#/components/schemas/SpecificRule'
+                $ref: '#/components/schemas/Rule'
         '403':
           description: forbidden
         '404':
@@ -354,7 +355,7 @@ paths:
         content:
           'application/json':
             schema:
-              $ref: '#/components/schemas/SpecificRule'
+              $ref: '#/components/schemas/Rule'
       responses:
         '204':
           description: success
@@ -377,7 +378,7 @@ paths:
           description: not found
 
   # aggregates
-  /leaderboards/{categoryName}:
+  /leaderboards/{name}:
     get:
       tags:
       - aggregates
@@ -386,7 +387,7 @@ paths:
       security:
       - apiKeyAuth: []
       parameters:
-      - name: categoryName
+      - name: name
         in: path
         description: name of the category
         required: true
@@ -404,7 +405,7 @@ paths:
         '403':
           description: forbidden
 
-  /users/{userId}:
+  /users/{id}:
     get:
       tags:
       - aggregates
@@ -413,7 +414,7 @@ paths:
       security:
       - apiKeyAuth: []
       parameters:
-      - name: userId
+      - name: id
         in: path
         description: id of the end user
         required: true
@@ -435,20 +436,19 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SpecificUserRanking'
+                  $ref: '#/components/schemas/Ranking'
         '403':
           description: forbidden
 
 components:
   securitySchemes:
-    #    bearerAuth:            # arbitrary name for the security scheme
-    #      type: http
-    #      scheme: bearer       # warning: it HAS TO be a lowercase b for the swagger ui version used in springfox
-    #      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
     apiKeyAuth:
       type: apiKey
       in: header
       name: X-API-KEY
+    basicAuth:
+      type: http
+      scheme: basic
 
   schemas:
     Category:
@@ -456,14 +456,6 @@ components:
       properties:
         name:
           type: string
-        title: 
-          type: string
-        description:
-          type: string
-
-    SpecificCategory:
-      type: object
-      properties:
         title: 
           type: string
         description:
@@ -480,8 +472,6 @@ components:
           type: string
         description:
           type: string
-        picture:
-          type: string
         pointsLower:
           type: integer
           nullable: true
@@ -489,25 +479,6 @@ components:
           type: integer
           nullable: true
 
-    SpecificBadge:
-      type: object
-      properties:
-        category:
-          type: string
-        title:
-          type: string
-        description:
-          type: string
-        picture:
-          type: string
-        pointsLower:
-          type: integer
-          nullable: true
-        pointsUpper:
-          type: integer
-          nullable: true
-
-    # An Event is specific to each user of our API.
     Event:
       type: object
       properties:
@@ -531,42 +502,24 @@ components:
         points:
           type: integer
 
-    SpecificRule:
+    Ranking:
       type: object
       properties:
         category:
           type: string
-        event:
-          type: string
-        points:
-          type: integer
-
-    UserRanking:
-      type: object
-      properties:
         userId:
           type: string
         rank:
           type: integer
         points:
           type: integer
-          
-    SpecificUserRanking:
-      type: object
-      properties:
-        category:
-          type: string
-        rank:
-          type: integer
-        points:
-          type: integer
         badges:
+          nullable: true
           type: array
           items:
             $ref: '#/components/schemas/Badge'
-    
-    # A registration is a piece of data used to identify an application.
-    NewAccount:
+
+    Registration:
       type: object
       properties:
         username:
@@ -574,22 +527,10 @@ components:
         password:
           type: string
 
-    ChangeAccount:
+    ChangePassword:
       type: object
       properties:
-        username:
-          type: string
-        oldPassword:
-          type: string
         newPassword:
-          type: string
-
-    Authentication:
-      type: object
-      properties:
-        username:
-          type: string
-        password:
           type: string
 
     AuthenticationSuccess:
