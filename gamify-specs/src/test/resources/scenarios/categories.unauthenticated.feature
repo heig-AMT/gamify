@@ -1,4 +1,4 @@
-Feature: Validation of unauthenticated event management
+Feature: Validation of unauthenticated categories management
 
   Background:
     Given there is a Gamify server

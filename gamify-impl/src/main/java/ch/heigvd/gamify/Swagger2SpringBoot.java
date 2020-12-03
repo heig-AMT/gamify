@@ -41,6 +41,8 @@ public class Swagger2SpringBoot {
     // TODO : Add your authenticated endpoints here.
 
     bean.addUrlPatterns("/events");
+    bean.addUrlPatterns("/categories");
+    bean.addUrlPatterns("/categories/*");
     return bean;
   }
 
