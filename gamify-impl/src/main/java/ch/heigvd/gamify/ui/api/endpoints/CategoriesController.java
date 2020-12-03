@@ -6,6 +6,9 @@ import ch.heigvd.gamify.domain.app.App;
 import ch.heigvd.gamify.domain.category.CategoryRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +32,20 @@ public class CategoriesController implements CategoriesApi {
 
   @Override
   public ResponseEntity<List<Category>> getCategories() {
-    return ResponseEntity.notFound().build();
+    var categories = StreamSupport.stream(categoryRepository
+        .findAllByApp((App) request.getAttribute(ApiKeyFilter.APP_KEY))
+        .spliterator(), false)
+        .map(category ->
+            new Category()
+                .name(category.getName())
+                .description(category.getDescription())
+                .title(category.getTitle())
+        )
+        .collect(Collectors.toList());
+
+    return ResponseEntity.ok(
+        categories
+    );
   }
 
   @Override
@@ -40,8 +56,6 @@ public class CategoriesController implements CategoriesApi {
   @Override
   public ResponseEntity<Void> putCategory(String name, @Valid Category category) {
     if (!category.getName().equals(name)) {
-      System.out.println(category.getName());
-      System.out.println(name);
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 

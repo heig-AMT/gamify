@@ -14,7 +14,7 @@ public class Categories implements En {
       environment.getClient().putPayload(named, randomCategory());
     });
 
-    When("I GET the {word} payload from the api.categories endpoint", (String named) -> {
+    When("I GET the payload from the api.categories endpoint", () -> {
       var api = new CategoriesApi();
       try {
         var categories = api.getCategoriesWithHttpInfo();

@@ -7,7 +7,7 @@ Feature: Validation of unauthenticated categories management
   # General
 
   Scenario: I can't read categories
-    When I GET the categories payload from the api.categories endpoint
+    When I GET the payload from the api.categories endpoint
     Then I receive a 403 status code
 
   # Specific categories

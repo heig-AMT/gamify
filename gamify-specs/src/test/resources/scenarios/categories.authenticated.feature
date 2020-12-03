@@ -18,3 +18,13 @@ Feature: Validation of authenticated categories management
     And I PUT the category resource to the api.categories.*** endpoint
     Then I receive a 204 status code
 
+  Scenario: I can create two categories
+    Given I create the category payload cat1
+    And I create the category payload cat2
+    When I PUT the cat1 resource to the api.categories.*** endpoint
+    And I PUT the cat2 resource to the api.categories.*** endpoint
+    Then I GET the payload from the api.categories endpoint
+    And I read the response payload
+    And I receive a 200 status code
+    And I see cat1 in response
+    And I see cat2 in response
