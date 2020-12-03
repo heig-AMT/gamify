@@ -14,6 +14,10 @@ public class Categories implements En {
       environment.getClient().putPayload(named, randomCategory());
     });
 
+    When("I create the category payload {word} with name {word}", (String named, String name) -> {
+      environment.getClient().putPayload(named, namedCategory(name));
+    });
+
     When("I GET the payload from the api.categories endpoint", () -> {
       var api = new CategoriesApi();
       try {
@@ -105,5 +109,10 @@ public class Categories implements En {
         .title(UUID.randomUUID().toString())
         .name(UUID.randomUUID().toString())
         .description(UUID.randomUUID().toString());
+  }
+
+  private Category namedCategory(String name) {
+    return randomCategory()
+        .name(name);
   }
 }

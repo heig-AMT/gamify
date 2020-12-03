@@ -35,12 +35,7 @@ public class CategoriesController implements CategoriesApi {
     var categories = StreamSupport.stream(categoryRepository
         .findAllByApp((App) request.getAttribute(ApiKeyFilter.APP_KEY))
         .spliterator(), false)
-        .map(category ->
-            new Category()
-                .name(category.getName())
-                .description(category.getDescription())
-                .title(category.getTitle())
-        )
+        .map(CategoriesController::toDto)
         .collect(Collectors.toList());
 
     return ResponseEntity.ok(
@@ -50,7 +45,10 @@ public class CategoriesController implements CategoriesApi {
 
   @Override
   public ResponseEntity<Category> getCategory(String name) {
-    return ResponseEntity.notFound().build();
+    return categoryRepository.findById(name)
+        .map(CategoriesController::toDto)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
   }
 
   @Override
@@ -69,5 +67,12 @@ public class CategoriesController implements CategoriesApi {
         .build());
 
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
+
+  private static Category toDto(ch.heigvd.gamify.domain.category.Category category) {
+    return new Category()
+        .title(category.getTitle())
+        .description(category.getDescription())
+        .name(category.getName());
   }
 }
