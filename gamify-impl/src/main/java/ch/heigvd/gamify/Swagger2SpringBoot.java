@@ -1,6 +1,7 @@
 package ch.heigvd.gamify;
 
-import ch.heigvd.gamify.api.filters.UserFilter;
+import ch.heigvd.gamify.api.filters.ApiKeyFilter;
+import ch.heigvd.gamify.api.filters.BasicAuthFilter;
 import ch.heigvd.gamify.repositories.RegisteredAppRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
@@ -33,24 +34,34 @@ public class Swagger2SpringBoot implements CommandLineRunner {
     new SpringApplication(Swagger2SpringBoot.class).run(args);
   }
 
-  // API KEY BEANS.
+  // AUTHENTICATION BEANS.
 
   /**
    * Creates a new {@link FilterRegistrationBean} that indicates that we'll actually apply the
-   * {@link UserFilter} on some specific paths.
+   * {@link ApiKeyFilter} on some specific paths.
    *
    * @param repository the {@link RegisteredAppRepository} that the registration filter depends on.
    */
   @Bean
-  public FilterRegistrationBean<UserFilter> users(
+  public FilterRegistrationBean<ApiKeyFilter> apiKey(
       RegisteredAppRepository repository
   ) {
-    var bean = new FilterRegistrationBean<UserFilter>();
-    bean.setFilter(new UserFilter(repository));
-
+    var bean = new FilterRegistrationBean<ApiKeyFilter>();
+    bean.setFilter(new ApiKeyFilter(repository));
     // TODO : Add your authenticated endpoints here.
-    bean.addUrlPatterns("/events");
 
+    bean.addUrlPatterns("/events");
+    return bean;
+  }
+
+  @Bean
+  public FilterRegistrationBean<BasicAuthFilter> basicAuth(
+      RegisteredAppRepository repository
+  ) {
+    var bean = new FilterRegistrationBean<BasicAuthFilter>();
+    bean.setFilter(new BasicAuthFilter(repository));
+    bean.addUrlPatterns("/account");
+    bean.addUrlPatterns("/account/token");
     return bean;
   }
 

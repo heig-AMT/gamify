@@ -7,7 +7,7 @@ Feature: Validation of event management
     Then I receive a 201 status code
     And I read the registrationResponse payload
     And I read the token payload as the token property of the registrationResponse payload
-    And I authenticate with token payload
+    And I authenticate with token api key
 
   Scenario: I can create new events
     Given I create the event payload event

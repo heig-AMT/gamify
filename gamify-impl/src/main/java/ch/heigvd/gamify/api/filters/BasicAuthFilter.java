@@ -2,6 +2,8 @@ package ch.heigvd.gamify.api.filters;
 
 import ch.heigvd.gamify.repositories.RegisteredAppRepository;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -11,21 +13,14 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * An implementation of a {@link Filter} that makes sure that proper API keys are used to
- * authenticate users.
- */
-public class UserFilter implements Filter {
+public class BasicAuthFilter implements Filter {
 
   /**
    * The key in which the {@link ch.heigvd.gamify.entities.RegisteredAppEntity} will be stored.
    */
   public static final String APP_KEY = "app";
 
-  /**
-   * The API key header that's specified in our spec.
-   */
-  private static final String API_KEY_HEADER = "X-API-KEY";
+  private static final String BASIC_AUTH_HEADER = "Authorization";
 
   /**
    * The {@link RegisteredAppRepository} that is used to look at the available registrations for the
@@ -33,48 +28,56 @@ public class UserFilter implements Filter {
    */
   private final RegisteredAppRepository repository;
 
-  public UserFilter(RegisteredAppRepository repository) {
+  public BasicAuthFilter(RegisteredAppRepository repository) {
     this.repository = repository;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void doFilter(
-      ServletRequest servletRequest,
-      ServletResponse servletResponse,
-      FilterChain filterChain
+      ServletRequest request,
+      ServletResponse response,
+      FilterChain chain
   ) throws IOException, ServletException {
-    var req = (HttpServletRequest) servletRequest;
-    var res = (HttpServletResponse) servletResponse;
+    var req = (HttpServletRequest) request;
+    var res = (HttpServletResponse) response;
 
     // Enforce API keys.
-    var key = req.getHeader(API_KEY_HEADER);
-    if (key == null) {
-      res.sendError(HttpServletResponse.SC_FORBIDDEN);
+    var cred = req.getHeader(BASIC_AUTH_HEADER);
+    if (cred == null || !cred.trim().startsWith("Basic ")) {
+      chain.doFilter(req, res);
+      return;
+    }
+
+    cred = new String(
+        Base64.getDecoder().decode(cred.trim().substring("Basic ".length())),
+        StandardCharsets.UTF_8
+    );
+
+    var split = cred.split(":");
+    if (split.length != 2) {
+      chain.doFilter(req, res);
       return;
     }
 
     // Retrieve the app.
-    var app = repository.findByToken(key);
+    var app = repository.findByNameAndPassword(split[0], split[1]);
     if (app.isEmpty()) {
-      res.sendError(HttpServletResponse.SC_FORBIDDEN);
+      chain.doFilter(req, res);
       return;
     }
 
     // Populate the app for the requests.
     req.setAttribute(APP_KEY, app.get());
-    filterChain.doFilter(req, res);
+    chain.doFilter(req, res);
   }
 
   @Override
-  public void init(FilterConfig filterConfig) {
-    // ignored
+  public void init(FilterConfig filterConfig) throws ServletException {
+    // ignored.
   }
 
   @Override
   public void destroy() {
-    // ignored
+    // ignored.
   }
 }
