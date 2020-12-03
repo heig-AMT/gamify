@@ -1,37 +1,27 @@
 package ch.heigvd.gamify;
 
+import ch.heigvd.gamify.domain.app.AppRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import ch.heigvd.gamify.ui.api.filters.BasicAuthFilter;
-import ch.heigvd.gamify.domain.app.AppRepository;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.ExitCodeGenerator;
+import java.util.TimeZone;
+import javax.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-import javax.annotation.PostConstruct;
-import java.util.TimeZone;
-
 @SpringBootApplication
 @ComponentScan(basePackages = {"ch.heigvd.gamify", "ch.heigvd.gamify.api"})
-public class Swagger2SpringBoot implements CommandLineRunner {
+public class Swagger2SpringBoot {
 
   @PostConstruct
-  void started() {
+  public void started() {
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
   }
 
-  @Override
-  public void run(String... arg0) {
-    if (arg0.length > 0 && arg0[0].equals("exitcode")) {
-      throw new ExitException();
-    }
-  }
-
   public static void main(String[] args) {
-    new SpringApplication(Swagger2SpringBoot.class).run(args);
+    new SpringApplication(Swagger2SpringBoot.class).run();
   }
 
   // AUTHENTICATION BEANS.
@@ -63,18 +53,5 @@ public class Swagger2SpringBoot implements CommandLineRunner {
     bean.addUrlPatterns("/account");
     bean.addUrlPatterns("/account/token");
     return bean;
-  }
-
-  /**
-   * An implementation of a {@link RuntimeException} that is used for exit.
-   */
-  static class ExitException extends RuntimeException implements ExitCodeGenerator {
-
-    private static final long serialVersionUID = 1L;
-
-    @Override
-    public int getExitCode() {
-      return 10;
-    }
   }
 }
