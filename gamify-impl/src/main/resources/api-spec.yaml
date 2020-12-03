@@ -4,7 +4,7 @@ info:
   title: Gamify API
   description: An API that manages application-specific events, and lets you define rules to find user scores.
 servers:
-  - url: api.tupperdate.me
+  - url: http://api.tupperdate.me
   
 tags:
 - name: account
