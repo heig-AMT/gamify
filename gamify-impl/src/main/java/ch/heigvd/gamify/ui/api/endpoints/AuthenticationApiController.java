@@ -1,11 +1,11 @@
-package ch.heigvd.gamify.api.endpoints;
+package ch.heigvd.gamify.ui.api.endpoints;
 
 import ch.heigvd.gamify.api.AccountApi;
-import ch.heigvd.gamify.api.filters.BasicAuthFilter;
 import ch.heigvd.gamify.api.model.AuthenticationSuccess;
 import ch.heigvd.gamify.api.model.Registration;
-import ch.heigvd.gamify.entities.RegisteredAppEntity;
-import ch.heigvd.gamify.repositories.RegisteredAppRepository;
+import ch.heigvd.gamify.domain.app.App;
+import ch.heigvd.gamify.domain.app.AppRepository;
+import ch.heigvd.gamify.ui.api.filters.BasicAuthFilter;
 import java.util.Optional;
 import java.util.UUID;
 import javax.servlet.ServletRequest;
@@ -21,7 +21,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 public class AuthenticationApiController implements AccountApi {
 
   @Autowired
-  RegisteredAppRepository repository;
+  AppRepository repository;
 
   @Autowired
   ServletRequest request;
@@ -39,7 +39,7 @@ public class AuthenticationApiController implements AccountApi {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
     var token = UUID.randomUUID().toString();
-    var entity = RegisteredAppEntity.builder()
+    var entity = App.builder()
         .name(registration.getUsername())
         .password(registration.getPassword())
         .token(token)
@@ -52,7 +52,7 @@ public class AuthenticationApiController implements AccountApi {
 
   @Override
   public ResponseEntity<AuthenticationSuccess> login() {
-    var app = (RegisteredAppEntity) request.getAttribute(BasicAuthFilter.APP_KEY);
+    var app = (App) request.getAttribute(BasicAuthFilter.APP_KEY);
 
     if (app == null) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

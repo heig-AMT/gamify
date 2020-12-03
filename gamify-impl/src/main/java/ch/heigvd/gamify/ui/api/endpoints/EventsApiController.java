@@ -1,11 +1,10 @@
-package ch.heigvd.gamify.api.endpoints;
+package ch.heigvd.gamify.ui.api.endpoints;
 
 import ch.heigvd.gamify.api.EventsApi;
-import ch.heigvd.gamify.api.filters.ApiKeyFilter;
-import ch.heigvd.gamify.api.model.Event;
-import ch.heigvd.gamify.entities.EventEntity;
-import ch.heigvd.gamify.entities.RegisteredAppEntity;
-import ch.heigvd.gamify.repositories.EventRepository;
+import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
+import ch.heigvd.gamify.domain.event.Event;
+import ch.heigvd.gamify.domain.app.App;
+import ch.heigvd.gamify.domain.event.EventRepository;
 import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,9 @@ public class EventsApiController implements EventsApi {
   ServletRequest request;
 
   @Override
-  public ResponseEntity<Void> addEvent(@Valid Event event) {
-    var app = (RegisteredAppEntity) request.getAttribute(ApiKeyFilter.APP_KEY);
-    var entity = this.repository.save(EventEntity.builder()
+  public ResponseEntity<Void> addEvent(@Valid ch.heigvd.gamify.api.model.Event event) {
+    var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
+    var entity = this.repository.save(Event.builder()
         .app(app)
         .timestamp(event.getTimestamp())
         .type(event.getType())

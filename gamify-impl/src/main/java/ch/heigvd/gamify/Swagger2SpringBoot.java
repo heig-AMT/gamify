@@ -1,8 +1,8 @@
 package ch.heigvd.gamify;
 
-import ch.heigvd.gamify.api.filters.ApiKeyFilter;
-import ch.heigvd.gamify.api.filters.BasicAuthFilter;
-import ch.heigvd.gamify.repositories.RegisteredAppRepository;
+import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
+import ch.heigvd.gamify.ui.api.filters.BasicAuthFilter;
+import ch.heigvd.gamify.domain.app.AppRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
@@ -40,11 +40,11 @@ public class Swagger2SpringBoot implements CommandLineRunner {
    * Creates a new {@link FilterRegistrationBean} that indicates that we'll actually apply the
    * {@link ApiKeyFilter} on some specific paths.
    *
-   * @param repository the {@link RegisteredAppRepository} that the registration filter depends on.
+   * @param repository the {@link AppRepository} that the registration filter depends on.
    */
   @Bean
   public FilterRegistrationBean<ApiKeyFilter> apiKey(
-      RegisteredAppRepository repository
+      AppRepository repository
   ) {
     var bean = new FilterRegistrationBean<ApiKeyFilter>();
     bean.setFilter(new ApiKeyFilter(repository));
@@ -56,7 +56,7 @@ public class Swagger2SpringBoot implements CommandLineRunner {
 
   @Bean
   public FilterRegistrationBean<BasicAuthFilter> basicAuth(
-      RegisteredAppRepository repository
+      AppRepository repository
   ) {
     var bean = new FilterRegistrationBean<BasicAuthFilter>();
     bean.setFilter(new BasicAuthFilter(repository));

@@ -1,4 +1,4 @@
-package ch.heigvd.gamify.entities;
+package ch.heigvd.gamify.domain.app;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisteredAppEntity {
+public class App {
 
   @Id
   private String name;

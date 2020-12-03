@@ -1,6 +1,7 @@
-package ch.heigvd.gamify.api.filters;
+package ch.heigvd.gamify.ui.api.filters;
 
-import ch.heigvd.gamify.repositories.RegisteredAppRepository;
+import ch.heigvd.gamify.domain.app.App;
+import ch.heigvd.gamify.domain.app.AppRepository;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -16,19 +17,19 @@ import javax.servlet.http.HttpServletResponse;
 public class BasicAuthFilter implements Filter {
 
   /**
-   * The key in which the {@link ch.heigvd.gamify.entities.RegisteredAppEntity} will be stored.
+   * The key in which the {@link App} will be stored.
    */
   public static final String APP_KEY = "app";
 
   private static final String BASIC_AUTH_HEADER = "Authorization";
 
   /**
-   * The {@link RegisteredAppRepository} that is used to look at the available registrations for the
+   * The {@link AppRepository} that is used to look at the available registrations for the
    * current user.
    */
-  private final RegisteredAppRepository repository;
+  private final AppRepository repository;
 
-  public BasicAuthFilter(RegisteredAppRepository repository) {
+  public BasicAuthFilter(AppRepository repository) {
     this.repository = repository;
   }
 
