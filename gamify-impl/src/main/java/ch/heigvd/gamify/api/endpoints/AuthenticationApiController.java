@@ -1,14 +1,16 @@
 package ch.heigvd.gamify.api.endpoints;
 
-import ch.heigvd.gamify.api.LoginApi;
-import ch.heigvd.gamify.api.RegisterApi;
+import ch.heigvd.gamify.api.AccountApi;
+import ch.heigvd.gamify.api.filters.BasicAuthFilter;
 import ch.heigvd.gamify.api.model.AuthenticationSuccess;
-import ch.heigvd.gamify.api.model.Credentials;
+import ch.heigvd.gamify.api.model.Registration;
 import ch.heigvd.gamify.entities.RegisteredAppEntity;
 import ch.heigvd.gamify.repositories.RegisteredAppRepository;
 import java.util.Optional;
 import java.util.UUID;
+import javax.servlet.ServletRequest;
 import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,14 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.NativeWebRequest;
 
 @Controller
-public class AuthenticationApiController
-    implements RegisterApi, LoginApi {
+public class AuthenticationApiController implements AccountApi {
 
-  private final RegisteredAppRepository repository;
+  @Autowired
+  RegisteredAppRepository repository;
 
-  public AuthenticationApiController(RegisteredAppRepository repository) {
-    this.repository = repository;
-  }
+  @Autowired
+  ServletRequest request;
 
   @Override
   public Optional<NativeWebRequest> getRequest() {
@@ -32,28 +33,32 @@ public class AuthenticationApiController
 
   @Transactional
   @Override
-  public ResponseEntity<AuthenticationSuccess> addApp(@Valid Credentials credentials) {
-    var exists = repository.findById(credentials.getAppId()).isPresent();
+  public ResponseEntity<AuthenticationSuccess> registerAccount(@Valid Registration registration) {
+    var exists = repository.findById(registration.getUsername()).isPresent();
     if (exists) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
     var token = UUID.randomUUID().toString();
     var entity = RegisteredAppEntity.builder()
-        .name(credentials.getAppId())
-        .password(credentials.getPassword())
+        .name(registration.getUsername())
+        .password(registration.getPassword())
         .token(token)
         .build();
     repository.save(entity);
+
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(new AuthenticationSuccess().token(token));
   }
 
   @Override
-  public ResponseEntity<AuthenticationSuccess> login(@Valid Credentials credentials) {
-    return repository.findById(credentials.getAppId())
-        .filter((app) -> app.getPassword().equals(credentials.getPassword()))
-        .map((app) -> ResponseEntity.status(HttpStatus.OK)
-            .body(new AuthenticationSuccess().token(app.getToken())))
-        .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+  public ResponseEntity<AuthenticationSuccess> login() {
+    var app = (RegisteredAppEntity) request.getAttribute(BasicAuthFilter.APP_KEY);
+
+    if (app == null) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(new AuthenticationSuccess().token(app.getToken()));
   }
 }

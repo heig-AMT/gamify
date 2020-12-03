@@ -8,6 +8,6 @@ import io.cucumber.java8.En;
 public class GamifyDefs implements En {
 
   public GamifyDefs(Environment environment) {
-    Given("there is a Gamify server", () -> assertNotNull(environment.getApi()));
+    Given("there is a Gamify server", () -> assertNotNull(environment.getClient()));
   }
 }

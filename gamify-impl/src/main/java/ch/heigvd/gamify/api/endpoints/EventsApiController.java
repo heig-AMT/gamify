@@ -1,7 +1,7 @@
 package ch.heigvd.gamify.api.endpoints;
 
 import ch.heigvd.gamify.api.EventsApi;
-import ch.heigvd.gamify.api.filters.UserFilter;
+import ch.heigvd.gamify.api.filters.ApiKeyFilter;
 import ch.heigvd.gamify.api.model.Event;
 import ch.heigvd.gamify.entities.EventEntity;
 import ch.heigvd.gamify.entities.RegisteredAppEntity;
@@ -24,7 +24,7 @@ public class EventsApiController implements EventsApi {
 
   @Override
   public ResponseEntity<Void> addEvent(@Valid Event event) {
-    var app = (RegisteredAppEntity) request.getAttribute(UserFilter.APP_KEY);
+    var app = (RegisteredAppEntity) request.getAttribute(ApiKeyFilter.APP_KEY);
     var entity = this.repository.save(EventEntity.builder()
         .app(app)
         .timestamp(event.getTimestamp())

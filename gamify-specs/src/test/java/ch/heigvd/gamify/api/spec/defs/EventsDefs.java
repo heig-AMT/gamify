@@ -1,6 +1,7 @@
 package ch.heigvd.gamify.api.spec.defs;
 
 import ch.heigvd.gamify.ApiException;
+import ch.heigvd.gamify.api.EventsApi;
 import ch.heigvd.gamify.api.dto.Event;
 import ch.heigvd.gamify.api.spec.env.Environment;
 import io.cucumber.java8.En;
@@ -16,8 +17,9 @@ public class EventsDefs implements En {
     // Server I/O
     When("I POST the {word} payload to the /events endpoint", (String named) -> {
       var payload = environment.getClient().<Event>getPayload(named);
+      var api = new EventsApi(); // TODO : Is injection relevant here ?
       try {
-        var info = environment.getApi().addEventWithHttpInfo(payload);
+        var info = api.addEventWithHttpInfo(payload);
         environment.getClient().putResponse(
             info.getStatusCode(),
             info.getData()
