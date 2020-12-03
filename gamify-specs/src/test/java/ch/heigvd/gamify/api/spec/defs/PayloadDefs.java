@@ -31,5 +31,9 @@ public class PayloadDefs implements En {
       var collection = (Collection) environment.getClient().getPayload(container);
       assertTrue(collection.contains(environment.getClient().getPayload(element)));
     });
+    Then("I count {int} items in {word}", (Integer count, String container) -> {
+      var collection = (Collection) environment.getClient().getPayload(container);
+      assertEquals(count.intValue(), collection.size());
+    });
   }
 }

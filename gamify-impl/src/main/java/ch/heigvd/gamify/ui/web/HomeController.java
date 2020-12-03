@@ -1,4 +1,4 @@
-package ch.heigvd.gamify.configuration;
+package ch.heigvd.gamify.ui.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

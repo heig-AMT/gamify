@@ -1,5 +1,6 @@
-package ch.heigvd.gamify.entities;
+package ch.heigvd.gamify.domain.event;
 
+import ch.heigvd.gamify.domain.app.App;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import javax.persistence.Column;
@@ -18,14 +19,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventEntity implements Serializable {
+public class Event implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
   @ManyToOne
-  private RegisteredAppEntity app;
+  private App app;
 
   @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
   private OffsetDateTime timestamp;
