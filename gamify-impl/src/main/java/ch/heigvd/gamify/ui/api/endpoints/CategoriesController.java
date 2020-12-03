@@ -6,10 +6,10 @@ import ch.heigvd.gamify.domain.app.App;
 import ch.heigvd.gamify.domain.category.CategoryRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import javax.servlet.ServletRequest;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,9 +25,16 @@ public class CategoriesController implements CategoriesApi {
   @Autowired
   CategoryRepository categoryRepository;
 
+  @Transactional
   @Override
   public ResponseEntity<Void> deleteCategory(String name) {
-    return ResponseEntity.notFound().build();
+    var exists = categoryRepository.existsById(name);
+    if (exists) {
+      categoryRepository.deleteById(name);
+      return ResponseEntity.noContent().build();
+    } else {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   @Override

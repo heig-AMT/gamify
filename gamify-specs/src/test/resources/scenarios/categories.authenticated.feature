@@ -40,3 +40,15 @@ Feature: Validation of authenticated categories management
     And I read the response payload
     And I receive a 200 status code
     And I see that response and cat are the same
+
+  Scenario: I can't delete a missing category
+    When I DELETE the resource api.categories.chocobon
+    Then I receive a 404 status code
+
+  Scenario: I can delete a specific category
+    Given I create the category payload cat with name aloy
+    When I PUT the cat payload to the api.categories.aloy endpoint
+    Then I DELETE the resource api.categories.aloy
+    And I receive a 204 status code
+    When I GET from the api.categories.aloy endpoint
+    Then I receive a 404 status code
