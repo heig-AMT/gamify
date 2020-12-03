@@ -61,6 +61,7 @@ public class Swagger2SpringBoot implements CommandLineRunner {
     var bean = new FilterRegistrationBean<BasicAuthFilter>();
     bean.setFilter(new BasicAuthFilter(repository));
     bean.addUrlPatterns("/account");
+    bean.addUrlPatterns("/account/token");
     return bean;
   }
 

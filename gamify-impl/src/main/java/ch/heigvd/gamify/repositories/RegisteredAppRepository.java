@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface RegisteredAppRepository extends CrudRepository<RegisteredAppEntity, String> {
 
   Optional<RegisteredAppEntity> findByToken(String token);
-  Optional<RegisteredAppRepository> findByNameAndPassword(String name, String password);
+  Optional<RegisteredAppEntity> findByNameAndPassword(String name, String password);
 }
