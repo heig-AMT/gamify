@@ -2,13 +2,25 @@ package ch.heigvd.gamify.ui.api.endpoints;
 
 import ch.heigvd.gamify.api.CategoriesApi;
 import ch.heigvd.gamify.api.model.Category;
+import ch.heigvd.gamify.domain.app.App;
+import ch.heigvd.gamify.domain.category.CategoryRepository;
+import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import java.util.List;
+import javax.servlet.ServletRequest;
 import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class CategoriesController implements CategoriesApi {
+
+  @Autowired
+  ServletRequest request;
+
+  @Autowired
+  CategoryRepository categoryRepository;
 
   @Override
   public ResponseEntity<Void> deleteCategory(String name) {
@@ -27,6 +39,21 @@ public class CategoriesController implements CategoriesApi {
 
   @Override
   public ResponseEntity<Void> putCategory(String name, @Valid Category category) {
-    return ResponseEntity.notFound().build();
+    if (!category.getName().equals(name)) {
+      System.out.println(category.getName());
+      System.out.println(name);
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
+
+    categoryRepository.save(ch.heigvd.gamify.domain.category.Category.builder()
+        .app(app)
+        .title(category.getTitle())
+        .name(category.getName())
+        .description(category.getDescription())
+        .build());
+
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 }
