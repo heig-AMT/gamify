@@ -15,7 +15,7 @@ public class EventsDefs implements En {
     );
 
     // Server I/O
-    When("I POST the {word} payload to the /events endpoint", (String named) -> {
+    When("I POST the {word} payload to the api.events endpoint", (String named) -> {
       var payload = environment.getClient().<Event>getPayload(named);
       var api = new EventsApi(); // TODO : Is injection relevant here ?
       try {

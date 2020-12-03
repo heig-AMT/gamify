@@ -14,7 +14,7 @@ public class CredentialsDefs implements En {
         (String name) -> environment.getClient().putPayload(name, generateRegistration())
     );
 
-    When("I POST the {word} payload to the /register endpoint", (String named) -> {
+    When("I POST the {word} payload to the api.register endpoint", (String named) -> {
       var payload = environment.getClient().<Registration>getPayload(named);
       var api = new AccountApi();
       try {
@@ -31,7 +31,7 @@ public class CredentialsDefs implements En {
       }
     });
 
-    When("I POST to the /login endpoint", () -> {
+    When("I POST to the api.login endpoint", () -> {
       try {
         var api = new AccountApi();
         var info = api.loginWithHttpInfo();
