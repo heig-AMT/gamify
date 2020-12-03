@@ -28,3 +28,7 @@ Feature: Validation of authenticated categories management
     And I receive a 200 status code
     And I see cat1 in response
     And I see cat2 in response
+
+  Scenario: I can't get a missing category
+    When I GET from the api.categories.chocobon endpoint
+    Then I receive a 404 status code
