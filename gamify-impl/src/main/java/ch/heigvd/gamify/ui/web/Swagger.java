@@ -3,7 +3,6 @@ package ch.heigvd.gamify.ui.web;
 import static ch.heigvd.gamify.ui.web.SecuritySchemes.apiKey;
 import static ch.heigvd.gamify.ui.web.SecuritySchemes.basicAuth;
 
-import java.util.function.Predicate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -39,12 +38,6 @@ public class Swagger {
       .version(API_DESC_VERSION)
       .build();
 
-  // Security schemes and references.
-  private static final List<SecurityReference> SECURITY_REFERENCES = List.of(
-      new SecurityReference("key", new AuthorizationScope[0]),
-      new SecurityReference("basic", new AuthorizationScope[0])
-  );
-
   /**
    * Returns the {@link Docket} that describes our API, by introspecting the request handlers
    * defined in the {@link ch.heigvd.gamify.ui.api} package.
@@ -59,7 +52,9 @@ public class Swagger {
         .apiInfo(API_INFO)
         .securitySchemes(List.of(apiKey(), basicAuth()))
         .securityContexts(List.of(SecurityContext.builder()
-            .securityReferences(SECURITY_REFERENCES)
+            .securityReferences(
+                List.of(SecurityReferences.apiKey(),
+                    SecurityReferences.basicAuth()))
             .build()));
 
   }

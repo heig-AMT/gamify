@@ -9,7 +9,7 @@ import springfox.documentation.service.SecurityScheme;
  */
 public class SecuritySchemes {
 
-  public static final String API_KEY_NAME = "apiKey";
+  public static final String API_KEY_NAME = "key";
   public static final String BASIC_AUTH_NAME = "basic";
 
   private SecuritySchemes() {
