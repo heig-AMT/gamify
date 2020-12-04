@@ -21,3 +21,12 @@ Feature: User login
     And I read the response payload
     And I read the loginToken payload as the token property of the response payload
     And I see that registrationToken and loginToken are the same
+
+  Scenario: I can delete my account
+    Given I create the credentials payload aloy
+    When I POST the aloy payload to the api.register endpoint
+    Then I receive a 201 status code
+    And I read the response payload
+    And I read the registrationToken payload as the token property of the response payload
+    When I DELETE my account aloy
+    Then I receive a 204 status code
