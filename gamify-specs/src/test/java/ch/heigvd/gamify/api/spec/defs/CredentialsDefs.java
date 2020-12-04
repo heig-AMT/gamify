@@ -2,6 +2,7 @@ package ch.heigvd.gamify.api.spec.defs;
 
 import ch.heigvd.gamify.ApiException;
 import ch.heigvd.gamify.api.AccountApi;
+import ch.heigvd.gamify.api.dto.Password;
 import ch.heigvd.gamify.api.dto.Registration;
 import ch.heigvd.gamify.api.spec.env.Environment;
 import io.cucumber.java8.En;
@@ -62,10 +63,30 @@ public class CredentialsDefs implements En
         {
             var payload = environment.getClient().<Registration>getPayload(name);
             var api = new AccountApi();
-
             try
             {
                 var info = api.deleteAccountWithHttpInfo();
+                environment.getClient().putResponse(
+                        info.getStatusCode(),
+                        info.getData());
+            }
+            catch (ApiException exception)
+            {
+                environment.getClient().putResponse(
+                        exception.getCode(),
+                        exception.getResponseBody()
+                );
+            }
+        });
+        When("I UPDATE the credentials {word} with new password {word}", (String account, String newPassword) ->
+        {
+            var payload = environment.getClient().<Registration>getPayload(account);
+            var api = new AccountApi();
+            Password password=new Password();
+            password.setNewPassword(newPassword);
+            try
+            {
+                var info = api.updateAccountWithHttpInfo(password);
                 environment.getClient().putResponse(
                         info.getStatusCode(),
                         info.getData());

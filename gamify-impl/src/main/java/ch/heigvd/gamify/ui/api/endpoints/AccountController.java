@@ -65,7 +65,7 @@ public class AccountController implements AccountApi
                     .password(pwd.getNewPassword())
                     .token(account.getToken()).build());
 
-            return ResponseEntity.status(HttpStatus.CREATED)
+            return ResponseEntity.status(HttpStatus.resolve(200))
                     .body(new AuthenticationSuccess().token(account.getToken()));
         }
         else
