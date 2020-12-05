@@ -9,9 +9,20 @@ Feature: Validation of authenticated categories management
     And I authenticate with token api key
 
   Scenario: I can create a new category
-    Given I create the category payload category
-    Given I POST the category payload to the api.categories endpoint
+    Given I create the category payload category with name jarjar
+    And I POST the category payload to the api.categories endpoint
     Then I receive a 201 status code
+    When I GET the payload from the api.categories endpoint
+    And I read the response payload
+    Then I count 1 items in response
+    When I GET from the api.categories.jarjar endpoint
+    Then I receive a 200 status code
+
+  Scenario: I can't create two identical categories
+    Given I create the category payload category
+    And I POST the category payload to the api.categories endpoint
+    And I POST the category payload to the api.categories endpoint
+    Then I receive a 409 status code
     When I GET the payload from the api.categories endpoint
     And I read the response payload
     Then I count 1 items in response
