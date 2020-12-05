@@ -35,5 +35,12 @@ public class PayloadDefs implements En {
       var collection = (Collection) environment.getClient().getPayload(container);
       assertEquals(count.intValue(), collection.size());
     });
+    Then("I read the {word} payload as the {word} property of the {word} payload",
+        (String field, String named, String original) -> {
+          var payload = environment.getClient().getPayload(original);
+          var innerField = payload.getClass().getDeclaredField(named);
+          innerField.setAccessible(true);
+          environment.getClient().putPayload(field, innerField.get(payload));
+        });
   }
 }

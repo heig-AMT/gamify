@@ -126,6 +126,25 @@ paths:
                   $ref: '#/components/schemas/Category'
         '403':
           description: forbidden
+    post:
+      tags:
+        - categories
+      description: creates a new category
+      operationId: postCategory
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '201':
+          description: success
+        '403':
+          description: forbidden
+        '409':
+          description: conflict
 
   /categories/{name}:
     parameters:

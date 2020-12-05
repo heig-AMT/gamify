@@ -8,17 +8,47 @@ Feature: Validation of authenticated categories management
     And I read the token payload as the token property of the response payload
     And I authenticate with token api key
 
+  Scenario: I can create a new category
+    Given I create the category payload category with name jarjar
+    And I POST the category payload to the api.categories endpoint
+    Then I receive a 201 status code
+    When I GET the payload from the api.categories endpoint
+    And I read the response payload
+    Then I count 1 items in response
+    When I GET from the api.categories.jarjar endpoint
+    Then I receive a 200 status code
+
+  Scenario: I can't create two identical categories
+    Given I create the category payload category
+    And I POST the category payload to the api.categories endpoint
+    And I POST the category payload to the api.categories endpoint
+    Then I receive a 409 status code
+    When I GET the payload from the api.categories endpoint
+    And I read the response payload
+    Then I count 1 items in response
+
+  Scenario: I can create multiple categories
+    Given I create the category payload cat1
+    Given I create the category payload cat2
+    Given I create the category payload cat3
+    And I POST the cat1 payload to the api.categories endpoint
+    And I POST the cat2 payload to the api.categories endpoint
+    And I POST the cat3 payload to the api.categories endpoint
+    When I GET the payload from the api.categories endpoint
+    And I read the response payload
+    Then I count 3 items in response
+
   Scenario: I can only create well-formed categories
     Given I create the category payload category
     And I PUT the category payload to the api.categories.chocobon endpoint
     Then I receive a 400 status code
 
-  Scenario: I can create a new category
+  Scenario: I can create a new specific category
     Given I create the category payload category
     And I PUT the category resource to the api.categories.*** endpoint
     Then I receive a 204 status code
 
-  Scenario: I can create two categories
+  Scenario: I can create two specific categories
     Given I create the category payload cat1
     And I create the category payload cat2
     When I PUT the cat1 resource to the api.categories.*** endpoint

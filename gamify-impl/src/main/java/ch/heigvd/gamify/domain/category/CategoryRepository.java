@@ -6,4 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface CategoryRepository extends CrudRepository<Category, String> {
 
   Iterable<Category> findAllByApp(App app);
+  Boolean existsByAppAndName(App app, String name);
 }
