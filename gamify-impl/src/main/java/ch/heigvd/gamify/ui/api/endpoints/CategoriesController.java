@@ -60,6 +60,7 @@ public class CategoriesController implements CategoriesApi {
         .orElse(ResponseEntity.notFound().build());
   }
 
+  @Transactional
   @Override
   public ResponseEntity<Void> postCategory(@Valid Category category) {
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
