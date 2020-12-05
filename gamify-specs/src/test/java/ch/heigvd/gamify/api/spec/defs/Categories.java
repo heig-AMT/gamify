@@ -33,6 +33,21 @@ public class Categories implements En {
         );
       }
     });
+    When("I POST to the api.categories endpoint", () -> {
+      var api = new CategoriesApi();
+      try {
+        var category = api.postCategoryWithHttpInfo();
+        environment.getClient().putResponse(
+            category.getStatusCode(),
+            category.getData()
+        );
+      } catch (ApiException exception) {
+        environment.getClient().putResponse(
+            exception.getCode(),
+            exception.getResponseBody()
+        );
+      }
+    });
 
     When("I PUT the {word} resource to the api.categories.*** endpoint", (String named) -> {
       Category payload = environment.getClient().getPayload(named);
