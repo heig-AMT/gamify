@@ -13,7 +13,6 @@ public class Categories implements En {
     When("I create the category payload {word}", (String named) -> {
       environment.getClient().putPayload(named, randomCategory());
     });
-
     When("I create the category payload {word} with name {word}", (String named, String name) -> {
       environment.getClient().putPayload(named, namedCategory(name));
     });
@@ -33,10 +32,10 @@ public class Categories implements En {
         );
       }
     });
-    When("I POST to the api.categories endpoint", () -> {
+    When("I POST the {word} payload to the api.categories endpoint", (String named) -> {
       var api = new CategoriesApi();
       try {
-        var category = api.postCategoryWithHttpInfo();
+        var category = api.postCategoryWithHttpInfo(environment.getClient().getPayload(named));
         environment.getClient().putResponse(
             category.getStatusCode(),
             category.getData()

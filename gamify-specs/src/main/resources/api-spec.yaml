@@ -133,6 +133,11 @@ paths:
       operationId: postCategory
       security:
         - apiKeyAuth: []
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Category'
       responses:
         '201':
           description: success

@@ -61,15 +61,15 @@ public class CategoriesController implements CategoriesApi {
   }
 
   @Override
-  public ResponseEntity<Void> postCategory() {
+  public ResponseEntity<Void> postCategory(@Valid Category category) {
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
     var name = UUID.randomUUID().toString();
 
     categoryRepository.save(ch.heigvd.gamify.domain.category.Category.builder()
         .app(app)
-        .name(name)
-        .title("New category")
-        .description("Category's description")
+        .name(category.getName())
+        .title(category.getTitle())
+        .description(category.getDescription())
         .build());
 
     var location = ServletUriComponentsBuilder.fromCurrentRequest()

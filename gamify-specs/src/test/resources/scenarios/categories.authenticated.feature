@@ -9,16 +9,20 @@ Feature: Validation of authenticated categories management
     And I authenticate with token api key
 
   Scenario: I can create a new category
-    Given I POST to the api.categories endpoint
+    Given I create the category payload category
+    Given I POST the category payload to the api.categories endpoint
     Then I receive a 201 status code
     When I GET the payload from the api.categories endpoint
     And I read the response payload
     Then I count 1 items in response
 
   Scenario: I can create multiple categories
-    Given I POST to the api.categories endpoint
-    And I POST to the api.categories endpoint
-    And I POST to the api.categories endpoint
+    Given I create the category payload cat1
+    Given I create the category payload cat2
+    Given I create the category payload cat3
+    And I POST the cat1 payload to the api.categories endpoint
+    And I POST the cat2 payload to the api.categories endpoint
+    And I POST the cat3 payload to the api.categories endpoint
     When I GET the payload from the api.categories endpoint
     And I read the response payload
     Then I count 3 items in response
