@@ -53,7 +53,7 @@ public class BadgesDefs implements En
                 var info = api.getBadgeWithHttpInfo(name);
                 environment.getClient().putResponse(
                         info.getStatusCode(),
-                        info.getData()
+                        info.getData().getPointsLower()
                 );
             } catch (ApiException exception) {
                 environment.getClient().putResponse(
