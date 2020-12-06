@@ -5,6 +5,7 @@ import ch.heigvd.gamify.api.model.Badge;
 import ch.heigvd.gamify.api.model.Category;
 import ch.heigvd.gamify.domain.app.App;
 import ch.heigvd.gamify.domain.badges.BadgeRepository;
+import ch.heigvd.gamify.domain.category.CategoryRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,9 @@ public class BadgesController implements BadgesApi
 
     @Autowired
     BadgeRepository badgeRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
 
     @Override
     public ResponseEntity<List<Badge>> getBadges()
@@ -54,15 +58,19 @@ public class BadgesController implements BadgesApi
         {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+        var category=categoryRepository.findById(badge.getCategory());
+        if(category.isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
 
         badgeRepository.save(ch.heigvd.gamify.domain.badges.Badge.builder()
                 .app((App) request.getAttribute(ApiKeyFilter.APP_KEY))
                 .title(badge.getTitle())
                 .description(badge.getDescription())
                 .name(badge.getName())
-                .category(badge.getCategory())
-                .pointsLower(badge.getPointsLower())
-                .pointsUpper(badge.getPointsUpper())
+                .category(category.get())
+                .pointsLower(badge.getPointsLower().orElse(0))
+                .pointsUpper(badge.getPointsUpper().orElse(Integer.MAX_VALUE))
                 .build());
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
