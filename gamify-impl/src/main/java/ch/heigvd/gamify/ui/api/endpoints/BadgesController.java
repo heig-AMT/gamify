@@ -69,8 +69,8 @@ public class BadgesController implements BadgesApi
                 .description(badge.getDescription())
                 .name(badge.getName())
                 .category(category.get())
-                .pointsLower(badge.getPointsLower().orElse(0))
-                .pointsUpper(badge.getPointsUpper().orElse(Integer.MAX_VALUE))
+                .pointsLower(badge.getPointsLower()==null ? 0 : badge.getPointsLower())
+                .pointsUpper(badge.getPointsUpper()==null ? Integer.MAX_VALUE: badge.getPointsUpper())
                 .build());
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -89,12 +89,13 @@ public class BadgesController implements BadgesApi
 
     private static Badge toDto(ch.heigvd.gamify.domain.badges.Badge badge)
     {
-        return new Badge()
+        Badge badgeTemp= new Badge()
                 .title(badge.getTitle())
                 .description(badge.getDescription())
                 .name(badge.getName())
-                .category(badge.getCategory().getName())
-                .pointsLower(badge.getPointsLower())
-                .pointsUpper(badge.getPointsUpper());
+                .category(badge.getCategory().getName());
+                badgeTemp.setPointsLower(badge.getPointsLower());
+                badgeTemp.setPointsUpper(badge.getPointsUpper());
+        return badgeTemp;
     }
 }
