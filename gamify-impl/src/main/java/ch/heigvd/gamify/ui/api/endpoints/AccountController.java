@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.NativeWebRequest;
 
 @RestController
-public class AccountController implements AccountApi
-{
-
+public class AccountController implements AccountApi {
     @Autowired
     AppRepository repository;
 
@@ -38,27 +36,22 @@ public class AccountController implements AccountApi
 
     @Transactional
     @Override
-    public ResponseEntity<Void> deleteAccount()
-    {
+    public ResponseEntity<Void> deleteAccount() {
         var app = (App) request.getAttribute(BasicAuthFilter.APP_KEY);
-        if (repository.findByNameAndPassword(app.getName(), app.getPassword()).isPresent())
-        {
+        if (repository.findByNameAndPassword(app.getName(), app.getPassword()).isPresent()) {
             repository.delete(app);
             return ResponseEntity.noContent().build();
         }
-        else
-        {
+        else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @Transactional
     @Override
-    public ResponseEntity<AuthenticationSuccess> updateAccount(@Valid Password pwd)
-    {
+    public ResponseEntity<AuthenticationSuccess> updateAccount(@Valid Password pwd) {
         var account = (App) request.getAttribute(BasicAuthFilter.APP_KEY);
-        if (repository.findByNameAndPassword(account.getName(), account.getPassword()).isPresent())
-        {
+        if (repository.findByNameAndPassword(account.getName(), account.getPassword()).isPresent()) {
             repository.delete(account);
             repository.save(App.builder()
                     .name(account.getName())
@@ -68,19 +61,16 @@ public class AccountController implements AccountApi
             return ResponseEntity.status(HttpStatus.resolve(200))
                     .body(new AuthenticationSuccess().token(account.getToken()));
         }
-        else
-        {
+        else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @Transactional
     @Override
-    public ResponseEntity<AuthenticationSuccess> registerAccount(@Valid Registration registration)
-    {
+    public ResponseEntity<AuthenticationSuccess> registerAccount(@Valid Registration registration) {
         var exists = repository.findById(registration.getUsername()).isPresent();
-        if (exists)
-        {
+        if (exists) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         var token = UUID.randomUUID().toString();
@@ -96,12 +86,10 @@ public class AccountController implements AccountApi
     }
 
     @Override
-    public ResponseEntity<AuthenticationSuccess> login()
-    {
+    public ResponseEntity<AuthenticationSuccess> login() {
         var app = (App) request.getAttribute(BasicAuthFilter.APP_KEY);
 
-        if (app == null)
-        {
+        if (app == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 

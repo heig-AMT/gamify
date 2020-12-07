@@ -12,26 +12,22 @@ import java.util.UUID;
 public class CredentialsDefs implements En
 {
 
-    public CredentialsDefs(Environment environment)
-    {
+    public CredentialsDefs(Environment environment) {
         Given("I create the credentials payload {word}",
                 (String name) -> environment.getClient().putPayload(name, generateRegistration())
         );
 
-        When("I POST the {word} payload to the api.register endpoint", (String named) ->
-        {
+        When("I POST the {word} payload to the api.register endpoint", (String named) -> {
             var payload = environment.getClient().<Registration>getPayload(named);
             var api = new AccountApi();
-            try
-            {
+            try {
                 var info = api.registerAccountWithHttpInfo(payload);
                 environment.getClient().putResponse(
                         info.getStatusCode(),
                         info.getData()
                 );
             }
-            catch (ApiException exception)
-            {
+            catch (ApiException exception) {
                 environment.getClient().putResponse(
                         exception.getCode(),
                         exception.getResponseBody()
@@ -39,10 +35,8 @@ public class CredentialsDefs implements En
             }
         });
 
-        When("I POST to the api.login endpoint", () ->
-        {
-            try
-            {
+        When("I POST to the api.login endpoint", () -> {
+            try {
                 var api = new AccountApi();
                 var info = api.loginWithHttpInfo();
                 environment.getClient().putResponse(
@@ -50,8 +44,7 @@ public class CredentialsDefs implements En
                         info.getData()
                 );
             }
-            catch (ApiException exception)
-            {
+            catch (ApiException exception) {
                 environment.getClient().putResponse(
                         exception.getCode(),
                         exception.getResponseBody()
@@ -59,40 +52,34 @@ public class CredentialsDefs implements En
             }
         });
 
-        When("I DELETE my account {word}", (String name) ->
-        {
+        When("I DELETE my account {word}", (String name) -> {
             var payload = environment.getClient().<Registration>getPayload(name);
             var api = new AccountApi();
-            try
-            {
+            try {
                 var info = api.deleteAccountWithHttpInfo();
                 environment.getClient().putResponse(
                         info.getStatusCode(),
                         info.getData());
             }
-            catch (ApiException exception)
-            {
+            catch (ApiException exception) {
                 environment.getClient().putResponse(
                         exception.getCode(),
                         exception.getResponseBody()
                 );
             }
         });
-        When("I UPDATE the credentials {word} with new password {word}", (String account, String newPassword) ->
-        {
+        When("I UPDATE the credentials {word} with new password {word}", (String account, String newPassword) -> {
             var payload = environment.getClient().<Registration>getPayload(account);
             var api = new AccountApi();
             Password password=new Password();
             password.setNewPassword(newPassword);
-            try
-            {
+            try {
                 var info = api.updateAccountWithHttpInfo(password);
                 environment.getClient().putResponse(
                         info.getStatusCode(),
                         info.getData());
             }
-            catch (ApiException exception)
-            {
+            catch (ApiException exception) {
                 environment.getClient().putResponse(
                         exception.getCode(),
                         exception.getResponseBody()
@@ -101,8 +88,7 @@ public class CredentialsDefs implements En
         });
     }
 
-    private Registration generateRegistration()
-    {
+    private Registration generateRegistration() {
         return new Registration()
                 .username(UUID.randomUUID().toString())
                 .password(UUID.randomUUID().toString());
