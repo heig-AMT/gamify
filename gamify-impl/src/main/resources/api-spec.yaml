@@ -491,7 +491,6 @@ components:
         pointsUpper:
           type: integer
 
-
     Event:
       type: object
       properties:
