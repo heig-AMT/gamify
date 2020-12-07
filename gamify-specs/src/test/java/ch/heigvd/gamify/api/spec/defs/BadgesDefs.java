@@ -62,6 +62,22 @@ public class BadgesDefs implements En
                 );
             }
         });
+        When("I DELETE {word} with api.badges.delete endpoint", (String name) ->
+        {
+            var api = new BadgesApi();
+            try {
+                var info = api.deleteBadgeWithHttpInfo(name);
+                environment.getClient().putResponse(
+                        info.getStatusCode(),
+                        info.getData()
+                );
+            } catch (ApiException exception) {
+                environment.getClient().putResponse(
+                        exception.getCode(),
+                        exception.getResponseBody()
+                );
+            }
+        });
     }
 
     private Badge newBadge(String name,String catName){
