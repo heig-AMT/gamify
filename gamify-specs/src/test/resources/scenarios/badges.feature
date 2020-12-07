@@ -15,9 +15,9 @@ Feature: badges test
 
   Scenario: I can create a badge
     Given I create the badge badge1 linked to category category
-    When I PUT the badge1 badge to the api\.badges endpoint
+    When I PUT the badge1 badge to the api.badges endpoint
     Then I receive a 204 status code
     #When I just GET from the badges endpoint
     #Then I receive a 200 status code
-    When I GET badge1 from the badges endpoint
+    Then I GET badge1 from the badges endpoint
     Then I receive a 200 status code

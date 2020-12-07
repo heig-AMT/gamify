@@ -13,7 +13,7 @@ public class BadgesDefs implements En
         Given("I create the badge {word} linked to category {word}", (String badge, String category) ->
                 environment.getClient().putPayload(badge, newBadge(badge, category)));
 
-        When("I PUT the {word} badge to the api\\.badges endpoint", (String badgeName) ->
+        When("I PUT the {word} badge to the api.badges endpoint", (String badgeName) ->
         {
             var payload = environment.getClient().<Badge>getPayload(badgeName);
             var api = new BadgesApi();
