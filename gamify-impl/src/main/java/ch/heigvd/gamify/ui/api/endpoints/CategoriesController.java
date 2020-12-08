@@ -3,6 +3,7 @@ package ch.heigvd.gamify.ui.api.endpoints;
 import ch.heigvd.gamify.api.CategoriesApi;
 import ch.heigvd.gamify.api.model.Category;
 import ch.heigvd.gamify.domain.app.App;
+import ch.heigvd.gamify.domain.category.CategoryIdentifier;
 import ch.heigvd.gamify.domain.category.CategoryRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import java.util.List;
@@ -30,9 +31,10 @@ public class CategoriesController implements CategoriesApi {
   @Transactional
   @Override
   public ResponseEntity<Void> deleteCategory(String name) {
-    var exists = categoryRepository.existsById(name);
+    var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
+    var exists = categoryRepository.existsByIdCategory_AppAndIdCategory_Name(app, name);
     if (exists) {
-      categoryRepository.deleteById(name);
+      categoryRepository.deleteByIdCategory_AppAndIdCategory_Name(app, name);
       return ResponseEntity.noContent().build();
     } else {
       return ResponseEntity.notFound().build();
@@ -42,7 +44,7 @@ public class CategoriesController implements CategoriesApi {
   @Override
   public ResponseEntity<List<Category>> getCategories() {
     var categories = StreamSupport.stream(categoryRepository
-        .findAllByApp((App) request.getAttribute(ApiKeyFilter.APP_KEY))
+        .findAllByIdCategory_App((App) request.getAttribute(ApiKeyFilter.APP_KEY))
         .spliterator(), false)
         .map(CategoriesController::toDto)
         .collect(Collectors.toList());
@@ -54,7 +56,8 @@ public class CategoriesController implements CategoriesApi {
 
   @Override
   public ResponseEntity<Category> getCategory(String name) {
-    return categoryRepository.findById(name)
+    var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
+    return categoryRepository.findByIdCategory_AppAndIdCategory_Name(app, name)
         .map(CategoriesController::toDto)
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());
@@ -69,12 +72,11 @@ public class CategoriesController implements CategoriesApi {
         .path("/{id}")
         .buildAndExpand(category.getName());
 
-    if (categoryRepository.existsByAppAndName(app, category.getName())) {
+    if (categoryRepository.existsByIdCategory_AppAndIdCategory_Name(app, category.getName())) {
       return ResponseEntity.status(HttpStatus.CONFLICT).location(location.toUri()).build();
     } else {
       categoryRepository.save(ch.heigvd.gamify.domain.category.Category.builder()
-          .app(app)
-          .name(category.getName())
+          .idCategory(CategoryIdentifier.builder().app(app).name(category.getName()).build())
           .title(category.getTitle())
           .description(category.getDescription())
           .build());
@@ -92,9 +94,8 @@ public class CategoriesController implements CategoriesApi {
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
 
     categoryRepository.save(ch.heigvd.gamify.domain.category.Category.builder()
-        .app(app)
+        .idCategory(CategoryIdentifier.builder().app(app).name(category.getName()).build())
         .title(category.getTitle())
-        .name(category.getName())
         .description(category.getDescription())
         .build());
 
@@ -105,6 +106,6 @@ public class CategoriesController implements CategoriesApi {
     return new Category()
         .title(category.getTitle())
         .description(category.getDescription())
-        .name(category.getName());
+        .name(category.getIdCategory().getName());
   }
 }
