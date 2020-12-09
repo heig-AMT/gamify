@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface CategoryRepository extends CrudRepository<Category, CategoryIdentifier> {
 
   Iterable<Category> findAllByIdCategory_App(App app);
-  Boolean existsByIdCategory_AppAndIdCategory_Name(App app, String name);
+  boolean existsByIdCategory_AppAndIdCategory_Name(App app, String name);
   void deleteByIdCategory_AppAndIdCategory_Name(App app, String name);
   Optional<Category> findByIdCategory_AppAndIdCategory_Name(App app, String name);
 }

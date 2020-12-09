@@ -15,9 +15,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @Builder
 @Embeddable
-public class CategoryIdentifier implements Serializable
-{
-    //@Column(nullable = false)
+public class CategoryIdentifier implements Serializable {
     private String name;
 
     @ManyToOne
