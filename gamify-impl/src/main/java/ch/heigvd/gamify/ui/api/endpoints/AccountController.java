@@ -29,8 +29,7 @@ public class AccountController implements AccountApi {
     ServletRequest request;
 
     @Override
-    public Optional<NativeWebRequest> getRequest()
-    {
+    public Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
     }
 
