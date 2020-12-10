@@ -33,7 +33,7 @@ public class BadgesController implements BadgesApi {
   CategoryRepository categoryRepository;
 
   private final int LOWER_DEFAULT=0;
-  private final int LOWER_MAX=Integer.MAX_VALUE;
+  private final int UPPER_MAX =Integer.MAX_VALUE;
 
   @Override
   public ResponseEntity<List<Badge>> getBadges(@Valid Integer page, @Valid Integer size) {
@@ -74,8 +74,8 @@ public class BadgesController implements BadgesApi {
         .title(badge.getTitle())
         .description(badge.getDescription())
         .category(category.get())
-        .pointsLower(badge.getPointsLower().orElse(0))
-        .pointsUpper(badge.getPointsUpper().orElse(Integer.MAX_VALUE))
+        .pointsLower(badge.getPointsLower().orElse(LOWER_DEFAULT))
+        .pointsUpper(badge.getPointsUpper().orElse(UPPER_MAX))
         .build());
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
