@@ -31,3 +31,12 @@ Feature: badges test
     When I DELETE badge1 with api.badges.delete endpoint
     Then I receive a 204 status code
 
+  #TODO make this Test to Rule Them All compile
+  #Scenario: Delete a category deletes badges related
+    #When I create the badge badge1 linked to category cat1
+    #Then I PUT the badge1 badge to the api.badges endpoint
+    #Then I receive a 204 status code
+    #When I DELETE the resource api.categories.cat1
+    #Then I receive a 204 status code
+    #Then I just GET from the badges endpoint
+    #Then I receive a 404 status code

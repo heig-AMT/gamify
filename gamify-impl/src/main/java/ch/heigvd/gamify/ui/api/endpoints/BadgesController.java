@@ -65,7 +65,8 @@ public class BadgesController implements BadgesApi {
     if (category.isEmpty()) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
-    ch.heigvd.gamify.domain.badges.Badge newB= (ch.heigvd.gamify.domain.badges.Badge.builder()
+
+    badgeRepository.save(ch.heigvd.gamify.domain.badges.Badge.builder()
         .idBadge(BadgeIdentifier.builder()
             .app(app).badgeName(name).build())
         .title(badge.getTitle())
@@ -74,13 +75,6 @@ public class BadgesController implements BadgesApi {
         .pointsLower(badge.getPointsLower().orElse(0))
         .pointsUpper(badge.getPointsUpper().orElse(Integer.MAX_VALUE))
         .build());
-    try{
-      badgeRepository.save(newB);
-    } catch (Exception e){
-      System.out.println(e.getMessage());
-    }
-
-
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
