@@ -10,6 +10,10 @@ public class Client {
   // PAYLOAD MANAGEMENT
 
   private final Map<String, Object> payloads = new HashMap<>();
+  private Integer responseStatus = null;
+  private Object responseData = null;
+
+  // RESPONSE STATUS AND CODE MANAGEMENT
 
   /**
    * Puts a certain payload for a matching key.
@@ -35,11 +39,6 @@ public class Client {
     assertNotNull(payload);
     return (T) payload;
   }
-
-  // RESPONSE STATUS AND CODE MANAGEMENT
-
-  private Integer responseStatus = null;
-  private Object responseData = null;
 
   /**
    * Puts a certain response status code in the {@link Client}.

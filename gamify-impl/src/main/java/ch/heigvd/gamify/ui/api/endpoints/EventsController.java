@@ -1,10 +1,10 @@
 package ch.heigvd.gamify.ui.api.endpoints;
 
 import ch.heigvd.gamify.api.EventsApi;
-import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
-import ch.heigvd.gamify.domain.event.Event;
 import ch.heigvd.gamify.domain.app.App;
+import ch.heigvd.gamify.domain.event.Event;
 import ch.heigvd.gamify.domain.event.EventRepository;
+import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
