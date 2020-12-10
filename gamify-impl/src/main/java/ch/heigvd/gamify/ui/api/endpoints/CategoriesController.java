@@ -6,13 +6,14 @@ import ch.heigvd.gamify.domain.app.App;
 import ch.heigvd.gamify.domain.category.CategoryRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import javax.servlet.ServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,13 @@ public class CategoriesController implements CategoriesApi {
   @Autowired
   CategoryRepository categoryRepository;
 
+  private static Category toDto(ch.heigvd.gamify.domain.category.Category category) {
+    return new Category()
+        .title(category.getTitle())
+        .description(category.getDescription())
+        .name(category.getName());
+  }
+
   @Transactional
   @Override
   public ResponseEntity<Void> deleteCategory(String name) {
@@ -40,10 +48,18 @@ public class CategoriesController implements CategoriesApi {
   }
 
   @Override
-  public ResponseEntity<List<Category>> getCategories() {
-    var categories = StreamSupport.stream(categoryRepository
-        .findAllByApp((App) request.getAttribute(ApiKeyFilter.APP_KEY))
-        .spliterator(), false)
+  public ResponseEntity<List<Category>> getCategories(@Valid Integer page, @Valid Integer size) {
+    Pageable pageable = PageRequest.of(
+        page == null ? 0 : page,
+        size == null ? Integer.MAX_VALUE : size
+    );
+
+    var categories = categoryRepository
+        .findAllByApp(
+            (App) request.getAttribute(ApiKeyFilter.APP_KEY),
+            pageable
+        )
+        .stream()
         .map(CategoriesController::toDto)
         .collect(Collectors.toList());
 
@@ -99,12 +115,5 @@ public class CategoriesController implements CategoriesApi {
         .build());
 
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-  }
-
-  private static Category toDto(ch.heigvd.gamify.domain.category.Category category) {
-    return new Category()
-        .title(category.getTitle())
-        .description(category.getDescription())
-        .name(category.getName());
   }
 }
