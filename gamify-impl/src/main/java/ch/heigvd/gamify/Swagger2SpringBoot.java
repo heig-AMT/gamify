@@ -15,13 +15,13 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = {"ch.heigvd.gamify", "ch.heigvd.gamify.api"})
 public class Swagger2SpringBoot {
 
+  public static void main(String[] args) {
+    new SpringApplication(Swagger2SpringBoot.class).run();
+  }
+
   @PostConstruct
   public void started() {
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-  }
-
-  public static void main(String[] args) {
-    new SpringApplication(Swagger2SpringBoot.class).run();
   }
 
   // AUTHENTICATION BEANS.
