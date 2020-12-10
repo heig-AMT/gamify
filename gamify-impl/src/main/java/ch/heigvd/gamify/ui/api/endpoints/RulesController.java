@@ -42,7 +42,6 @@ public class RulesController implements RulesApi {
 
   @Override
   public ResponseEntity<List<Rule>> getRules(@Valid Integer page, @Valid Integer size) {
-    // TODO : Paginate the results.
     var pageable = PageRequest.of(page == null ? 0 : page, size == null ? Integer.MAX_VALUE : size);
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
     var rules = ruleRepository.findAllById_Category_IdCategory_App(app, pageable).stream()
