@@ -53,3 +53,17 @@ Feature: Validation of authenticated rules management
     When I GET the payload from the api.rules endpoint
     And I read the response payload
     Then I count 0 items in response
+
+  Scenario: can't read missing rules
+    When I GET from the api.rules.roulette endpoint
+    Then I receive a 404 status code
+
+  Scenario: can read an existing rule
+    When I create the category payload category with name cat
+    And I create the rule payload rule with name roulette for category cat
+    And I POST the category payload to the api.categories endpoint
+    And I POST the rule payload to the api.rules endpoint
+    And I GET from the api.rules.roulette endpoint
+    Then I read the response payload
+    And I receive a 200 status code
+    And I see that response and rule are the same

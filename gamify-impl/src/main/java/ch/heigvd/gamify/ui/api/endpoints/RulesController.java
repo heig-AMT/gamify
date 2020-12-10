@@ -32,6 +32,15 @@ public class RulesController implements RulesApi {
   private ServletRequest request;
 
   @Override
+  public ResponseEntity<Rule> getRule(String name) {
+    var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
+    return ruleRepository.findById_Category_IdCategory_AppAndIdName(app, name)
+        .map(RulesController::toDTO)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
+  }
+
+  @Override
   public ResponseEntity<List<Rule>> getRules(@Valid Integer page, @Valid Integer size) {
     // TODO : Paginate the results.
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
@@ -82,7 +91,8 @@ public class RulesController implements RulesApi {
   @Override
   public ResponseEntity<Void> deleteRule(String name) {
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
-    var existing = ruleRepository.findById_Category_IdCategory_App_NameAndId_Name(app.getName(), name);
+    var existing = ruleRepository
+        .findById_Category_IdCategory_App_NameAndId_Name(app.getName(), name);
     if (existing.isEmpty()) {
       return ResponseEntity.notFound().build();
     }
