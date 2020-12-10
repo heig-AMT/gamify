@@ -1,4 +1,3 @@
-# Created by David Dupraz at 05.12.2020
 Feature: badges test
 
   Background:
@@ -23,3 +22,4 @@ Feature: badges test
     #Then I receive a 200 status code
     #When I DELETE badge1 with api.badges.delete endpoint
     #Then I receive a 204 status code
+
