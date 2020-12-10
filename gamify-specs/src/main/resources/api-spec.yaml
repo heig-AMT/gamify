@@ -340,6 +340,17 @@ paths:
       operationId: getRules
       security:
         - apiKeyAuth: [ ]
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         '200':
           description: success
