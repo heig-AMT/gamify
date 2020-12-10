@@ -12,14 +12,22 @@ Feature: badges test
     Then I PUT the category payload to the api.categories.cat1 endpoint
     Then I receive a 204 status code
 
-  Scenario: I can create a badge, update it and delete it
+  Scenario: I can create or update a badge
     When I create the badge badge1 linked to category cat1
     Then I PUT the badge1 badge to the api.badges endpoint
     Then I receive a 204 status code
+
+  Scenario: I can get one or all the badges
+    When I create the badge badge1 linked to category cat1
+    Then I PUT the badge1 badge to the api.badges endpoint
     When I just GET from the badges endpoint
     Then I receive a 200 status code
     When I GET badge1 from the badges endpoint
     Then I receive a 200 status code
+
+  Scenario: I can delete a badge
+    When I create the badge badge1 linked to category cat1
+    Then I PUT the badge1 badge to the api.badges endpoint
     When I DELETE badge1 with api.badges.delete endpoint
     Then I receive a 204 status code
 

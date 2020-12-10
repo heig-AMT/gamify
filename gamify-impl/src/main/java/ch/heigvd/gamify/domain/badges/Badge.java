@@ -20,11 +20,11 @@ public class Badge implements Serializable {
   @EmbeddedId
   private BadgeIdentifier idBadge;
 
-  @ManyToOne
-  private Category category;
-
   @NotNull
   private String title, description;
+
+  @ManyToOne
+  private Category category;
 
   private int pointsLower, pointsUpper;
 }
