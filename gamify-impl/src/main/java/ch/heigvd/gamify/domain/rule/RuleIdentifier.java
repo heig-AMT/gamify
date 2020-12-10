@@ -1,9 +1,8 @@
 package ch.heigvd.gamify.domain.rule;
 
-import ch.heigvd.gamify.domain.category.Category;
+import ch.heigvd.gamify.domain.app.App;
 import java.io.Serializable;
 import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,8 +21,7 @@ public class RuleIdentifier implements Serializable {
   String name;
 
   /**
-   * The category to which the {@link Rule} applies.
+   * The {@link App} for which this {@link Rule} is defined,
    */
-  @ManyToOne
-  private Category category;
+  String app;
 }

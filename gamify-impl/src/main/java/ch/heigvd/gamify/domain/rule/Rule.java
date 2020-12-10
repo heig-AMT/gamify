@@ -1,8 +1,10 @@
 package ch.heigvd.gamify.domain.rule;
 
+import ch.heigvd.gamify.domain.category.Category;
 import java.io.Serializable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,4 +36,10 @@ public class Rule implements Serializable {
    */
   @EmbeddedId
   private RuleIdentifier id;
+
+  /**
+   * The {@link Category} that is associated with this {@link Rule}.
+   */
+  @ManyToOne
+  Category category;
 }
