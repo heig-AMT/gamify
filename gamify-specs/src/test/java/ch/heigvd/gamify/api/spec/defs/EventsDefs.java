@@ -14,6 +14,15 @@ public class EventsDefs implements En {
         environment.getClient().putPayload(name, generatePayload())
     );
 
+    Given("I create the event payload {word} for category {word}", (String name, String category) ->
+            environment.getClient().putPayload(name, eventForCategory(category))
+    );
+
+    Given("I create the event payload {word} for category {word} and for user {word}", (String name, String category, String userId) ->
+            environment.getClient().putPayload(name, eventForCategoryAndUser(category, userId))
+    );
+
+
     // Server I/O
     When("I POST the {word} payload to the api.events endpoint", (String named) -> {
       var payload = environment.getClient().<Event>getPayload(named);
@@ -38,5 +47,19 @@ public class EventsDefs implements En {
         .type("openQuestion")
         .userId("bob")
         .timestamp(OffsetDateTime.now());
+  }
+
+  private Event eventForCategory(String forCategory) {
+    return new Event()
+            .type(forCategory)
+            .userId("bob")
+            .timestamp(OffsetDateTime.now());
+  }
+
+  private Event eventForCategoryAndUser(String forCategory, String forUser) {
+    return new Event()
+            .type(forCategory)
+            .userId(forUser)
+            .timestamp(OffsetDateTime.now());
   }
 }

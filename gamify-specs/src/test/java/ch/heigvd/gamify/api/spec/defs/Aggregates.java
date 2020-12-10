@@ -3,9 +3,9 @@ package ch.heigvd.gamify.api.spec.defs;
 import ch.heigvd.gamify.api.spec.env.Environment;
 import io.cucumber.java8.En;
 
-public class AggregatesDefs implements En {
+public class Aggregates implements En {
 
-  public AggregatesDefs(Environment environment) {
+  public Aggregates(Environment environment) {
 
     When("I GET from the api.leaderboards.{word} endpoint", (String name) -> {
       try {
