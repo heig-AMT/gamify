@@ -12,6 +12,7 @@ import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletRequest;
@@ -55,6 +56,7 @@ public class BadgesController implements BadgesApi {
         .orElse(ResponseEntity.notFound().build());
   }
 
+  @Transactional
   @Override
   public ResponseEntity<Void> putBadge(String name, @Valid Badge badge) {
     if (!badge.getName().equals(name)) {
@@ -65,7 +67,7 @@ public class BadgesController implements BadgesApi {
         .name(badge.getCategory())
         .app(app).build());
     if (category.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     badgeRepository.save(ch.heigvd.gamify.domain.badges.Badge.builder()
@@ -80,6 +82,7 @@ public class BadgesController implements BadgesApi {
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
+  @Transactional
   @Override
   public ResponseEntity<Void> deleteBadge(String name) {
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);

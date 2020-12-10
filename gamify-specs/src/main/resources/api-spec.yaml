@@ -293,8 +293,8 @@ paths:
       responses:
         '204':
           description: success
-        '403':
-          description: forbidden
+        '404':
+          description: not found
 
     delete:
       tags:
