@@ -5,6 +5,7 @@ import ch.heigvd.gamify.api.model.Badge;
 import ch.heigvd.gamify.api.model.Category;
 import ch.heigvd.gamify.domain.app.App;
 import ch.heigvd.gamify.domain.badges.BadgeRepository;
+import ch.heigvd.gamify.domain.category.CategoryIdentifier;
 import ch.heigvd.gamify.domain.category.CategoryRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,10 @@ public class BadgesController implements BadgesApi
         {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        var category=categoryRepository.findById(badge.getCategory());
+        var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
+        var category=categoryRepository.findById(CategoryIdentifier.builder()
+                .name(badge.getCategory())
+                .app(app).build());
         if(category.isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -93,7 +97,7 @@ public class BadgesController implements BadgesApi
                 .title(badge.getTitle())
                 .description(badge.getDescription())
                 .name(badge.getName())
-                .category(badge.getCategory().getName());
+                .category(badge.getCategory().getIdCategory().getName());
                 badgeTemp.setPointsLower(badge.getPointsLower());
                 badgeTemp.setPointsUpper(badge.getPointsUpper());
         return badgeTemp;
