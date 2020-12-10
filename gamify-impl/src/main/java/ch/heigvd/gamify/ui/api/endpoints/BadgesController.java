@@ -20,86 +20,81 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @RestController
-public class BadgesController implements BadgesApi
-{
-    @Autowired
-    ServletRequest request;
+public class BadgesController implements BadgesApi {
 
-    @Autowired
-    BadgeRepository badgeRepository;
+  @Autowired
+  ServletRequest request;
 
-    @Autowired
-    CategoryRepository categoryRepository;
+  @Autowired
+  BadgeRepository badgeRepository;
 
-    @Override
-    public ResponseEntity<List<Badge>> getBadges()
-    {
-        return ResponseEntity.ok(
-                StreamSupport.stream(badgeRepository
-                        .findAllByApp((App) request.getAttribute(ApiKeyFilter.APP_KEY))
-                        .spliterator(), false)
-                        .map(BadgesController::toDto)
-                        .collect(Collectors.toList())
-        );
+  @Autowired
+  CategoryRepository categoryRepository;
+
+  @Override
+  public ResponseEntity<List<Badge>> getBadges() {
+    return ResponseEntity.ok(
+        StreamSupport.stream(badgeRepository
+            .findAllByApp((App) request.getAttribute(ApiKeyFilter.APP_KEY))
+            .spliterator(), false)
+            .map(BadgesController::toDto)
+            .collect(Collectors.toList())
+    );
+  }
+
+  @Override
+  public ResponseEntity<Badge> getBadge(String name) {
+    return badgeRepository.findById(name)
+        .map(BadgesController::toDto)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
+  }
+
+  @Override
+  public ResponseEntity<Void> putBadge(String name, @Valid Badge badge) {
+    if (!badge.getName().equals(name)) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+    var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
+    var category = categoryRepository.findById(CategoryIdentifier.builder()
+        .name(badge.getCategory())
+        .app(app).build());
+    if (category.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @Override
-    public ResponseEntity<Badge> getBadge(String name)
-    {
-        return badgeRepository.findById(name)
-                .map(BadgesController::toDto)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    badgeRepository.save(ch.heigvd.gamify.domain.badges.Badge.builder()
+        .app((App) request.getAttribute(ApiKeyFilter.APP_KEY))
+        .title(badge.getTitle())
+        .description(badge.getDescription())
+        .name(badge.getName())
+        .category(category.get())
+        .pointsLower(badge.getPointsLower() == null ? 0 : badge.getPointsLower())
+        .pointsUpper(badge.getPointsUpper() == null ? Integer.MAX_VALUE : badge.getPointsUpper())
+        .build());
+
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
+
+  @Override
+  public ResponseEntity<Void> deleteBadge(String name) {
+    var exists = badgeRepository.existsById(name);
+    if (exists) {
+      badgeRepository.deleteById(name);
+      return ResponseEntity.noContent().build();
+    } else {
+      return ResponseEntity.notFound().build();
     }
+  }
 
-    @Override
-    public ResponseEntity<Void> putBadge(String name, @Valid Badge badge)
-    {
-        if (! badge.getName().equals(name))
-        {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
-        var category=categoryRepository.findById(CategoryIdentifier.builder()
-                .name(badge.getCategory())
-                .app(app).build());
-        if(category.isEmpty()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-
-        badgeRepository.save(ch.heigvd.gamify.domain.badges.Badge.builder()
-                .app((App) request.getAttribute(ApiKeyFilter.APP_KEY))
-                .title(badge.getTitle())
-                .description(badge.getDescription())
-                .name(badge.getName())
-                .category(category.get())
-                .pointsLower(badge.getPointsLower()==null ? 0 : badge.getPointsLower())
-                .pointsUpper(badge.getPointsUpper()==null ? Integer.MAX_VALUE: badge.getPointsUpper())
-                .build());
-
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    @Override
-    public ResponseEntity<Void> deleteBadge(String name) {
-        var exists = badgeRepository.existsById(name);
-        if (exists) {
-            badgeRepository.deleteById(name);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    private static Badge toDto(ch.heigvd.gamify.domain.badges.Badge badge)
-    {
-        Badge badgeTemp= new Badge()
-                .title(badge.getTitle())
-                .description(badge.getDescription())
-                .name(badge.getName())
-                .category(badge.getCategory().getIdCategory().getName());
-                badgeTemp.setPointsLower(badge.getPointsLower());
-                badgeTemp.setPointsUpper(badge.getPointsUpper());
-        return badgeTemp;
-    }
+  private static Badge toDto(ch.heigvd.gamify.domain.badges.Badge badge) {
+    Badge badgeTemp = new Badge()
+        .title(badge.getTitle())
+        .description(badge.getDescription())
+        .name(badge.getName())
+        .category(badge.getCategory().getIdCategory().getName());
+    badgeTemp.setPointsLower(badge.getPointsLower());
+    badgeTemp.setPointsUpper(badge.getPointsUpper());
+    return badgeTemp;
+  }
 }

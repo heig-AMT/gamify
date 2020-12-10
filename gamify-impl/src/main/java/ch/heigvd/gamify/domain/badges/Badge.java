@@ -18,19 +18,18 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Badge implements Serializable
-{
-    @Id
-    private String name;
+public class Badge implements Serializable {
+  @Id
+  private String name;
 
-    @ManyToOne
-    private Category category;
+  @ManyToOne
+  private Category category;
 
-    @ManyToOne
-    private App app;
+  @ManyToOne
+  private App app;
 
-    @NotNull
-    private String title, description;
+  @NotNull
+  private String title, description;
 
-    private int pointsLower, pointsUpper;
+  private int pointsLower, pointsUpper;
 }
