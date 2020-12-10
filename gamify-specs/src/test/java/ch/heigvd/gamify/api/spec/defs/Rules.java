@@ -21,7 +21,7 @@ public class Rules implements En {
     When("I GET the payload from the api.rules endpoint", () -> {
       var api = new RulesApi();
       try {
-        var categories = api.getRulesWithHttpInfo();
+        var categories = api.getRulesWithHttpInfo(0, Integer.MAX_VALUE);
         environment.getClient().putResponse(
             categories.getStatusCode(),
             categories.getData()
