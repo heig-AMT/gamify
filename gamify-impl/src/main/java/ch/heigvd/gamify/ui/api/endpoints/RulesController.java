@@ -9,11 +9,11 @@ import ch.heigvd.gamify.domain.rule.RuleRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import javax.servlet.ServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,9 +43,9 @@ public class RulesController implements RulesApi {
   @Override
   public ResponseEntity<List<Rule>> getRules(@Valid Integer page, @Valid Integer size) {
     // TODO : Paginate the results.
+    var pageable = PageRequest.of(page == null ? 0 : page, size == null ? Integer.MAX_VALUE : size);
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
-    var rules = StreamSupport
-        .stream(ruleRepository.findAllById_Category_IdCategory_App(app).spliterator(), false)
+    var rules = ruleRepository.findAllById_Category_IdCategory_App(app, pageable).stream()
         .map(RulesController::toDTO)
         .collect(Collectors.toList());
     return ResponseEntity.ok(rules);
