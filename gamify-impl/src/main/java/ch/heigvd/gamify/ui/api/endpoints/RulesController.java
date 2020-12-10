@@ -34,7 +34,7 @@ public class RulesController implements RulesApi {
   @Override
   public ResponseEntity<Rule> getRule(String name) {
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
-    return ruleRepository.findById_Category_IdCategory_AppAndIdName(app, name)
+    return ruleRepository.findById_AppAndId_Name(app.getName(), name)
         .map(RulesController::toDTO)
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());
@@ -44,7 +44,7 @@ public class RulesController implements RulesApi {
   public ResponseEntity<List<Rule>> getRules(@Valid Integer page, @Valid Integer size) {
     var pageable = PageRequest.of(page == null ? 0 : page, size == null ? Integer.MAX_VALUE : size);
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
-    var rules = ruleRepository.findAllById_Category_IdCategory_App(app, pageable).stream()
+    var rules = ruleRepository.findAllById_App(app.getName(), pageable).stream()
         .map(RulesController::toDTO)
         .collect(Collectors.toList());
     return ResponseEntity.ok(rules);
@@ -54,7 +54,7 @@ public class RulesController implements RulesApi {
   @Override
   public ResponseEntity<Void> putRule(String name, @Valid Rule rule) {
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
-    var previous = ruleRepository.findById_Category_IdCategory_App_NameAndId_Name(
+    var previous = ruleRepository.findById_AppAndId_Name(
         app.getName(),
         rule.getName()
     );
@@ -83,7 +83,7 @@ public class RulesController implements RulesApi {
   @Override
   public ResponseEntity<Void> postRule(@Valid Rule rule) {
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
-    var previous = ruleRepository.findById_Category_IdCategory_App_NameAndId_Name(
+    var previous = ruleRepository.findById_AppAndId_Name(
         app.getName(),
         rule.getName()
     );
@@ -105,8 +105,9 @@ public class RulesController implements RulesApi {
     ruleRepository.save(ch.heigvd.gamify.domain.rule.Rule.builder()
         .eventType(rule.getEvent())
         .points(rule.getPoints())
+        .category(category.get())
         .id(RuleIdentifier.builder()
-            .category(category.get())
+            .app(app.getName())
             .name(rule.getName())
             .build())
         .build()
@@ -119,8 +120,7 @@ public class RulesController implements RulesApi {
   @Override
   public ResponseEntity<Void> deleteRule(String name) {
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
-    var existing = ruleRepository
-        .findById_Category_IdCategory_App_NameAndId_Name(app.getName(), name);
+    var existing = ruleRepository.findById_AppAndId_Name(app.getName(), name);
     if (existing.isEmpty()) {
       return ResponseEntity.notFound().build();
     }
@@ -130,7 +130,7 @@ public class RulesController implements RulesApi {
 
   private static Rule toDTO(ch.heigvd.gamify.domain.rule.Rule rule) {
     return new Rule()
-        .category(rule.getId().getCategory().getIdCategory().getName())
+        .category(rule.getCategory().getIdCategory().getName())
         .event(rule.getEventType())
         .name(rule.getId().getName())
         .points(rule.getPoints());
