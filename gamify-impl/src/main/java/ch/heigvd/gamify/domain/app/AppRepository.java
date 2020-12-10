@@ -5,5 +5,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface AppRepository extends PagingAndSortingRepository<App, String> {
   Optional<App> findByToken(String token);
+
   Optional<App> findByNameAndPassword(String name, String password);
 }
