@@ -45,6 +45,8 @@ public class Swagger2SpringBoot {
     bean.addUrlPatterns("/categories/*");
     bean.addUrlPatterns("/rules");
     bean.addUrlPatterns("/rules/*");
+    bean.addUrlPatterns("/leaderboards/*");
+    bean.addUrlPatterns("/users/*");
     return bean;
   }
 
