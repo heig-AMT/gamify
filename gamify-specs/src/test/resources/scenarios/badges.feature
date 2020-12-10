@@ -1,4 +1,3 @@
-# Created by David Dupraz at 05.12.2020
 Feature: badges test
 
   Background:
