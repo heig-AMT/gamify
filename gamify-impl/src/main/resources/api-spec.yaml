@@ -5,27 +5,27 @@ info:
   description: An API that manages application-specific events, and lets you define rules to find user scores.
 servers:
   - url: http://heig-amt-gamify.herokuapp.com
-  
+
 tags:
-- name: account
-  description: Everything about your account
-- name: categories
-  description: Everything about categories
-- name: badges
-  description: Everything about badges
-- name: events
-  description: Everything about events
-- name: rules
-  description: Everything about rules
-- name: aggregates
-  description: Everything about aggregates
-  
+  - name: account
+    description: Everything about your account
+  - name: categories
+    description: Everything about categories
+  - name: badges
+    description: Everything about badges
+  - name: events
+    description: Everything about events
+  - name: rules
+    description: Everything about rules
+  - name: aggregates
+    description: Everything about aggregates
+
 paths:
   # account
   /account:
     post:
       tags:
-      - account
+        - account
       description: register a new account
       operationId: registerAccount
       requestBody:
@@ -47,11 +47,11 @@ paths:
 
     put:
       tags:
-      - account
+        - account
       description: update an account's password
       operationId: updateAccount
       security:
-      - basicAuth: []
+        - basicAuth: [ ]
       requestBody:
         content:
           'application/json':
@@ -73,11 +73,11 @@ paths:
 
     delete:
       tags:
-      - account
+        - account
       description: delete an account
       operationId: deleteAccount
       security:
-      - basicAuth: []
+        - basicAuth: [ ]
       responses:
         '204':
           description: success
@@ -87,15 +87,15 @@ paths:
           description: unauthorized
         '404':
           description: not found
-          
+
   /account/token:
     post:
       tags:
-      - account
+        - account
       description: login to an account
       operationId: login
       security:
-      - basicAuth: []
+        - basicAuth: [ ]
       responses:
         '200':
           description: success
@@ -105,16 +105,16 @@ paths:
                 $ref: '#/components/schemas/AuthenticationSuccess'
         '401':
           description: unauthorized
-  
+
   # categories
   /categories:
     get:
       tags:
-      - categories
+        - categories
       description: get all the categories
       operationId: getCategories
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: [ ]
       responses:
         '200':
           description: success
@@ -132,7 +132,7 @@ paths:
       description: creates a new category
       operationId: postCategory
       security:
-        - apiKeyAuth: []
+        - apiKeyAuth: [ ]
       requestBody:
         content:
           'application/json':
@@ -148,20 +148,20 @@ paths:
 
   /categories/{name}:
     parameters:
-          - name: name
-            in: path
-            description: name of the category
-            required: true
-            schema:
-              type: string
+      - name: name
+        in: path
+        description: name of the category
+        required: true
+        schema:
+          type: string
 
     get:
       tags:
-      - categories
+        - categories
       description: get a specific category
       operationId: getCategory
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: [ ]
       responses:
         '200':
           description: success
@@ -176,11 +176,11 @@ paths:
 
     put:
       tags:
-      - categories
+        - categories
       description: update a category or create it if it doesn't exist
       operationId: putCategory
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: [ ]
       requestBody:
         content:
           'application/json':
@@ -194,11 +194,11 @@ paths:
 
     delete:
       tags:
-      - categories
+        - categories
       description: delete a category
       operationId: deleteCategory
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: [ ]
       responses:
         '204':
           description: success
@@ -211,11 +211,11 @@ paths:
   /badges:
     get:
       tags:
-      - badges
+        - badges
       description: get all the badges
       operationId: getBadges
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: [ ]
       responses:
         '200':
           description: success
@@ -230,20 +230,20 @@ paths:
 
   /badges/{name}:
     parameters:
-          - name: name
-            in: path
-            description: name of the badge
-            required: true
-            schema:
-              type: string
+      - name: name
+        in: path
+        description: name of the badge
+        required: true
+        schema:
+          type: string
 
     get:
       tags:
-      - badges
+        - badges
       description: get a specific badge
       operationId: getBadge
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: [ ]
       responses:
         '200':
           description: success
@@ -258,11 +258,11 @@ paths:
 
     put:
       tags:
-      - badges
+        - badges
       description: update a badge or create it if it doesn't exist
       operationId: putBadge
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: [ ]
       requestBody:
         content:
           'application/json':
@@ -276,11 +276,11 @@ paths:
 
     delete:
       tags:
-      - badges
+        - badges
       description: delete a badge
       operationId: deleteBadge
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: [ ]
       responses:
         '204':
           description: success
@@ -293,11 +293,11 @@ paths:
   /events:
     post:
       tags:
-      - events
+        - events
       description: post an event for a certain userId
       operationId: addEvent
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: [ ]
       requestBody:
         content:
           'application/json':
@@ -313,11 +313,11 @@ paths:
   /rules:
     get:
       tags:
-      - rules
+        - rules
       description: get all the rules
       operationId: getRules
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: [ ]
       responses:
         '200':
           description: success
@@ -330,22 +330,42 @@ paths:
         '403':
           description: forbidden
 
+    post:
+      tags:
+        - rules
+      description: creates a new rule
+      operationId: postRule
+      security:
+        - apiKeyAuth: [ ]
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Rule'
+      responses:
+        '201':
+          description: success
+        '403':
+          description: forbidden
+        '409':
+          description: conflict
+
   /rules/{name}:
     parameters:
-          - name: name
-            in: path
-            description: name of the rule
-            required: true
-            schema:
-              type: string
+      - name: name
+        in: path
+        description: name of the rule
+        required: true
+        schema:
+          type: string
 
     get:
       tags:
-      - rules
+        - rules
       description: get a specific rule
       operationId: getRule
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: [ ]
       responses:
         '200':
           description: success
@@ -360,11 +380,11 @@ paths:
 
     put:
       tags:
-      - rules
+        - rules
       description: update a rule or create it if it doesn't exist
       operationId: putRule
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: [ ]
       requestBody:
         content:
           'application/json':
@@ -378,11 +398,11 @@ paths:
 
     delete:
       tags:
-      - rules
+        - rules
       description: delete a rule
       operationId: deleteRule
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: [ ]
       responses:
         '204':
           description: success
@@ -395,18 +415,18 @@ paths:
   /leaderboards/{name}:
     get:
       tags:
-      - aggregates
+        - aggregates
       description: get the leaderboard for a category
       operationId: getLeaderboard
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: [ ]
       parameters:
-      - name: name
-        in: path
-        description: name of the category
-        required: true
-        schema:
-          type: string
+        - name: name
+          in: path
+          description: name of the category
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: success
@@ -422,26 +442,26 @@ paths:
   /users/{id}:
     get:
       tags:
-      - aggregates
+        - aggregates
       description: get a specific user information for specified categories and/or his badges
       operationId: getUserAggregate
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: [ ]
       parameters:
-      - name: id
-        in: path
-        description: id of the end user
-        required: true
-        schema:
-          type: string
-      - name: categories
-        in: query
-        description: array of categories to be fetches for the user
-        required: false
-        schema:
-          type: array
-          items: 
+        - name: id
+          in: path
+          description: id of the end user
+          required: true
+          schema:
             type: string
+        - name: categories
+          in: query
+          description: array of categories to be fetches for the user
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: success
@@ -470,7 +490,7 @@ components:
       properties:
         name:
           type: string
-        title: 
+        title:
           type: string
         description:
           type: string
