@@ -1,7 +1,11 @@
 package ch.heigvd.gamify.api.spec.defs;
 
+import ch.heigvd.gamify.ApiException;
+import ch.heigvd.gamify.api.AggregatesApi;
 import ch.heigvd.gamify.api.spec.env.Environment;
 import io.cucumber.java8.En;
+
+import java.util.Collections;
 
 public class Aggregates implements En {
 
@@ -10,7 +14,7 @@ public class Aggregates implements En {
     When("I GET from the api.leaderboards.{word} endpoint", (String name) -> {
       try {
         var api = new AggregatesApi();
-        var categoryAggregate = api.getCategoryAggregateWithHttpInfo(name);
+        var categoryAggregate = api.getLeaderboardWithHttpInfo(name, 0, Integer.MAX_VALUE);
         environment.getClient().putResponse(
                 categoryAggregate.getStatusCode(),
                 categoryAggregate.getData()
@@ -26,7 +30,7 @@ public class Aggregates implements En {
     When("I GET from the api.users.{word} endpoint", (String id) -> {
       try {
         var api = new AggregatesApi();
-        var userAggregate = api.getUserAggregateWithHttpInfo(name);
+        var userAggregate = api.getUserAggregateWithHttpInfo(id, Collections.emptyList());
         environment.getClient().putResponse(
                 userAggregate.getStatusCode(),
                 userAggregate.getData()
