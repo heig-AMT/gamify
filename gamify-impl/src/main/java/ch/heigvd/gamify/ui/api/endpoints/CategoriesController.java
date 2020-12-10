@@ -8,11 +8,12 @@ import ch.heigvd.gamify.domain.category.CategoryRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import javax.servlet.ServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,10 +49,17 @@ public class CategoriesController implements CategoriesApi {
   }
 
   @Override
-  public ResponseEntity<List<Category>> getCategories() {
-    var categories = StreamSupport.stream(categoryRepository
-        .findAllByIdCategory_App((App) request.getAttribute(ApiKeyFilter.APP_KEY))
-        .spliterator(), false)
+  public ResponseEntity<List<Category>> getCategories(@Valid Integer page, @Valid Integer size) {
+    Pageable pageable = PageRequest.of(
+        page == null ? 0 : page,
+        size == null ? Integer.MAX_VALUE : size
+    );
+
+    var categories = categoryRepository
+        .findAllByIdCategory_App(
+            (App) request.getAttribute(ApiKeyFilter.APP_KEY),
+            pageable
+        ).stream()
         .map(CategoriesController::toDto)
         .collect(Collectors.toList());
 
