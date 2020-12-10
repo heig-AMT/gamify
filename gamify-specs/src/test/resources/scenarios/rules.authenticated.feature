@@ -36,3 +36,20 @@ Feature: Validation of authenticated rules management
     And I POST the rule payload to the api.rules endpoint
     And I POST the rule payload to the api.rules endpoint
     Then I receive a 409 status code
+
+  Scenario: can't delete a missing rule
+    When I DELETE the resource api.rules.roulette
+    Then I receive a 404 status code
+
+  Scenario: can delete a rule I've added
+    When I create the category payload category with name cat
+    And I create the rule payload rule with name roulette for category cat
+    And I POST the category payload to the api.categories endpoint
+    And I receive a 201 status code
+    And I POST the rule payload to the api.rules endpoint
+    And I receive a 201 status code
+    And I DELETE the resource api.rules.roulette
+    Then I receive a 204 status code
+    When I GET the payload from the api.rules endpoint
+    And I read the response payload
+    Then I count 0 items in response

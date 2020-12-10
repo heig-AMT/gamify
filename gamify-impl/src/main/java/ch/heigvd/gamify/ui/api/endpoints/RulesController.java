@@ -78,6 +78,18 @@ public class RulesController implements RulesApi {
     return ResponseEntity.created(location.toUri()).build();
   }
 
+  @Transactional
+  @Override
+  public ResponseEntity<Void> deleteRule(String name) {
+    var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
+    var existing = ruleRepository.findById_Category_IdCategory_App_NameAndId_Name(app.getName(), name);
+    if (existing.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    ruleRepository.delete(existing.get());
+    return ResponseEntity.noContent().build();
+  }
+
   private static Rule toDTO(ch.heigvd.gamify.domain.rule.Rule rule) {
     return new Rule()
         .category(rule.getId().getCategory().getIdCategory().getName())
