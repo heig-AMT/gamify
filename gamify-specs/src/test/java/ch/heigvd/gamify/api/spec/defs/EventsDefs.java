@@ -14,12 +14,12 @@ public class EventsDefs implements En {
         environment.getClient().putPayload(name, generatePayload())
     );
 
-    Given("I create the event payload {word} for category {word}", (String name, String category) ->
-            environment.getClient().putPayload(name, eventForCategory(category))
+    Given("I create the event payload {word} with type {word}", (String name, String type) ->
+            environment.getClient().putPayload(name, eventForCategory(type))
     );
 
-    Given("I create the event payload {word} for category {word} and for user {word}", (String name, String category, String userId) ->
-            environment.getClient().putPayload(name, eventForCategoryAndUser(category, userId))
+    Given("I create the event payload {word} with type {word} and for user {word}", (String name, String type, String userId) ->
+            environment.getClient().putPayload(name, eventForCategoryAndUser(type, userId))
     );
 
 
@@ -49,16 +49,16 @@ public class EventsDefs implements En {
         .timestamp(OffsetDateTime.now());
   }
 
-  private Event eventForCategory(String forCategory) {
+  private Event eventForCategory(String type) {
     return new Event()
-            .type(forCategory)
+            .type(type)
             .userId("bob")
             .timestamp(OffsetDateTime.now());
   }
 
-  private Event eventForCategoryAndUser(String forCategory, String forUser) {
+  private Event eventForCategoryAndUser(String type, String forUser) {
     return new Event()
-            .type(forCategory)
+            .type(type)
             .userId(forUser)
             .timestamp(OffsetDateTime.now());
   }

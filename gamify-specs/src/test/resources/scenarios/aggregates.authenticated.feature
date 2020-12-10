@@ -27,9 +27,9 @@ Feature: Validation of authenticated aggregates
   Scenario: I can get a category aggregate with one user
     Given I create the category payload cat with name catName
     And I PUT the cat payload to the api.categories.catName endpoint
-    Given I create the rule payload rule for category catName
+    Given I create the rule payload rule with name ruleName for category catName and event type eventName
     And I PUT the rule payload to the api.rules.ruleName endpoint
-    Given I create the event payload event for category catName
+    Given I create the event payload event with type eventName
     When I POST the event payload to the api.events endpoint
     Then I GET from the api.leaderboards.catName endpoint
     And I read the response payload

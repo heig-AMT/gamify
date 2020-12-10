@@ -7,17 +7,16 @@ import ch.heigvd.gamify.domain.app.App;
 import ch.heigvd.gamify.domain.category.CategoryRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import io.swagger.annotations.ApiParam;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.servlet.ServletRequest;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.ServletRequest;
-import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class CategoryAggregatesController implements LeaderboardsApi {
@@ -33,9 +32,10 @@ public class CategoryAggregatesController implements LeaderboardsApi {
 
   @Transactional
   @Override
-  public ResponseEntity<List<Ranking>> getLeaderboard(@ApiParam(value = "name of the category",required=true) @PathVariable("name") String name,
-                                                      @ApiParam(value = "") @Valid @RequestParam(value = "page", required = false) Integer page,
-                                                      @ApiParam(value = "") @Valid @RequestParam(value = "size", required = false) Integer size) {
+  public ResponseEntity<List<Ranking>> getLeaderboard(
+      @ApiParam(value = "name of the category", required = true) @PathVariable("name") String name,
+      @ApiParam(value = "") @Valid @RequestParam(value = "page", required = false) Integer page,
+      @ApiParam(value = "") @Valid @RequestParam(value = "size", required = false) Integer size) {
     //var pageable = PageRequest.of(page == null ? 0 : page, size == null ? Integer.MAX_VALUE : size);
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
     var category = categoryRepository.findByIdCategory_AppAndIdCategory_Name(app, name);
@@ -45,11 +45,12 @@ public class CategoryAggregatesController implements LeaderboardsApi {
     }
 
     var leaderboard = leaderboardRepository.findLeaderboardEntries(app.getName(), name)
-            .stream()
-            .map(leaderboardEntry -> new Ranking()
-                    .points(leaderboardEntry.getTotal())
-                    .userId(leaderboardEntry.getUser()))
-            .collect(Collectors.toList());
+        .stream()
+        .map(leaderboardEntry -> new Ranking()
+            .points(leaderboardEntry.getTotal())
+            .userId(leaderboardEntry.getUser())
+            .badges(List.of()))
+        .collect(Collectors.toList());
 
     return ResponseEntity.ok(leaderboard);
   }
