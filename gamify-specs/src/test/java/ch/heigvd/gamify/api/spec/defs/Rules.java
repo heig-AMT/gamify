@@ -14,7 +14,7 @@ public class Rules implements En {
     When("I create the rule payload {word} for category {word}",
         (String named, String category) -> environment.getClient()
             .putPayload(named, randomRule(category)));
-    When("I create the category payload {word} with name {word} for category {word}",
+    When("I create the rule payload {word} with name {word} for category {word}",
         (String named, String name, String category) -> environment.getClient()
             .putPayload(named, namedRule(name, category)));
 
