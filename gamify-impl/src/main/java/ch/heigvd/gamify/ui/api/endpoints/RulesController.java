@@ -53,6 +53,35 @@ public class RulesController implements RulesApi {
 
   @Transactional
   @Override
+  public ResponseEntity<Void> putRule(String name, @Valid Rule rule) {
+    var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
+    var previous = ruleRepository.findById_Category_IdCategory_App_NameAndId_Name(
+        app.getName(),
+        rule.getName()
+    );
+
+    // Add the rule if it exists.
+    if (previous.isEmpty()) {
+      return postRule(rule);
+    }
+
+    // Update the rule otherwise.
+    var existing = previous.get();
+
+    // Rule name and resource must be the same.
+    if (!existing.getId().getName().equals(name)) {
+      return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
+    }
+
+    existing.setEventType(rule.getEvent());
+    existing.setPoints(rule.getPoints());
+    ruleRepository.save(existing);
+
+    return ResponseEntity.noContent().build();
+  }
+
+  @Transactional
+  @Override
   public ResponseEntity<Void> postRule(@Valid Rule rule) {
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
     var previous = ruleRepository.findById_Category_IdCategory_App_NameAndId_Name(

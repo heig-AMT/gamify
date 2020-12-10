@@ -1,6 +1,7 @@
 package ch.heigvd.gamify.api.spec.defs;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import ch.heigvd.gamify.api.spec.env.Environment;
@@ -21,6 +22,13 @@ public class PayloadDefs implements En {
       var payload2 = environment.getClient().getPayload(second);
 
       assertEquals(payload1, payload2);
+    });
+
+    When("I see that {word} and {word} are not the same", (String first, String second) -> {
+      var payload1 = environment.getClient().getPayload(first);
+      var payload2 = environment.getClient().getPayload(second);
+
+      assertNotEquals(payload1, payload2);
     });
 
     // Server responses management.

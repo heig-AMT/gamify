@@ -67,3 +67,43 @@ Feature: Validation of authenticated rules management
     Then I read the response payload
     And I receive a 200 status code
     And I see that response and rule are the same
+
+  Scenario: can put a non-existing rule
+    When I create the category payload category with name cat
+    And I create the rule payload rule with name roulette for category cat
+    And I POST the category payload to the api.categories endpoint
+    And I PUT the rule resource to the api.rules.*** endpoint
+    And I receive a 201 status code
+    And I GET from the api.rules.roulette endpoint
+    Then I read the response payload
+    And I receive a 200 status code
+    And I see that response and rule are the same
+
+  Scenario: put is idempotent
+    When I create the category payload category with name cat
+    And I create the rule payload rule with name roulette for category cat
+    And I POST the category payload to the api.categories endpoint
+    And I PUT the rule resource to the api.rules.*** endpoint
+    And I receive a 201 status code
+    And I PUT the rule resource to the api.rules.*** endpoint
+    And I receive a 204 status code
+    And I PUT the rule resource to the api.rules.*** endpoint
+    And I receive a 204 status code
+    And I GET from the api.rules.roulette endpoint
+    Then I read the response payload
+    And I receive a 200 status code
+    And I see that response and rule are the same
+
+  Scenario: put updates values
+    When I create the category payload category with name cat
+    And I create the rule payload rule1 with name roulette for category cat
+    And I create the rule payload rule2 with name roulette for category cat
+    And I POST the category payload to the api.categories endpoint
+    And I PUT the rule1 resource to the api.rules.*** endpoint
+    And I PUT the rule2 resource to the api.rules.*** endpoint
+    And I receive a 204 status code
+    And I GET from the api.rules.roulette endpoint
+    Then I read the response payload
+    And I receive a 200 status code
+    And I see that response and rule1 are not the same
+    And I see that response and rule2 are the same
