@@ -460,6 +460,16 @@ paths:
           required: true
           schema:
             type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         '200':
           description: success
