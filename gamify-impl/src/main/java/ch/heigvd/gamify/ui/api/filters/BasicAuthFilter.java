@@ -24,8 +24,8 @@ public class BasicAuthFilter implements Filter {
   private static final String BASIC_AUTH_HEADER = "Authorization";
 
   /**
-   * The {@link AppRepository} that is used to look at the available registrations for the
-   * current user.
+   * The {@link AppRepository} that is used to look at the available registrations for the current
+   * user.
    */
   private final AppRepository repository;
 

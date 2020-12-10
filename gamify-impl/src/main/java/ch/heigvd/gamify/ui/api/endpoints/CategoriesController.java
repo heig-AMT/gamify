@@ -7,7 +7,6 @@ import ch.heigvd.gamify.domain.category.CategoryIdentifier;
 import ch.heigvd.gamify.domain.category.CategoryRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import javax.servlet.ServletRequest;
@@ -27,6 +26,13 @@ public class CategoriesController implements CategoriesApi {
 
   @Autowired
   CategoryRepository categoryRepository;
+
+  private static Category toDto(ch.heigvd.gamify.domain.category.Category category) {
+    return new Category()
+        .title(category.getTitle())
+        .description(category.getDescription())
+        .name(category.getIdCategory().getName());
+  }
 
   @Transactional
   @Override
@@ -100,12 +106,5 @@ public class CategoriesController implements CategoriesApi {
         .build());
 
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-  }
-
-  private static Category toDto(ch.heigvd.gamify.domain.category.Category category) {
-    return new Category()
-        .title(category.getTitle())
-        .description(category.getDescription())
-        .name(category.getIdCategory().getName());
   }
 }
