@@ -36,7 +36,8 @@ public class AccountController implements AccountApi {
   @Override
   public ResponseEntity<Void> deleteAccount() {
     var app = (App) request.getAttribute(BasicAuthFilter.APP_KEY);
-    if (repository.findByNameAndPassword(app.getName(), app.getPassword()).isPresent()) {
+    if (app != null &&
+        repository.findByNameAndPassword(app.getName(), app.getPassword()).isPresent()) {
       repository.delete(app);
       return ResponseEntity.noContent().build();
     } else {
