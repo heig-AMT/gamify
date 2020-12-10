@@ -1,8 +1,6 @@
 package ch.heigvd.gamify.domain.event;
 
-import ch.heigvd.gamify.domain.event.Event;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface EventRepository extends CrudRepository<Event, Long> {
-
+public interface EventRepository extends PagingAndSortingRepository<Event, Long> {
 }
