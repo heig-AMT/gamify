@@ -18,8 +18,8 @@ Feature: badges test
     Then I receive a 204 status code
     When I just GET from the badges endpoint
     Then I receive a 200 status code
-    #When I GET badge1 from the badges endpoint
-    #Then I receive a 200 status code
-    #When I DELETE badge1 with api.badges.delete endpoint
-    #Then I receive a 204 status code
+    When I GET badge1 from the badges endpoint
+    Then I receive a 200 status code
+    When I DELETE badge1 with api.badges.delete endpoint
+    Then I receive a 204 status code
 

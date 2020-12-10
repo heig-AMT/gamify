@@ -4,6 +4,7 @@ import ch.heigvd.gamify.api.BadgesApi;
 import ch.heigvd.gamify.api.model.Badge;
 import ch.heigvd.gamify.api.model.Category;
 import ch.heigvd.gamify.domain.app.App;
+import ch.heigvd.gamify.domain.badges.BadgeIdentifier;
 import ch.heigvd.gamify.domain.badges.BadgeRepository;
 import ch.heigvd.gamify.domain.category.CategoryIdentifier;
 import ch.heigvd.gamify.domain.category.CategoryRepository;
@@ -35,7 +36,7 @@ public class BadgesController implements BadgesApi {
   @Override
   public ResponseEntity<List<Badge>> getBadges() {
     List<Badge> bd=StreamSupport.stream(badgeRepository
-            .findAllByApp((App) request.getAttribute(ApiKeyFilter.APP_KEY))
+            .findAllByIdBadge_App((App) request.getAttribute(ApiKeyFilter.APP_KEY))
             .spliterator(), false)
             .map(BadgesController::toDto)
             .collect(Collectors.toList());
@@ -44,7 +45,9 @@ public class BadgesController implements BadgesApi {
 
   @Override
   public ResponseEntity<Badge> getBadge(String name) {
-    return badgeRepository.findById(name)
+    var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
+    return badgeRepository.findById(BadgeIdentifier.builder()
+        .app(app).badgeName(name).build())
         .map(BadgesController::toDto)
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());
@@ -62,25 +65,33 @@ public class BadgesController implements BadgesApi {
     if (category.isEmpty()) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
-
-    badgeRepository.save(ch.heigvd.gamify.domain.badges.Badge.builder()
-        .app((App) request.getAttribute(ApiKeyFilter.APP_KEY))
+    ch.heigvd.gamify.domain.badges.Badge newB= (ch.heigvd.gamify.domain.badges.Badge.builder()
+        .idBadge(BadgeIdentifier.builder()
+            .app(app).badgeName(name).build())
         .title(badge.getTitle())
         .description(badge.getDescription())
-        .name(badge.getName())
         .category(category.get())
         .pointsLower(badge.getPointsLower().orElse(0))
         .pointsUpper(badge.getPointsUpper().orElse(Integer.MAX_VALUE))
         .build());
+    try{
+      badgeRepository.save(newB);
+    } catch (Exception e){
+      System.out.println(e.getMessage());
+    }
+
 
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
   @Override
   public ResponseEntity<Void> deleteBadge(String name) {
-    var exists = badgeRepository.existsById(name);
+    var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
+    var exists = badgeRepository.existsById(BadgeIdentifier
+    .builder().app(app).badgeName(name).build());
     if (exists) {
-      badgeRepository.deleteById(name);
+      badgeRepository.deleteById(BadgeIdentifier
+          .builder().app(app).badgeName(name).build());
       return ResponseEntity.noContent().build();
     } else {
       return ResponseEntity.notFound().build();
@@ -91,7 +102,7 @@ public class BadgesController implements BadgesApi {
     Badge badgeTemp = new Badge()
         .title(badge.getTitle()==null ? "t": badge.getTitle())
         .description(badge.getDescription()==null ? "d": badge.getDescription())
-        .name(badge.getName())
+        .name(badge.getIdBadge().getBadgeName())
         .category(badge.getCategory().getIdCategory().getName());
     badgeTemp.setPointsLower(JsonNullable.of(badge.getPointsLower()));
     badgeTemp.setPointsUpper(JsonNullable.of(badge.getPointsUpper()));
