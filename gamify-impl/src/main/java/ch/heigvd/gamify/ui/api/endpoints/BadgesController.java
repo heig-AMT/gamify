@@ -8,6 +8,7 @@ import ch.heigvd.gamify.domain.badges.BadgeRepository;
 import ch.heigvd.gamify.domain.category.CategoryIdentifier;
 import ch.heigvd.gamify.domain.category.CategoryRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,13 +34,12 @@ public class BadgesController implements BadgesApi {
 
   @Override
   public ResponseEntity<List<Badge>> getBadges() {
-    return ResponseEntity.ok(
-        StreamSupport.stream(badgeRepository
+    List<Badge> bd=StreamSupport.stream(badgeRepository
             .findAllByApp((App) request.getAttribute(ApiKeyFilter.APP_KEY))
             .spliterator(), false)
             .map(BadgesController::toDto)
-            .collect(Collectors.toList())
-    );
+            .collect(Collectors.toList());
+    return ResponseEntity.ok(bd);
   }
 
   @Override
@@ -69,8 +69,8 @@ public class BadgesController implements BadgesApi {
         .description(badge.getDescription())
         .name(badge.getName())
         .category(category.get())
-        .pointsLower(badge.getPointsLower() == null ? 0 : badge.getPointsLower())
-        .pointsUpper(badge.getPointsUpper() == null ? Integer.MAX_VALUE : badge.getPointsUpper())
+        .pointsLower(badge.getPointsLower().orElse(0))
+        .pointsUpper(badge.getPointsUpper().orElse(Integer.MAX_VALUE))
         .build());
 
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -89,12 +89,12 @@ public class BadgesController implements BadgesApi {
 
   private static Badge toDto(ch.heigvd.gamify.domain.badges.Badge badge) {
     Badge badgeTemp = new Badge()
-        .title(badge.getTitle())
-        .description(badge.getDescription())
+        .title(badge.getTitle()==null ? "t": badge.getTitle())
+        .description(badge.getDescription()==null ? "d": badge.getDescription())
         .name(badge.getName())
         .category(badge.getCategory().getIdCategory().getName());
-    badgeTemp.setPointsLower(badge.getPointsLower());
-    badgeTemp.setPointsUpper(badge.getPointsUpper());
+    badgeTemp.setPointsLower(JsonNullable.of(badge.getPointsLower()));
+    badgeTemp.setPointsUpper(JsonNullable.of(badge.getPointsUpper()));
     return badgeTemp;
   }
 }

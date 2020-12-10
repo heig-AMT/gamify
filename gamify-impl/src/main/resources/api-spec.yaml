@@ -508,8 +508,10 @@ components:
           type: string
         pointsLower:
           type: integer
+          nullable: true
         pointsUpper:
           type: integer
+          nullable: true
 
     Event:
       type: object
