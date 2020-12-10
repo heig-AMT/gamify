@@ -33,7 +33,7 @@ public class BadgesDefs implements En {
     {
       var api = new BadgesApi();
       try {
-        var info = api.getBadgesWithHttpInfo();
+        var info = api.getBadgesWithHttpInfo(0, Integer.MAX_VALUE);
         environment.getClient().putResponse(
             info.getStatusCode(),
             info.getData()

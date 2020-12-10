@@ -2,7 +2,6 @@ package ch.heigvd.gamify.ui.api.endpoints;
 
 import ch.heigvd.gamify.api.BadgesApi;
 import ch.heigvd.gamify.api.model.Badge;
-import ch.heigvd.gamify.api.model.Category;
 import ch.heigvd.gamify.domain.app.App;
 import ch.heigvd.gamify.domain.badges.BadgeIdentifier;
 import ch.heigvd.gamify.domain.badges.BadgeRepository;
@@ -33,13 +32,16 @@ public class BadgesController implements BadgesApi {
   @Autowired
   CategoryRepository categoryRepository;
 
+  private final int LOWER_DEFAULT=0;
+  private final int LOWER_MAX=Integer.MAX_VALUE;
+
   @Override
-  public ResponseEntity<List<Badge>> getBadges() {
+  public ResponseEntity<List<Badge>> getBadges(@Valid Integer page, @Valid Integer size) {
     List<Badge> bd=StreamSupport.stream(badgeRepository
-            .findAllByIdBadge_App((App) request.getAttribute(ApiKeyFilter.APP_KEY))
-            .spliterator(), false)
-            .map(BadgesController::toDto)
-            .collect(Collectors.toList());
+        .findAllByIdBadge_App((App) request.getAttribute(ApiKeyFilter.APP_KEY))
+        .spliterator(), false)
+        .map(BadgesController::toDto)
+        .collect(Collectors.toList());
     return ResponseEntity.ok(bd);
   }
 
