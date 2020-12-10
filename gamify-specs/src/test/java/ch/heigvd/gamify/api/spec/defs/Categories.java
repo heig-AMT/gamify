@@ -20,7 +20,7 @@ public class Categories implements En {
     When("I GET the payload from the api.categories endpoint", () -> {
       var api = new CategoriesApi();
       try {
-        var categories = api.getCategoriesWithHttpInfo();
+        var categories = api.getCategoriesWithHttpInfo(0, Integer.MAX_VALUE);
         environment.getClient().putResponse(
             categories.getStatusCode(),
             categories.getData()

@@ -114,7 +114,18 @@ paths:
       description: get all the categories
       operationId: getCategories
       security:
-        - apiKeyAuth: [ ]
+        - apiKeyAuth: []
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         '200':
           description: success
@@ -216,6 +227,17 @@ paths:
       operationId: getBadges
       security:
         - apiKeyAuth: [ ]
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         '200':
           description: success
@@ -318,6 +340,17 @@ paths:
       operationId: getRules
       security:
         - apiKeyAuth: [ ]
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         '200':
           description: success
@@ -427,6 +460,16 @@ paths:
           required: true
           schema:
             type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         '200':
           description: success
