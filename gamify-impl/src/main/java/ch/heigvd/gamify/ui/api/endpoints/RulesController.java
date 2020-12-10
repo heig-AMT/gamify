@@ -32,7 +32,8 @@ public class RulesController implements RulesApi {
   private ServletRequest request;
 
   @Override
-  public ResponseEntity<List<Rule>> getRules() {
+  public ResponseEntity<List<Rule>> getRules(@Valid Integer page, @Valid Integer size) {
+    // TODO : Paginate the results.
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
     var rules = StreamSupport
         .stream(ruleRepository.findAllById_Category_IdCategory_App(app).spliterator(), false)
