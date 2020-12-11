@@ -4,9 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+import ch.heigvd.gamify.api.dto.Ranking;
 import ch.heigvd.gamify.api.spec.env.Environment;
 import io.cucumber.java8.En;
 import java.util.Collection;
+import java.util.List;
 
 public class PayloadDefs implements En {
 
@@ -50,5 +52,12 @@ public class PayloadDefs implements En {
           innerField.setAccessible(true);
           environment.getClient().putPayload(field, innerField.get(payload));
         });
+
+    Then("The best user in the leaderboard {word} has {int} points",
+            (String container, Integer points) -> {
+              var list = (List) environment.getClient().getPayload(container);
+              var ranking = (Ranking) list.get(0);
+              assertEquals(points, ranking.getPoints());
+    });
   }
 }
