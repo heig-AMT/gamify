@@ -13,6 +13,6 @@ public interface LeaderboardRepository extends Repository<Rule, RuleIdentifier> 
       + "WHERE e.app.name = :app "
       + "AND r.category.idCategory.name = :category "
       + "GROUP BY e.user "
-      + "ORDER BY total")
+      + "ORDER BY total DESC")
   List<LeaderboardEntry> findLeaderboardEntries(String app, String category);
 }
