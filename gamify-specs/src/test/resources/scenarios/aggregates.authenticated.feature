@@ -35,23 +35,3 @@ Feature: Validation of authenticated aggregates
     And I read the response payload
     And I receive a 200 status code
     And I count 1 items in response
-
-  Scenario: I can get a user aggregate with no events
-    Given I create the category payload cat with name name
-    And I PUT the cat payload to the api.categories.name endpoint
-    Then I GET from the api.users.id endpoint
-    And I read the response payload
-    And I receive a 200 status code
-    And I count 0 items in response
-
-  Scenario: I can get a user aggregate with one event
-    Given I create the category payload cat with name catName
-    And I PUT the cat payload to the api.categories.catName endpoint
-    Given I create the rule payload rule for category catName
-    And I PUT the rule payload to the api.rules.ruleName endpoint
-    Given I create the event payload event for category catName and for user id
-    When I POST the event payload to the api.events endpoint
-    Then I GET from the api.users.id endpoint
-    And I read the response payload
-    And I receive a 200 status code
-    And I count 1 items in response
