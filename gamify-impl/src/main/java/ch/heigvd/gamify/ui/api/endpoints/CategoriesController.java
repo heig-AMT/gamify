@@ -39,9 +39,11 @@ public class CategoriesController implements CategoriesApi {
   @Override
   public ResponseEntity<Void> deleteCategory(String name) {
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
-    var exists = categoryRepository.existsByIdCategory_AppAndIdCategory_Name(app, name);
+    CategoryIdentifier idC= CategoryIdentifier.builder()
+        .app(app).name(name).build();
+    var exists = categoryRepository.existsById(idC);
     if (exists) {
-      categoryRepository.deleteByIdCategory_AppAndIdCategory_Name(app, name);
+      categoryRepository.deleteById(idC);
       return ResponseEntity.noContent().build();
     } else {
       return ResponseEntity.notFound().build();

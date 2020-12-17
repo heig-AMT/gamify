@@ -43,6 +43,9 @@ public class BadgesController implements BadgesApi {
         .spliterator(), false)
         .map(BadgesController::toDto)
         .collect(Collectors.toList());
+    if(bd.isEmpty()){
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
     return ResponseEntity.ok(bd);
   }
 
