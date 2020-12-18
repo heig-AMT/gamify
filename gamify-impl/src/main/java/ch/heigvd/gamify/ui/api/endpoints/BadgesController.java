@@ -33,8 +33,8 @@ public class BadgesController implements BadgesApi {
   @Autowired
   CategoryRepository categoryRepository;
 
-  private final int LOWER_DEFAULT=0;
-  private final int UPPER_MAX =Integer.MAX_VALUE;
+  private final int LOWER_DEFAULT = 0;
+  private final int UPPER_MAX = Integer.MAX_VALUE;
 
   @Override
   public ResponseEntity<List<Badge>> getBadges(@Valid Integer page, @Valid Integer size) {
