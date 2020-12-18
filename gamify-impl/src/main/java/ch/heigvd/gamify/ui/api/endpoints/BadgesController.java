@@ -38,7 +38,7 @@ public class BadgesController implements BadgesApi {
 
   @Override
   public ResponseEntity<List<Badge>> getBadges(@Valid Integer page, @Valid Integer size) {
-    List<Badge> bd=StreamSupport.stream(badgeRepository
+    List<Badge> bd = StreamSupport.stream(badgeRepository
         .findAllByIdBadge_App((App) request.getAttribute(ApiKeyFilter.APP_KEY))
         .spliterator(), false)
         .map(BadgesController::toDto)
