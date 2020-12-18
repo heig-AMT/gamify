@@ -249,8 +249,6 @@ paths:
                   $ref: '#/components/schemas/Badge'
         '403':
           description: forbidden
-        '404':
-          description: no badges in the repo
 
   /badges/{name}:
     parameters:
@@ -295,6 +293,8 @@ paths:
       responses:
         '204':
           description: success
+        '403':
+          description: forbidden
         '404':
           description: not found
 

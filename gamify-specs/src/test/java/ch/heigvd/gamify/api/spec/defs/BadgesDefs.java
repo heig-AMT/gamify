@@ -12,8 +12,7 @@ public class BadgesDefs implements En {
     Given("I create the badge {word} linked to category {word}", (String badge, String category) ->
         environment.getClient().putPayload(badge, newBadge(badge, category)));
 
-    When("I PUT the {word} badge to the api.badges endpoint", (String badgeName) ->
-    {
+    When("I PUT the {word} badge to the api.badges endpoint", (String badgeName) -> {
       var payload = environment.getClient().<Badge>getPayload(badgeName);
       var api = new BadgesApi();
       try {
@@ -29,8 +28,7 @@ public class BadgesDefs implements En {
         );
       }
     });
-    When("I just GET from the badges endpoint", () ->
-    {
+    When("I GET from the api.badges endpoint", () -> {
       var api = new BadgesApi();
       try {
         var info = api.getBadgesWithHttpInfo(0, Integer.MAX_VALUE);
@@ -45,8 +43,7 @@ public class BadgesDefs implements En {
         );
       }
     });
-    When("I GET {word} from the badges endpoint", (String name) ->
-    {
+    When("I GET from the api.badges.{word} endpoint", (String name) -> {
       var api = new BadgesApi();
       try {
         var info = api.getBadgeWithHttpInfo(name);
@@ -61,8 +58,7 @@ public class BadgesDefs implements En {
         );
       }
     });
-    When("I DELETE {word} with api.badges.delete endpoint", (String name) ->
-    {
+    When("I DELETE {word} with api.badges.delete endpoint", (String name) -> {
       var api = new BadgesApi();
       try {
         var info = api.deleteBadgeWithHttpInfo(name);

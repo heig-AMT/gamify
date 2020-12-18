@@ -33,8 +33,8 @@ public class BadgesController implements BadgesApi {
   @Autowired
   CategoryRepository categoryRepository;
 
-  private final int LOWER_DEFAULT = 0;
-  private final int UPPER_MAX = Integer.MAX_VALUE;
+  private final static int LOWER_DEFAULT = 0;
+  private final static int UPPER_DEFAULT = Integer.MAX_VALUE;
 
   @Override
   public ResponseEntity<List<Badge>> getBadges(@Valid Integer page, @Valid Integer size) {
@@ -77,7 +77,7 @@ public class BadgesController implements BadgesApi {
         .description(badge.getDescription())
         .category(category.get())
         .pointsLower(badge.getPointsLower().orElse(LOWER_DEFAULT))
-        .pointsUpper(badge.getPointsUpper().orElse(UPPER_MAX))
+        .pointsUpper(badge.getPointsUpper().orElse(UPPER_DEFAULT))
         .build());
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
@@ -98,13 +98,12 @@ public class BadgesController implements BadgesApi {
   }
 
   private static Badge toDto(ch.heigvd.gamify.domain.badges.Badge badge) {
-    Badge badgeTemp = new Badge()
+    return new Badge()
         .title(badge.getTitle()==null ? "t": badge.getTitle())
         .description(badge.getDescription()==null ? "d": badge.getDescription())
         .name(badge.getIdBadge().getBadgeName())
+        .pointsLower(JsonNullable.of(badge.getPointsLower()).orElse(LOWER_DEFAULT))
+        .pointsUpper(JsonNullable.of(badge.getPointsUpper()).orElse(UPPER_DEFAULT))
         .category(badge.getCategory().getIdCategory().getName());
-    badgeTemp.setPointsLower(JsonNullable.of(badge.getPointsLower()));
-    badgeTemp.setPointsUpper(JsonNullable.of(badge.getPointsUpper()));
-    return badgeTemp;
   }
 }
