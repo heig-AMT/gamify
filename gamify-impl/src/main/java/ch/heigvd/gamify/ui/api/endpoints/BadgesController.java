@@ -99,11 +99,11 @@ public class BadgesController implements BadgesApi {
 
   private static Badge toDto(ch.heigvd.gamify.domain.badges.Badge badge) {
     return new Badge()
-        .title(badge.getTitle()==null ? "t": badge.getTitle())
-        .description(badge.getDescription()==null ? "d": badge.getDescription())
+        .title(badge.getTitle())
+        .description(badge.getDescription())
         .name(badge.getIdBadge().getBadgeName())
-        .pointsLower(JsonNullable.of(badge.getPointsLower()).orElse(LOWER_DEFAULT))
-        .pointsUpper(JsonNullable.of(badge.getPointsUpper()).orElse(UPPER_DEFAULT))
+        .pointsLower(badge.getPointsLower())
+        .pointsUpper(badge.getPointsUpper())
         .category(badge.getCategory().getIdCategory().getName());
   }
 }

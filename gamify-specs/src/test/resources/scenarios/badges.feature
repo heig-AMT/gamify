@@ -1,4 +1,4 @@
-Feature: badges test
+Feature: Validation of badges management
 
   Background:
     Given there is a Gamify server
