@@ -9,6 +9,7 @@ import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,7 +44,7 @@ public class UserAggregatesController implements UsersApi {
 
         if (categories == null) {
             System.out.println("Categories is null -> fetch for all categories");
-            var pageable = PageRequest.of(0, Integer.MAX_VALUE);
+            Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
             categories = categoryRepository
                     .findAllByIdCategory_App(app, pageable)
                     .stream()
