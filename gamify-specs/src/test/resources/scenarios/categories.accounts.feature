@@ -68,6 +68,7 @@ Feature: Validation of account management for categories
       #creation of a category
       Then I create the category payload category with name cat1
       Then I PUT the category payload to the api.categories.cat1 endpoint
+      Then I receive a 204 status code
       Then I GET from the api.categories.cat1 endpoint
       And I read the response payload
       And I receive a 200 status code
