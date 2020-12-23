@@ -2,6 +2,8 @@ package ch.heigvd.gamify.ui.api.endpoints;
 
 import ch.heigvd.gamify.api.EventsApi;
 import ch.heigvd.gamify.domain.app.App;
+import ch.heigvd.gamify.domain.endUser.EndUser;
+import ch.heigvd.gamify.domain.endUser.EndUserRepository;
 import ch.heigvd.gamify.domain.event.Event;
 import ch.heigvd.gamify.domain.event.EventRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
@@ -19,6 +21,9 @@ public class EventsController implements EventsApi {
   EventRepository repository;
 
   @Autowired
+  EndUserRepository userRepository;
+
+  @Autowired
   ServletRequest request;
 
   @Override
@@ -34,6 +39,22 @@ public class EventsController implements EventsApi {
     var location = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}")
         .buildAndExpand(entity.getId());
+    addEventPoints(app, 0);
     return ResponseEntity.created(location.toUri()).build();
+  }
+
+
+  private void addEventPoints(App app, int points) {
+    var userId = userRepository.findByUserId(app.getName());
+    if (userId.isPresent()) {
+      userId.get().addPoints(points);
+    } else {
+        userRepository.save(
+            EndUser.builder()
+                .userId(app.getName())
+                .points(points)
+                .build()
+        );
+    }
   }
 }
