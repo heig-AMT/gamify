@@ -593,7 +593,6 @@ components:
         points:
           type: integer
         badges:
-          nullable: true
           type: array
           items:
             $ref: '#/components/schemas/Badge'

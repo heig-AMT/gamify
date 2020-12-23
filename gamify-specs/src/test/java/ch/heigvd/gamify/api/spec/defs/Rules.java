@@ -17,6 +17,12 @@ public class Rules implements En {
     When("I create the rule payload {word} with name {word} for category {word}",
         (String named, String name, String category) -> environment.getClient()
             .putPayload(named, namedRule(name, category)));
+    When("I create the rule payload {word} with name {word} for category {word} and event type {word}",
+        (String named, String name, String category, String type) -> environment.getClient()
+            .putPayload(named, namedRule(name, category, type)));
+    When("I create the rule payload {word} with name {word} for category {word} and event type {word} awarding {int} points",
+            (String named, String name, String category, String type, Integer points) -> environment.getClient()
+                    .putPayload(named, namedRule(name, category, type, points)));
 
     When("I GET the payload from the api.rules endpoint", () -> {
       var api = new RulesApi();
@@ -129,5 +135,15 @@ public class Rules implements En {
   private Rule namedRule(String name, String forCategory) {
     return randomRule(forCategory)
         .name(name);
+  }
+
+  private Rule namedRule(String name, String forCategory, String type) {
+    return namedRule(name, forCategory)
+        .event(type);
+  }
+
+  private Rule namedRule(String name, String forCategory, String type, int points) {
+    return namedRule(name, forCategory, type)
+            .points(points);
   }
 }
