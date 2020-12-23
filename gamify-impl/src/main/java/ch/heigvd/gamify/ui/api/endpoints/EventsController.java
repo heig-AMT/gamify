@@ -6,6 +6,8 @@ import ch.heigvd.gamify.domain.endUser.EndUser;
 import ch.heigvd.gamify.domain.endUser.EndUserRepository;
 import ch.heigvd.gamify.domain.event.Event;
 import ch.heigvd.gamify.domain.event.EventRepository;
+import ch.heigvd.gamify.domain.rule.Rule;
+import ch.heigvd.gamify.domain.rule.RuleRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import javax.servlet.ServletRequest;
 import javax.validation.Valid;
@@ -24,6 +26,9 @@ public class EventsController implements EventsApi {
   EndUserRepository userRepository;
 
   @Autowired
+  RuleRepository ruleRepository;
+
+  @Autowired
   ServletRequest request;
 
   @Override
@@ -39,7 +44,11 @@ public class EventsController implements EventsApi {
     var location = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}")
         .buildAndExpand(entity.getId());
-    addEventPoints(app, 0);
+    int points=0;
+    if(ruleRepository.findByEventType(event.getType()).isPresent()){
+      points=ruleRepository.findByEventType(event.getType()).get().getPoints();
+    }
+    addEventPoints(app, points);
     return ResponseEntity.created(location.toUri()).build();
   }
 

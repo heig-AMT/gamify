@@ -10,4 +10,6 @@ public interface RuleRepository extends PagingAndSortingRepository<Rule, RuleIde
   List<Rule> findAllById_App(String app, Pageable pageable);
 
   Optional<Rule> findById_AppAndId_Name(String app, String name);
+
+  Optional<Rule> findByEventType(String eventType);
 }

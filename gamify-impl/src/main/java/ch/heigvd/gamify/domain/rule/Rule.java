@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
@@ -29,6 +30,7 @@ public class Rule implements Serializable {
   /**
    * How many points are attributed for the event to the category.
    */
+  @Getter
   int points;
 
   /**
