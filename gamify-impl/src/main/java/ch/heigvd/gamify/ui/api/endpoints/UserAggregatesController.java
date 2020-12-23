@@ -54,23 +54,21 @@ public class UserAggregatesController implements UsersApi {
         }
 
         var rankings = new ArrayList<Ranking>();
-        try {
-            categories.forEach(category -> {
-                System.out.println("category: " + category);
-                var ranking = rankingRepository.findRankingEntryForUserAndCategory(app.getName(), id, category)
-                        .stream()
-                        .map(rankingEntry -> new Ranking()
-                                .category(rankingEntry.getCategory())
-                                .userId(rankingEntry.getUser())
-                                //.rank(rankingEntry.getRank()) TODO: Fix the rank thingy
-                                .points(rankingEntry.getTotal())
-                                .badges(List.of()))
-                        .collect(Collectors.toList());
+        categories.forEach(category -> {
+            System.out.println("category: " + category);
+            var ranking = rankingRepository.findRankingEntryForUserAndCategory(app.getName(), id, category)
+                    .stream()
+                    .map(rankingEntry -> new Ranking()
+                            .category(rankingEntry.getCategory())
+                            .userId(rankingEntry.getUser())
+                            //.rank(rankingEntry.getRank()) TODO: Fix the rank thingy
+                            .points(rankingEntry.getTotal())
+                            .badges(List.of())) // TODO: Get badges
+                    .collect(Collectors.toList());
+            if (!ranking.isEmpty()) {
                 rankings.add(ranking.get(0));
-            });
-        } catch (IndexOutOfBoundsException e) {
-            return ResponseEntity.notFound().build();
-        }
+            }
+        });
 
         return ResponseEntity.ok(rankings);
     }

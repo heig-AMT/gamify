@@ -74,5 +74,5 @@ Feature: Validation of authenticated user aggregates
     Then I GET from the api.users.userId1 endpoint
     And I read the response payload
     And I receive a 200 status code
-    And I count 3 items in response
+    And I count 2 items in response
     And The first point category in the user ranking response has 150 points
