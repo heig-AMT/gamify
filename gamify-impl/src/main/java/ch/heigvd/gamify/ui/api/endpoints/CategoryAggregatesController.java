@@ -44,8 +44,7 @@ public class CategoryAggregatesController implements LeaderboardsApi {
             return ResponseEntity.notFound().build();
         }
 
-        // var leaderboard = leaderboardRepository.findLeaderboardEntries(app.getName(), name, page, page * size)
-        var leaderboard = leaderboardRepository.findLeaderboardEntries(app.getName(), name)
+         var leaderboard = leaderboardRepository.findLeaderboardEntries(app.getName(), name, size, page * size)
                 .stream()
                 .map(leaderboardEntry -> new Ranking()
                         .category(name)

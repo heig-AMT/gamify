@@ -9,22 +9,12 @@ import java.util.List;
 
 public interface LeaderboardRepository extends Repository<Rule, RuleIdentifier> {
 
-  /* TODO: Find out how to fix the native query
   @Query(nativeQuery = true, value =
-        "SELECT SUM(r.points) AS total, e.user AS user, ROW_NUMBER() OVER (ORDER BY total DESC) as rank "
-      + "FROM Rule r INNER JOIN Event e ON r.eventType = e.type AND r.id.app = e.app.name "
-      + "WHERE e.app.name = :app "
-      + "AND r.category.idCategory.name = :category "
-      + "GROUP BY e.user "
-      + "LIMIT :page OFFSET :offset")
-  List<LeaderboardEntry> findLeaderboardEntries(String app, String category, int page, int offset);
-   */
-
-  @Query("SELECT SUM(r.points) AS total, e.user AS user "
-      + "FROM Rule r INNER JOIN Event e ON r.eventType = e.type AND r.id.app = e.app.name "
-      + "WHERE e.app.name = :app "
-      + "AND r.category.idCategory.name = :category "
-      + "GROUP BY e.user "
-      + "ORDER BY total DESC ")
-  List<LeaderboardEntry> findLeaderboardEntries(String app, String category);
+        "SELECT SUM(r.points) AS total, e.user_id AS user, ROW_NUMBER() OVER (ORDER BY SUM(r.points) DESC) as rank "
+      + "FROM Rule r INNER JOIN Event e ON r.event_type = e.type AND r.app = e.app_name "
+      + "WHERE e.app_name = :app "
+      + "AND r.category_name = :category "
+      + "GROUP BY e.user_id "
+      + "LIMIT :pagesize OFFSET :offset")
+  List<LeaderboardEntry> findLeaderboardEntries(String app, String category, int pagesize, int offset);
 }
