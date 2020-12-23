@@ -1,4 +1,4 @@
-Feature: Validation of unauthenticated aggregates
+Feature: Validation of unauthenticated category aggregates
 
   Background:
     Given there is a Gamify server
@@ -6,8 +6,4 @@ Feature: Validation of unauthenticated aggregates
 
   Scenario: I can't read category aggregates
     When I GET from the api.leaderboards.name endpoint
-    Then I receive a 403 status code
-
-  Scenario: I can't read user aggregates
-    When I GET from the api.users.id endpoint
     Then I receive a 403 status code

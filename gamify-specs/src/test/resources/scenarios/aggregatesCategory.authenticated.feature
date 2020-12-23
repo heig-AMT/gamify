@@ -12,10 +12,6 @@ Feature: Validation of authenticated aggregates
     When I GET from the api.leaderboards.name endpoint
     Then I receive a 404 status code
 
-  Scenario: I can't get a user aggregate for a missing user
-    When I GET from the api.users.id endpoint
-    Then I receive a 404 status code
-
   Scenario: I can get a category aggregate with no end users
     Given I create the category payload cat with name name
     When I PUT the cat payload to the api.categories.name endpoint

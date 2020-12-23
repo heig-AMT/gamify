@@ -59,5 +59,12 @@ public class PayloadDefs implements En {
               var ranking = (Ranking) list.get(0);
               assertEquals(points, ranking.getPoints());
     });
+
+      Then("The first point category in the user ranking {word} has {int} points",
+              (String container, Integer points, String category) -> {
+                  var list = (List) environment.getClient().getPayload(container);
+                  var ranking = (Ranking) list.get(0);
+                  assertEquals(points, ranking.getPoints());
+              });
   }
 }
