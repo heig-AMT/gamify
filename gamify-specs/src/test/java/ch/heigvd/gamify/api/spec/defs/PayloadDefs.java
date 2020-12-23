@@ -43,6 +43,7 @@ public class PayloadDefs implements En {
     });
     Then("I count {int} items in {word}", (Integer count, String container) -> {
       var collection = (Collection) environment.getClient().getPayload(container);
+      System.out.println("Collection: " + collection.toString());
       assertEquals(count.intValue(), collection.size());
     });
     Then("I read the {word} payload as the {word} property of the {word} payload",
@@ -61,7 +62,7 @@ public class PayloadDefs implements En {
     });
 
       Then("The first point category in the user ranking {word} has {int} points",
-              (String container, Integer points, String category) -> {
+              (String container, Integer points) -> {
                   var list = (List) environment.getClient().getPayload(container);
                   var ranking = (Ranking) list.get(0);
                   assertEquals(points, ranking.getPoints());

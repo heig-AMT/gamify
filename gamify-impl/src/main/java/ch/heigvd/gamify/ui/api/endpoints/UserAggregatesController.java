@@ -42,17 +42,20 @@ public class UserAggregatesController implements UsersApi {
         var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
 
         if (categories == null) {
+            System.out.println("Categories is null -> fetch for all categories");
             var pageable = PageRequest.of(0, Integer.MAX_VALUE);
             categories = categoryRepository
                     .findAllByIdCategory_App(app, pageable)
                     .stream()
-                    .map(category -> category.getTitle())
+                    .map(category -> category.getIdCategory().getName())
                     .collect(Collectors.toList());
+            System.out.println("Found " + categories.size() + " categories");
         }
 
         var rankings = new ArrayList<Ranking>();
         try {
             categories.forEach(category -> {
+                System.out.println("category: " + category);
                 var ranking = rankingRepository.findRankingEntryForUserAndCategory(app.getName(), id, category)
                         .stream()
                         .map(rankingEntry -> new Ranking()

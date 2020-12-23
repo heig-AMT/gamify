@@ -25,9 +25,34 @@ Feature: Validation of authenticated user aggregates
     And I read the response payload
     And I receive a 200 status code
     And I count 1 items in response
-    # And The first point category in the user ranking response has 50 points
+    And The first point category in the user ranking response has 50 points
 
-  Scenario: I can get a user aggregate for a user with points in several categories
+  Scenario: I can get a user aggregate for a user with points in several categories for one specific category
+    Given I create the category payload cat1 with name catName1
+    And I PUT the cat1 payload to the api.categories.catName1 endpoint
+    Given I create the category payload cat2 with name catName2
+    And I PUT the cat2 payload to the api.categories.catName2 endpoint
+    Given I create the category payload cat3 with name catName3
+    And I PUT the cat3 payload to the api.categories.catName3 endpoint
+    Given I create the rule payload rule1 with name ruleName1 for category catName1 and event type eventName1 awarding 50 points
+    And I PUT the rule1 payload to the api.rules.ruleName1 endpoint
+    Given I create the rule payload rule2 with name ruleName2 for category catName2 and event type eventName2 awarding 100 points
+    And I PUT the rule2 payload to the api.rules.ruleName2 endpoint
+    Given I create the event payload event1 with type eventName1 and for user userId1
+    Given I create the event payload event2 with type eventName1 and for user userId1
+    Given I create the event payload event3 with type eventName2 and for user userId1
+    Given I create the event payload event4 with type eventName1 and for user userId1
+    When I POST the event1 payload to the api.events endpoint
+    And I POST the event2 payload to the api.events endpoint
+    And I POST the event3 payload to the api.events endpoint
+    And I POST the event4 payload to the api.events endpoint
+    Then I GET from the api.users.userId1 endpoint for category catName2
+    And I read the response payload
+    And I receive a 200 status code
+    And I count 1 items in response
+    And The first point category in the user ranking response has 100 points
+
+  Scenario: I can get a user aggregate for a user with points in several categories for no specific category
     Given I create the category payload cat1 with name catName1
     And I PUT the cat1 payload to the api.categories.catName1 endpoint
     Given I create the category payload cat2 with name catName2
@@ -50,4 +75,4 @@ Feature: Validation of authenticated user aggregates
     And I read the response payload
     And I receive a 200 status code
     And I count 3 items in response
-    # And The first point category in the user ranking response has 150 points
+    And The first point category in the user ranking response has 150 points
