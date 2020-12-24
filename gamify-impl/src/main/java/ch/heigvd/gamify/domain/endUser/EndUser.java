@@ -1,12 +1,13 @@
 package ch.heigvd.gamify.domain.endUser;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Entity
 @Builder
@@ -15,11 +16,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EndUser {
 
-  @Id
-  private String userId;
-  @Getter
+  @EmbeddedId
+  private EndUserIdentifier idEndUser;
   private int points;
 
+  @Transactional
   public void addPoints(int newPoints) {
     this.points += newPoints;
   }

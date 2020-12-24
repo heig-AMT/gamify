@@ -3,6 +3,7 @@ package ch.heigvd.gamify.ui.api.endpoints;
 import ch.heigvd.gamify.api.EventsApi;
 import ch.heigvd.gamify.domain.app.App;
 import ch.heigvd.gamify.domain.endUser.EndUser;
+import ch.heigvd.gamify.domain.endUser.EndUserIdentifier;
 import ch.heigvd.gamify.domain.endUser.EndUserRepository;
 import ch.heigvd.gamify.domain.event.Event;
 import ch.heigvd.gamify.domain.event.EventRepository;
@@ -13,6 +14,7 @@ import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -31,6 +33,7 @@ public class EventsController implements EventsApi {
   @Autowired
   ServletRequest request;
 
+  @Transactional
   @Override
   public ResponseEntity<Void> addEvent(@Valid ch.heigvd.gamify.api.model.Event event) {
     var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
@@ -44,26 +47,28 @@ public class EventsController implements EventsApi {
     var location = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}")
         .buildAndExpand(entity.getId());
-    int points=0;
-    if(ruleRepository.findByEventType(event.getType()).isPresent()){
-      points=ruleRepository.findByEventType(event.getType()).get().getPoints();
+    int points = 0;
+    if (ruleRepository.findByEventType(event.getType()).isPresent()) {
+      points = ruleRepository.findByEventType(event.getType()).get().getPoints();
     }
-    addEventPoints(app, points);
+    addEventPoints(event.getUserId(), app, points);
     return ResponseEntity.created(location.toUri()).build();
   }
 
 
-  private void addEventPoints(App app, int points) {
-    var userId = userRepository.findByUserId(app.getName());
+  private void addEventPoints(String username, App app, int points) {
+    var userId = userRepository.findByIdEndUser_UserIdAndIdEndUser_App(username, app);
     if (userId.isPresent()) {
       userId.get().addPoints(points);
     } else {
-        userRepository.save(
-            EndUser.builder()
-                .userId(app.getName())
-                .points(points)
-                .build()
-        );
+      userRepository.save(
+          EndUser.builder()
+              .idEndUser(EndUserIdentifier.builder()
+                  .userId(username)
+                  .app(app).build())
+              .points(points)
+              .build()
+      );
     }
   }
 }
