@@ -5,6 +5,9 @@ import ch.heigvd.gamify.domain.app.App;
 import ch.heigvd.gamify.domain.endUser.EndUser;
 import ch.heigvd.gamify.domain.endUser.EndUserIdentifier;
 import ch.heigvd.gamify.domain.endUser.EndUserRepository;
+import ch.heigvd.gamify.domain.endUserPoints.EndUserPoints;
+import ch.heigvd.gamify.domain.endUserPoints.EndUserPointsIdentifier;
+import ch.heigvd.gamify.domain.endUserPoints.EndUserPointsRepository;
 import ch.heigvd.gamify.domain.event.Event;
 import ch.heigvd.gamify.domain.event.EventRepository;
 import ch.heigvd.gamify.domain.rule.Rule;
@@ -26,6 +29,9 @@ public class EventsController implements EventsApi {
 
   @Autowired
   EndUserRepository userRepository;
+
+  @Autowired
+  EndUserPointsRepository userPointsRepository;
 
   @Autowired
   RuleRepository ruleRepository;
@@ -50,24 +56,35 @@ public class EventsController implements EventsApi {
     int points = 0;
     var rules=ruleRepository.findByEventType(event.getType());
     for (Rule r : rules) {
-      points += r.getPoints();
+      //points += r.getPoints();
+      addEventPoints(event.getUserId(), app, r,  points);
     }
-    addEventPoints(event.getUserId(), app, points);
     return ResponseEntity.created(location.toUri()).build();
   }
 
-  private void addEventPoints(String username, App app, int points) {
+  private void addEventPoints(String username, App app, Rule rule, int points) {
     var userId = userRepository.findByIdEndUser_UserIdAndIdEndUser_App(username, app);
-    if (userId.isPresent()) {
-      userId.get().addPoints(points);
-    } else {
+    if(userId.isEmpty()){
       userRepository.save(
           EndUser.builder()
               .idEndUser(EndUserIdentifier.builder()
                   .userId(username)
                   .app(app).build())
-              .points(points)
               .build()
+      );
+    }
+    var realUser=userRepository.findByIdEndUser_UserIdAndIdEndUser_App(username, app).get();
+    var userPoints=userPointsRepository.findByIdEndUserPoints_IdxCategoryAndIdEndUserPoints_IdxUser(
+        rule.getCategory(), realUser);
+    if (userPoints.isPresent()) {
+      userPoints.get().addPoints(points);
+    } else {
+      userPointsRepository.save(
+          EndUserPoints.builder()
+              .idEndUserPoints(EndUserPointsIdentifier.builder()
+                  .idxCategory(rule.getCategory())
+                  .idxUser(realUser).build())
+              .points(points).build()
       );
     }
   }
