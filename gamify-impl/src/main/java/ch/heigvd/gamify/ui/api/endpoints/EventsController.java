@@ -48,13 +48,13 @@ public class EventsController implements EventsApi {
         .path("/{id}")
         .buildAndExpand(entity.getId());
     int points = 0;
-    if (ruleRepository.findByEventType(event.getType()).isPresent()) {
-      points = ruleRepository.findByEventType(event.getType()).get().getPoints();
+    var rules=ruleRepository.findByEventType(event.getType());
+    for (Rule r : rules) {
+      points += r.getPoints();
     }
     addEventPoints(event.getUserId(), app, points);
     return ResponseEntity.created(location.toUri()).build();
   }
-
 
   private void addEventPoints(String username, App app, int points) {
     var userId = userRepository.findByIdEndUser_UserIdAndIdEndUser_App(username, app);

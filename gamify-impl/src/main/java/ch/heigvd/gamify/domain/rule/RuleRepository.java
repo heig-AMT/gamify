@@ -11,5 +11,5 @@ public interface RuleRepository extends PagingAndSortingRepository<Rule, RuleIde
 
   Optional<Rule> findById_AppAndId_Name(String app, String name);
 
-  Optional<Rule> findByEventType(String eventType);
+  List<Rule> findByEventType(String eventType);
 }
