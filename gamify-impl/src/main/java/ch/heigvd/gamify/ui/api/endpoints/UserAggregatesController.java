@@ -56,8 +56,8 @@ public class UserAggregatesController implements UsersApi {
             var ranking = rankingRepository.findRankingEntryForUserAndCategory(app.getName(), id, category)
                     .stream()
                     .map(rankingEntry -> new Ranking()
-                            .category(rankingEntry.getCategory())
-                            .userId(rankingEntry.getUser())
+                            .category(category)
+                            .userId(id)
                             //.rank(rankingEntry.getRank()) TODO: Simplify rank calculations
                             .points(rankingEntry.getTotal())
                             .badges(List.of())) // TODO: Get badges
