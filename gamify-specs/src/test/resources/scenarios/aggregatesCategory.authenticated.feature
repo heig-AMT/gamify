@@ -25,7 +25,7 @@ Feature: Validation of authenticated aggregates
     And I PUT the cat payload to the api.categories.catName endpoint
     Given I create the rule payload rule with name ruleName for category catName and event type eventName awarding 50 points
     And I PUT the rule payload to the api.rules.ruleName endpoint
-    Given I create the event payload event with type eventName
+    Given I create the event payload event with type eventName and for user userId
     When I POST the event payload to the api.events endpoint
     Then I GET from the api.leaderboards.catName endpoint
     And I read the response payload

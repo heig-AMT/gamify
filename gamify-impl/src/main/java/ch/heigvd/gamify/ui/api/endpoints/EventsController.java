@@ -53,11 +53,9 @@ public class EventsController implements EventsApi {
     var location = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}")
         .buildAndExpand(entity.getId());
-    int points = 0;
     var rules=ruleRepository.findByEventType(event.getType());
     for (Rule r : rules) {
-      //points += r.getPoints();
-      addEventPoints(event.getUserId(), app, r,  points);
+      addEventPoints(event.getUserId(), app, r,  r.getPoints());
     }
     return ResponseEntity.created(location.toUri()).build();
   }
