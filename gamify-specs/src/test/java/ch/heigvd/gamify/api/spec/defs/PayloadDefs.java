@@ -43,7 +43,6 @@ public class PayloadDefs implements En {
     });
     Then("I count {int} items in {word}", (Integer count, String container) -> {
       var collection = (Collection) environment.getClient().getPayload(container);
-      System.out.println("Collection: " + collection.toString());
       assertEquals(count.intValue(), collection.size());
     });
     Then("I read the {word} payload as the {word} property of the {word} payload",
