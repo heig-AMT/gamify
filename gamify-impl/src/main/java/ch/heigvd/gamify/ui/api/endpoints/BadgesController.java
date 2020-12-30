@@ -97,7 +97,7 @@ public class BadgesController implements BadgesApi {
     }
   }
 
-  private static Badge toDto(ch.heigvd.gamify.domain.badges.Badge badge) {
+  static Badge toDto(ch.heigvd.gamify.domain.badges.Badge badge) {
     return new Badge()
         .title(badge.getTitle())
         .description(badge.getDescription())

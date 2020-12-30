@@ -17,6 +17,11 @@ Feature: Validation of badges management
     Then I PUT the badge1 badge to the api.badges endpoint
     Then I receive a 204 status code
 
+  Scenario: I can create a badge with points
+    When I create the badge badge1 linked to category cat1 within points range 0 to 100
+    Then I PUT the badge1 badge to the api.badges endpoint
+    Then I receive a 204 status code
+
   Scenario: I can get one or all the badges
     When I create the badge badge1 linked to category cat1
     Then I PUT the badge1 badge to the api.badges endpoint

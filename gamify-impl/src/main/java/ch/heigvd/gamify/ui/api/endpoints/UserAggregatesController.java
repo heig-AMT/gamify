@@ -4,9 +4,11 @@ import ch.heigvd.gamify.api.UsersApi;
 import ch.heigvd.gamify.api.model.Ranking;
 import ch.heigvd.gamify.domain.aggregate.RankingRepository;
 import ch.heigvd.gamify.domain.app.App;
+import ch.heigvd.gamify.domain.badges.BadgeRepository;
 import ch.heigvd.gamify.domain.category.CategoryRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import io.swagger.annotations.ApiParam;
+import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,48 +27,63 @@ import java.util.stream.Collectors;
 @RestController
 public class UserAggregatesController implements UsersApi {
 
-    @Autowired
-    private RankingRepository rankingRepository;
+  @Autowired
+  private RankingRepository rankingRepository;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+  @Autowired
+  private CategoryRepository categoryRepository;
 
-    @Autowired
-    private ServletRequest request;
+  @Autowired
+  private BadgeRepository badgeRepository;
 
-    @Transactional
-    @Override
-    public ResponseEntity<List<Ranking>> getUserAggregate(
-            @ApiParam(value = "id of the end user", required = true) @PathVariable("id") String id,
-            @ApiParam(value = "array of categories to be fetches for the user") @Valid @RequestParam(value = "categories", required = false) List<String> categories) {
+  @Autowired
+  private ServletRequest request;
 
-        var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
+  @Transactional
+  @Override
+  public ResponseEntity<List<Ranking>> getUserAggregate(
+      @ApiParam(value = "id of the end user", required = true) @PathVariable("id") String id,
+      @ApiParam(value = "array of categories to be fetches for the user") @Valid @RequestParam(value = "categories", required = false) List<String> categories) {
 
-        if (categories == null) {
-            Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
-            categories = categoryRepository
-                    .findAllByIdCategory_App(app, pageable)
-                    .stream()
-                    .map(category -> category.getIdCategory().getName())
-                    .collect(Collectors.toList());
-        }
+    var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
 
-        var rankings = new ArrayList<Ranking>();
-        categories.forEach(category -> {
-            var ranking = rankingRepository.findRankingEntryForUserAndCategory(app.getName(), id, category)
-                    .stream()
-                    .map(rankingEntry -> new Ranking()
-                            .category(category)
-                            .userId(id)
-                            //.rank(rankingEntry.getRank()) TODO: Simplify rank calculations
-                            .points(rankingEntry.getTotal())
-                            .badges(List.of())) // TODO: Get badges
-                    .collect(Collectors.toList());
-            if (!ranking.isEmpty()) {
-                rankings.add(ranking.get(0));
-            }
-        });
-
-        return ResponseEntity.ok(rankings);
+    if (categories == null) {
+      Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
+      categories = categoryRepository
+          .findAllByIdCategory_App(app, pageable)
+          .stream()
+          .map(category -> category.getIdCategory().getName())
+          .collect(Collectors.toList());
     }
+
+    var badges = StreamSupport.stream(badgeRepository
+        .findAllByIdBadge_App(app)
+        .spliterator(), false)
+        .map(BadgesController::toDto)
+        .collect(Collectors.toList());
+
+    var rankings = new ArrayList<Ranking>();
+    categories.forEach(category -> {
+      var badgesCategory = badges.stream().filter(badge -> badge.getCategory().equals(category))
+          .collect(Collectors.toList());
+      var ranking = rankingRepository
+          .findRankingEntryForUserAndCategory(app.getName(), id, category)
+          .stream()
+          .map(rankingEntry -> new Ranking()
+              .category(category)
+              .userId(id)
+              //.rank(rankingEntry.getRank()) TODO: Simplify rank calculations
+              .points(rankingEntry.getTotal())
+              .badges(badgesCategory.stream().filter(
+                  badge -> badge.getPointsLower().orElse(0) < rankingEntry.getTotal()
+                      && badge.getPointsUpper().orElse(Integer.MAX_VALUE) > rankingEntry.getTotal()
+              ).collect(Collectors.toList())))
+          .collect(Collectors.toList());
+      if (!ranking.isEmpty()) {
+        rankings.add(ranking.get(0));
+      }
+    });
+
+    return ResponseEntity.ok(rankings);
+  }
 }
