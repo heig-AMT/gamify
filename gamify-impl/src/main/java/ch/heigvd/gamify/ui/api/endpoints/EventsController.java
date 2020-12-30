@@ -13,6 +13,7 @@ import ch.heigvd.gamify.domain.event.EventRepository;
 import ch.heigvd.gamify.domain.rule.Rule;
 import ch.heigvd.gamify.domain.rule.RuleRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
+import java.util.List;
 import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,16 +54,17 @@ public class EventsController implements EventsApi {
     var location = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}")
         .buildAndExpand(entity.getId());
-    var rules=ruleRepository.findByEventType(event.getType());
+    var rules = ruleRepository.findByEventTypeAndId_App(event.getType(), app.getName());
     for (Rule r : rules) {
-      addEventPoints(event.getUserId(), app, r,  r.getPoints());
+      addEventPoints(event.getUserId(), app, r, r.getPoints());
     }
+    System.out.println("Posted an event");
     return ResponseEntity.created(location.toUri()).build();
   }
 
   private void addEventPoints(String username, App app, Rule rule, int points) {
     var userId = userRepository.findByIdEndUser_UserIdAndIdEndUser_App(username, app);
-    if(userId.isEmpty()){
+    if (userId.isEmpty()) {
       userRepository.save(
           EndUser.builder()
               .idEndUser(EndUserIdentifier.builder()
@@ -71,9 +73,10 @@ public class EventsController implements EventsApi {
               .build()
       );
     }
-    var realUser=userRepository.findByIdEndUser_UserIdAndIdEndUser_App(username, app).get();
-    var userPoints=userPointsRepository.findByIdEndUserPoints_IdxCategoryAndIdEndUserPoints_IdxUser(
-        rule.getCategory(), realUser);
+    var realUser = userRepository.findByIdEndUser_UserIdAndIdEndUser_App(username, app).get();
+    var userPoints = userPointsRepository
+        .findByIdEndUserPoints_IdxCategoryAndIdEndUserPoints_IdxUser(
+            rule.getCategory(), realUser);
     if (userPoints.isPresent()) {
       userPoints.get().addPoints(points);
     } else {
