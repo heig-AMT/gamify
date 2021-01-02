@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RankingRepository extends Repository<Rule, RuleIdentifier> {
   @Query(nativeQuery = true, value =
@@ -18,7 +19,6 @@ public interface RankingRepository extends Repository<Rule, RuleIdentifier> {
           + ") "
           + "SELECT s.total, s.userId, s.rank "
           + "FROM subquery s "
-          + "WHERE userId = :userId "
-          + "LIMIT 1")
-  List<RankingEntry> findRankingEntryForUserAndCategory(String app, String userId, String category);
+          + "WHERE userId = :userId ")
+  Optional<RankingEntry> findRankingEntryForUserAndCategory(String app, String userId, String category);
 }

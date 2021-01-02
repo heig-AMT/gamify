@@ -66,21 +66,20 @@ public class UserAggregatesController implements UsersApi {
     categories.forEach(category -> {
       var badgesCategory = badges.stream().filter(badge -> badge.getCategory().equals(category))
           .collect(Collectors.toList());
-      var ranking = rankingRepository
-          .findRankingEntryForUserAndCategory(app.getName(), id, category)
-          .stream()
-          .map(rankingEntry -> new Ranking()
-              .category(category)
-              .userId(id)
-              .rank(rankingEntry.getRank())
-              .points(rankingEntry.getTotal())
-              .badges(badgesCategory.stream().filter(
-                  badge -> badge.getPointsLower().orElse(0) < rankingEntry.getTotal()
-                      && badge.getPointsUpper().orElse(Integer.MAX_VALUE) > rankingEntry.getTotal()
-              ).collect(Collectors.toList())))
-          .collect(Collectors.toList());
-      if (!ranking.isEmpty()) {
-        rankings.add(ranking.get(0));
+
+      var optRankingEntry = rankingRepository.findRankingEntryForUserAndCategory(app.getName(), id, category);
+      if (!optRankingEntry.isEmpty()) {
+        var entry = optRankingEntry.get();
+        var ranking = new Ranking()
+                .category(category)
+                .userId(id)
+                .rank(entry.getRank())
+                .points(entry.getTotal())
+                .badges(badgesCategory.stream().filter(
+                        badge -> badge.getPointsLower().orElse(0) < entry.getTotal()
+                     && badge.getPointsUpper().orElse(Integer.MAX_VALUE) > entry.getTotal()
+                ).collect(Collectors.toList()));
+        rankings.add(ranking);
       }
     });
 
