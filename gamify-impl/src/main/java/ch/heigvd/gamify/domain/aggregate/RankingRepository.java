@@ -5,7 +5,6 @@ import ch.heigvd.gamify.domain.rule.RuleIdentifier;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface RankingRepository extends Repository<Rule, RuleIdentifier> {
@@ -15,7 +14,6 @@ public interface RankingRepository extends Repository<Rule, RuleIdentifier> {
           + "FROM end_user_points p "
           + "WHERE p.idx_user_app_name = :app "
           + "AND p.idx_category_name = :category "
-          + "GROUP BY p.idx_user_user_id, p.points "
           + ") "
           + "SELECT s.total, s.userId, s.rank "
           + "FROM subquery s "
