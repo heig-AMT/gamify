@@ -1,0 +1,33 @@
+name: Build and publish Wiki
+
+on:
+  push:
+    branches: [ dev ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Build the spec documentation
+        run: |
+          cd gamify-specs/
+          mvn -B clean compile
+
+      - name: Push documentation to Wiki
+        run: |
+          cd gamify-specs/target/generated-sources/openapi/docs
+          git init .
+          git config user.name "${{github.actor}}"
+          git config user.email "${{github.actor}}@users.noreply.github.com"
+          git add .
+          git commit -m "Deployed wiki 🚀"
+          git remote add origin https://${{secrets.TOKEN_GITHUB}}@github.com/${{github.repository}}.wiki.git
+          git push -u origin master --force
