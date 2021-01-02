@@ -58,7 +58,6 @@ public class EventsController implements EventsApi {
     for (Rule r : rules) {
       addEventPoints(event.getUserId(), app, r, r.getPoints());
     }
-    System.out.println("Posted an event");
     return ResponseEntity.created(location.toUri()).build();
   }
 
