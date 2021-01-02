@@ -7,6 +7,7 @@
 This repository contains our version of the second project of the AMT class of HEIG-VD.
 
 **:seedling: Our Cucumber reports for the `dev` branch are on [GitHub Pages](https://heig-amt.github.io/gamify/) :seedling:**
+
 **:coffee: The generated `spec` API is on the [repository Wiki](https://github.com/heig-AMT/gamify/wiki/) :coffee:**
 
 ## Structure
