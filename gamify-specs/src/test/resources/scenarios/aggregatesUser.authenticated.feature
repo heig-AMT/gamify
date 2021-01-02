@@ -93,3 +93,22 @@ Feature: Validation of authenticated user aggregates
     And I count 2 items in response
     And The first point category in the user ranking response has 150 points
     And The first point category in the user ranking response has 1 badges
+
+  Scenario: I can get a user aggregate for a user when there are several users in the system and his rank is correct
+    Given I create the category payload cat with name catName
+    And I PUT the cat payload to the api.categories.catName endpoint
+    Given I create the rule payload rule with name ruleName for category catName and event type eventName awarding 50 points
+    And I PUT the rule payload to the api.rules.ruleName endpoint
+    Given I create the badge badge1 linked to category catName within points range 0 to 100
+    Then I PUT the badge1 badge to the api.badges endpoint
+    Given I create the event payload event1 with type eventName and for user userId1
+    And I POST the event1 payload to the api.events endpoint
+    Given I create the event payload event2 with type eventName and for user userId2
+    And I POST the event2 payload to the api.events endpoint
+    Given I create the event payload event3 with type eventName and for user userId2
+    And I POST the event3 payload to the api.events endpoint
+    When I GET from the api.users.userId1 endpoint for category catName
+    Then I read the response payload
+    And I receive a 200 status code
+    And I count 1 items in response
+    And The first point category in the user ranking response is rank 2

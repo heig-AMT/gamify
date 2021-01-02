@@ -9,12 +9,16 @@ import java.util.List;
 
 public interface RankingRepository extends Repository<Rule, RuleIdentifier> {
   @Query(nativeQuery = true, value =
-          "SELECT p.points AS total "
-        + "FROM end_user_points p "
-        + "WHERE p.idx_user_app_name = :app "
-        + "AND p.idx_user_user_id = :userId "
-        + "AND p.idx_category_name = :category "
-        + "GROUP BY p.idx_user_user_id, p.points "
-        + "LIMIT 1")
+          "WITH subquery AS ( "
+          + "SELECT p.points AS total, p.idx_user_user_id AS userId, ROW_NUMBER() OVER (ORDER BY p.points DESC) as rank "
+          + "FROM end_user_points p "
+          + "WHERE p.idx_user_app_name = :app "
+          + "AND p.idx_category_name = :category "
+          + "GROUP BY p.idx_user_user_id, p.points "
+          + ") "
+          + "SELECT s.total, s.userId, s.rank "
+          + "FROM subquery s "
+          + "WHERE userId = :userId "
+          + "LIMIT 1")
   List<RankingEntry> findRankingEntryForUserAndCategory(String app, String userId, String category);
 }

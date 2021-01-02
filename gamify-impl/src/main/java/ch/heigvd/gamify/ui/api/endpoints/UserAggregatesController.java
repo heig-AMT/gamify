@@ -72,7 +72,7 @@ public class UserAggregatesController implements UsersApi {
           .map(rankingEntry -> new Ranking()
               .category(category)
               .userId(id)
-              //.rank(rankingEntry.getRank()) TODO: Simplify rank calculations
+              .rank(rankingEntry.getRank())
               .points(rankingEntry.getTotal())
               .badges(badgesCategory.stream().filter(
                   badge -> badge.getPointsLower().orElse(0) < rankingEntry.getTotal()
