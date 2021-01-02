@@ -10,11 +10,11 @@ import java.util.List;
 public interface LeaderboardRepository extends Repository<Rule, RuleIdentifier> {
 
   @Query(nativeQuery = true, value =
-        "SELECT SUM(r.points) AS total, e.user_id AS user, ROW_NUMBER() OVER (ORDER BY SUM(r.points) DESC) as rank "
-      + "FROM Rule r INNER JOIN Event e ON r.event_type = e.type AND r.app = e.app_name "
-      + "WHERE e.app_name = :app "
-      + "AND r.category_name = :category "
-      + "GROUP BY e.user_id "
+        "SELECT p.points AS total, p.idx_user_user_id AS userId, ROW_NUMBER() OVER (ORDER BY p.points DESC) as rank "
+      + "FROM end_user_points p "
+      + "WHERE p.idx_user_app_name = :app "
+      + "AND p.idx_category_name = :category "
+      + "GROUP BY p.idx_user_user_id, p.points "
       + "LIMIT :pagesize OFFSET :offset")
   List<LeaderboardEntry> findLeaderboardEntries(String app, String category, int pagesize, int offset);
 }
