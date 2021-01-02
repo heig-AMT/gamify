@@ -48,7 +48,7 @@ public class CategoryAggregatesController implements LeaderboardsApi {
                 .stream()
                 .map(leaderboardEntry -> new Ranking()
                         .category(name)
-                        .userId(leaderboardEntry.getUser())
+                        .userId(leaderboardEntry.getUserId())
                         .rank(leaderboardEntry.getRank())
                         .points(leaderboardEntry.getTotal())
                         .badges(List.of()))
