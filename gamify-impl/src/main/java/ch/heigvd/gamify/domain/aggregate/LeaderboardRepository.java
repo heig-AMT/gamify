@@ -16,5 +16,5 @@ public interface LeaderboardRepository extends Repository<Rule, RuleIdentifier> 
       + "AND p.idx_category_name = :category "
       + "GROUP BY p.idx_user_user_id, p.points "
       + "LIMIT :pagesize OFFSET :offset")
-  List<LeaderboardEntry> findLeaderboardEntries(String app, String category, int pagesize, int offset);
+  List<LeaderboardEntry> findLeaderboardEntries(String app, String category, int pagesize, long offset);
 }

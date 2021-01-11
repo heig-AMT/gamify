@@ -8,6 +8,7 @@ import ch.heigvd.gamify.domain.category.CategoryRepository;
 import ch.heigvd.gamify.ui.api.filters.ApiKeyFilter;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,11 +41,13 @@ public class CategoryAggregatesController implements LeaderboardsApi {
         var app = (App) request.getAttribute(ApiKeyFilter.APP_KEY);
         var category = categoryRepository.findByIdCategory_AppAndIdCategory_Name(app, name);
 
+        var pageable = PageRequest.of(page == null ? 0 : page, size == null ? Integer.MAX_VALUE : size);
+
         if (category.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-         var leaderboard = leaderboardRepository.findLeaderboardEntries(app.getName(), name, size, page * size)
+         var leaderboard = leaderboardRepository.findLeaderboardEntries(app.getName(), name, pageable.getPageSize(), pageable.getOffset())
                 .stream()
                 .map(leaderboardEntry -> new Ranking()
                         .category(name)
