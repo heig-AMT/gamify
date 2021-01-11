@@ -28,6 +28,22 @@ public class Aggregates implements En {
       }
     });
 
+    When("I GET from the api.leaderboards.{word} endpoint with no pagination", (String name) -> {
+      try {
+        var api = new AggregatesApi();
+        var categoryAggregate = api.getLeaderboardWithHttpInfo(name, null, null);
+        environment.getClient().putResponse(
+                categoryAggregate.getStatusCode(),
+                categoryAggregate.getData()
+        );
+      } catch (ApiException exception) {
+        environment.getClient().putResponse(
+                exception.getCode(),
+                exception.getResponseBody()
+        );
+      }
+    });
+
     When("I GET from the api.leaderboards.{word} endpoint for page {int} and page size {int}", (String name, Integer page, Integer pagesize) -> {
       try {
         var api = new AggregatesApi();
