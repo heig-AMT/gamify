@@ -1,6 +1,6 @@
 package ch.heigvd.gamify.ui.api.endpoints;
 
-import ch.heigvd.gamify.api.AccountApi;
+import ch.heigvd.gamify.api.AccountsApi;
 import ch.heigvd.gamify.api.model.AuthenticationSuccess;
 import ch.heigvd.gamify.api.model.Password;
 import ch.heigvd.gamify.api.model.Registration;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.NativeWebRequest;
 
 @RestController
-public class AccountController implements AccountApi {
+public class AccountController implements AccountsApi {
 
   @Autowired
   AppRepository repository;
