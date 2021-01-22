@@ -58,8 +58,8 @@ public class Swagger2SpringBoot {
   ) {
     var bean = new FilterRegistrationBean<BasicAuthFilter>();
     bean.setFilter(new BasicAuthFilter(repository));
-    bean.addUrlPatterns("/account");
-    bean.addUrlPatterns("/account/token");
+    bean.addUrlPatterns("/accounts");
+    bean.addUrlPatterns("/accounts/token");
     return bean;
   }
 }
