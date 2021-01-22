@@ -57,7 +57,7 @@ Here are some of the behaviors verified in our `63` test scenarios :
 
 ### The case of JMeter (what doesn't work)
 
-While we [load tested our system](load-testing/Add%20events.jmx), we realized that the `/events` endpoint sometimes skips point additions. We could not reproduce the issue with Cucumber tests, so we're glad to have found this issue with JMeter.
+As we were taking the proactive step of [load testing our system](load-testing/Add%20events.jmx), we realized that the `/events` endpoint sometimes skips point additions. We could not reproduce the issue with Cucumber tests, so we're glad to have found this issue with JMeter.
 
 ## Production Deployments
 
