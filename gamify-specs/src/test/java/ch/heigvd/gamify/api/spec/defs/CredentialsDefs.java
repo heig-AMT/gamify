@@ -1,7 +1,7 @@
 package ch.heigvd.gamify.api.spec.defs;
 
 import ch.heigvd.gamify.ApiException;
-import ch.heigvd.gamify.api.AccountApi;
+import ch.heigvd.gamify.api.AccountsApi;
 import ch.heigvd.gamify.api.dto.Password;
 import ch.heigvd.gamify.api.dto.Registration;
 import ch.heigvd.gamify.api.spec.env.Environment;
@@ -17,7 +17,7 @@ public class CredentialsDefs implements En {
 
     When("I POST the {word} payload to the api.register endpoint", (String named) -> {
       var payload = environment.getClient().<Registration>getPayload(named);
-      var api = new AccountApi();
+      var api = new AccountsApi();
       try {
         var info = api.registerAccountWithHttpInfo(payload);
         environment.getClient().putResponse(
@@ -34,7 +34,7 @@ public class CredentialsDefs implements En {
 
     When("I POST to the api.login endpoint", () -> {
       try {
-        var api = new AccountApi();
+        var api = new AccountsApi();
         var info = api.loginWithHttpInfo();
         environment.getClient().putResponse(
             info.getStatusCode(),
@@ -50,7 +50,7 @@ public class CredentialsDefs implements En {
 
     When("I DELETE my account {word}", (String name) -> {
       var payload = environment.getClient().<Registration>getPayload(name);
-      var api = new AccountApi();
+      var api = new AccountsApi();
       try {
         var info = api.deleteAccountWithHttpInfo();
         environment.getClient().putResponse(
@@ -66,7 +66,7 @@ public class CredentialsDefs implements En {
     When("I UPDATE the credentials {word} with new password {word}",
         (String account, String newPassword) -> {
           var payload = environment.getClient().<Registration>getPayload(account);
-          var api = new AccountApi();
+          var api = new AccountsApi();
           Password password = new Password();
           password.setNewPassword(newPassword);
           try {
