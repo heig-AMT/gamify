@@ -14,7 +14,7 @@ public interface RankingRepository extends Repository<Rule, RuleIdentifier> {
           + "FROM end_user_point_award p "
           + "WHERE p.idx_end_user_app_name = :app "
           + "AND p.idx_category_name = :category "
-          + "GROUP BY p.idx_end_user_user_id, p.points "
+          + "GROUP BY p.idx_end_user_user_id "
           + ") "
           + "SELECT s.total, s.userId, s.rank "
           + "FROM subquery s "
