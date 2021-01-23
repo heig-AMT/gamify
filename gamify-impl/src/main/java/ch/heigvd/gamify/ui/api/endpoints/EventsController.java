@@ -61,23 +61,23 @@ public class EventsController implements EventsApi {
 
   private void addEventPointAward(String username, App app, Rule rule, int points) {
     var endUser = userRepository
-            .findByIdEndUser_UserIdAndIdEndUser_App(username, app)
-            .orElse(userRepository.save(
-                    EndUser.builder()
-                            .idEndUser(
-                                    EndUserIdentifier.builder()
-                                            .userId(username)
-                                            .app(app).build()
-                            )
-                            .build())
-            );
+        .findByIdEndUser_UserIdAndIdEndUser_App(username, app)
+        .orElse(userRepository.save(
+            EndUser.builder()
+                .idEndUser(
+                    EndUserIdentifier.builder()
+                        .userId(username)
+                        .app(app).build()
+                )
+                .build())
+        );
 
     userPointAwardRepository.save(
-      EndUserPointAward.builder()
-              .idxCategory(rule.getCategory())
-              .idxEndUser(endUser)
-          .points(points)
-          .build()
+        EndUserPointAward.builder()
+            .idxCategory(rule.getCategory())
+            .idxEndUser(endUser)
+            .points(points)
+            .build()
     );
   }
 }
