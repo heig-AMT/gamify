@@ -1,4 +1,4 @@
-Feature: Validation of authenticated aggregates
+Feature: Validation of authenticated category aggregates
 
   Background:
     Given there is a Gamify server
