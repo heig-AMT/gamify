@@ -58,27 +58,27 @@ Feature: Validation of account management for categories
     Then I read the response payload
     And I count 1 items in response
 
-    Scenario: A category is not only identified by its creator
+  Scenario: A category is not only identified by its creator
       #long but necessary
-      When I create the credentials payload aloy
-      Then I POST the aloy payload to the api.register endpoint
-      Then I read the response payload
-      And I read the token1 payload as the token property of the response payload
-      And I authenticate with token1 api key
+    When I create the credentials payload aloy
+    Then I POST the aloy payload to the api.register endpoint
+    Then I read the response payload
+    And I read the token1 payload as the token property of the response payload
+    And I authenticate with token1 api key
       #creation of a category
-      Then I create the category payload category with name cat1
-      Then I PUT the category payload to the api.categories.cat1 endpoint
-      Then I receive a 204 status code
-      Then I GET from the api.categories.cat1 endpoint
-      And I read the response payload
-      And I receive a 200 status code
-      And I see that response and category are the same
+    Then I create the category payload category with name cat1
+    Then I PUT the category payload to the api.categories.cat1 endpoint
+    Then I receive a 204 status code
+    Then I GET from the api.categories.cat1 endpoint
+    And I read the response payload
+    And I receive a 200 status code
+    And I see that response and category are the same
       #deletion and re-creation of account
-      When I DELETE my account aloy
-      Then I create the credentials payload aloy
-      Then I POST the aloy payload to the api.register endpoint
-      Then I read the response payload
-      And I read the token2 payload as the token property of the response payload
-      And I authenticate with token2 api key
-      Then I GET from the api.categories.cat1 endpoint
-      And I receive a 404 status code
+    When I DELETE my account aloy
+    Then I create the credentials payload aloy
+    Then I POST the aloy payload to the api.register endpoint
+    Then I read the response payload
+    And I read the token2 payload as the token property of the response payload
+    And I authenticate with token2 api key
+    Then I GET from the api.categories.cat1 endpoint
+    And I receive a 404 status code

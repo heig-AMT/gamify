@@ -12,8 +12,9 @@ public class BadgesDefs implements En {
     Given("I create the badge {word} linked to category {word}", (String badge, String category) ->
         environment.getClient().putPayload(badge, newBadge(badge, category)));
 
-    Given("I create the badge {word} linked to category {word} within points range {int} to {int}", (String badge, String category, Integer low, Integer up) ->
-        environment.getClient().putPayload(badge, newBadge(badge, category, low, up)));
+    Given("I create the badge {word} linked to category {word} within points range {int} to {int}",
+        (String badge, String category, Integer low, Integer up) ->
+            environment.getClient().putPayload(badge, newBadge(badge, category, low, up)));
 
     When("I PUT the {word} badge to the api.badges endpoint", (String badgeName) -> {
       var payload = environment.getClient().<Badge>getPayload(badgeName);
@@ -83,6 +84,7 @@ public class BadgesDefs implements En {
   }
 
   private Badge newBadge(String name, String catName, int pointsLower, int pointsUpper) {
-    return new Badge().category(catName).name(name).pointsLower(pointsLower).pointsUpper(pointsUpper);
+    return new Badge().category(catName).name(name).pointsLower(pointsLower)
+        .pointsUpper(pointsUpper);
   }
 }
