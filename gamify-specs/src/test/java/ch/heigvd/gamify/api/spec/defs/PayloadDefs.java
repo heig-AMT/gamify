@@ -54,18 +54,18 @@ public class PayloadDefs implements En {
         });
 
     Then("The best user in the leaderboard {word} has {int} points",
-            (String container, Integer points) -> {
-              var list = (List) environment.getClient().getPayload(container);
-              var ranking = (Ranking) list.get(0);
-              assertEquals(points, ranking.getPoints());
-    });
+        (String container, Integer points) -> {
+          var list = (List) environment.getClient().getPayload(container);
+          var ranking = (Ranking) list.get(0);
+          assertEquals(points, ranking.getPoints());
+        });
 
-      Then("The first point category in the user ranking {word} has {int} points",
-              (String container, Integer points) -> {
-                  var list = (List) environment.getClient().getPayload(container);
-                  var ranking = (Ranking) list.get(0);
-                  assertEquals(points, ranking.getPoints());
-              });
+    Then("The first point category in the user ranking {word} has {int} points",
+        (String container, Integer points) -> {
+          var list = (List) environment.getClient().getPayload(container);
+          var ranking = (Ranking) list.get(0);
+          assertEquals(points, ranking.getPoints());
+        });
 
     Then("The first point category in the user ranking {word} has {int} badges",
         (String container, Integer badges) -> {
@@ -74,11 +74,11 @@ public class PayloadDefs implements En {
           assertEquals(badges, (Integer) ranking.getBadges().size());
         });
 
-      Then("The first point category in the user ranking {word} is rank {int}",
-              (String container, Integer rank) -> {
-                  var list = (List) environment.getClient().getPayload(container);
-                  var ranking = (Ranking) list.get(0);
-                  assertEquals(rank, ranking.getRank());
-              });
+    Then("The first point category in the user ranking {word} is rank {int}",
+        (String container, Integer rank) -> {
+          var list = (List) environment.getClient().getPayload(container);
+          var ranking = (Ranking) list.get(0);
+          assertEquals(rank, ranking.getRank());
+        });
   }
 }

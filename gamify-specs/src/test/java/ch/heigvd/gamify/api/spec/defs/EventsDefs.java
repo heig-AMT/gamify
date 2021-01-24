@@ -15,13 +15,13 @@ public class EventsDefs implements En {
     );
 
     Given("I create the event payload {word} with type {word}", (String name, String type) ->
-            environment.getClient().putPayload(name, eventForCategory(type))
+        environment.getClient().putPayload(name, eventForCategory(type))
     );
 
-    Given("I create the event payload {word} with type {word} and for user {word}", (String name, String type, String userId) ->
+    Given("I create the event payload {word} with type {word} and for user {word}",
+        (String name, String type, String userId) ->
             environment.getClient().putPayload(name, eventForCategoryAndUser(type, userId))
     );
-
 
     // Server I/O
     When("I POST the {word} payload to the api.events endpoint", (String named) -> {
@@ -51,15 +51,15 @@ public class EventsDefs implements En {
 
   private Event eventForCategory(String type) {
     return new Event()
-            .type(type)
-            .userId("bob")
-            .timestamp(OffsetDateTime.now());
+        .type(type)
+        .userId("bob")
+        .timestamp(OffsetDateTime.now());
   }
 
   private Event eventForCategoryAndUser(String type, String forUser) {
     return new Event()
-            .type(type)
-            .userId(forUser)
-            .timestamp(OffsetDateTime.now());
+        .type(type)
+        .userId(forUser)
+        .timestamp(OffsetDateTime.now());
   }
 }
